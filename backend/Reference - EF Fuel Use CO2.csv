@@ -1,0 +1,37 @@
+﻿Fuel,Region,CO2,CO2 - Biomass Fuel,CO2 Unit - Numerator,CO2 Unit - Denominator,Default Scope,Unit Type,Mode of Transport
+Jet Fuel,Other,9.428,,Kilogram,US Gallon,,Volume,Aircraft
+Aviation Gasoline,Other,8.333,,Kilogram,US Gallon,,Volume,Aircraft
+Gasoline/Petrol,Other,8.598734991,,Kilogram,US Gallon,,Volume,
+On-Road Diesel Fuel,Other,10.131,,Kilogram,US Gallon,,Volume,
+Residual Fuel Oil (3s 5 and 6),Other,11.125,,Kilogram,US Gallon,,Volume,
+LPG,Other,6.1,,Kilogram,US Gallon,,Volume,
+CNG,Other,0.053,,Kilogram,Standard Cubic Foot,,Volume,
+LNG,Other,4.46,,Kilogram,US Gallon,,Volume,
+Ethanol,Other,,5.56,Kilogram,US Gallon,,Volume,
+100% Biodiesel,Other,,9.46,Kilogram,US Gallon,,Volume,
+E85 Ethanol/Gasoline,Other,1.289810249,4.726,Kilogram,US Gallon,,Volume,
+B20 Biodiesel/Diesel,Other,8.104417776,1.892,Kilogram,US Gallon,,Volume,
+Jet Fuel,UK,9.54605,,Kilogram,US Gallon,,Volume,Aircraft
+Aviation Gasoline,UK,8.37295,,Kilogram,US Gallon,,Volume,Aircraft
+Gasoline/Petrol,UK,8.71326,,Kilogram,US Gallon,,Volume,
+On-Road Diesel Fuel,UK,9.99841,,Kilogram,US Gallon,,Volume,
+Residual Fuel Oil (3s 5 and 6),UK,9.576713272,,Kilogram,US Gallon,,Volume,
+LPG,UK,5.641020641,,Kilogram,US Gallon,,Volume,
+CNG,UK,0.057284981,,Kilogram,Standard Cubic Foot,,Volume,
+LNG,UK,4.645457341,,Kilogram,US Gallon,,Volume,
+Ethanol,UK,,5.56,Kilogram,US Gallon,,Volume,
+100% Biodiesel,UK,,9.46,Kilogram,US Gallon,,Volume,
+E85 Ethanol/Gasoline,UK,1.306989,4.726,Kilogram,US Gallon,,Volume,
+B20 Biodiesel/Diesel,UK,7.998728,1.892,Kilogram,US Gallon,,Volume,
+Jet Fuel,US,9.57,,Kilogram,US Gallon,,Volume,Aircraft
+Aviation Gasoline,US,8.32,,Kilogram,US Gallon,,Volume,Aircraft
+Gasoline/Petrol,US,8.81,,Kilogram,US Gallon,,Volume,
+On-Road Diesel Fuel,US,10.15,,Kilogram,US Gallon,,Volume,
+Residual Fuel Oil (3s 5 and 6),US,11.8,,Kilogram,US Gallon,,Volume,
+LPG,US,5.79,,Kilogram,US Gallon,,Volume,
+CNG,US,0.054,,Kilogram,Standard Cubic Foot,,Volume,
+LNG,US,4.46,,Kilogram,US Gallon,,Volume,
+Ethanol,US,,5.56,Kilogram,US Gallon,,Volume,
+100% Biodiesel,US,,9.46,Kilogram,US Gallon,,Volume,
+E85 Ethanol/Gasoline,US,1.3215,4.726,Kilogram,US Gallon,,Volume,
+B20 Biodiesel/Diesel,US,8.12,1.892,Kilogram,US Gallon,,Volume,

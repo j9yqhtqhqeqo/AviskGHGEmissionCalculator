@@ -1,0 +1,32 @@
+/* App.css */
+.app-container {
+  font-family: Arial, sans-serif;
+}
+
+.app-nav {
+  background-color: #2a5783;
+  padding: 15px 0;
+}
+
+.app-nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+}
+
+.app-nav li {
+  margin: 0 15px;
+}
+
+.app-nav a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.app-nav a:hover {
+  text-decoration: underline;
+}

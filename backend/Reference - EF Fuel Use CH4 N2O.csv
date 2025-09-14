@@ -1,0 +1,116 @@
+﻿Transport and Fuel,Region,CH4,CH4 Unit - Numerator,CH4 Unit - Denominator,N2O,N2O Unit - Numerator,N2O Unit - Denominator,Default Scope,Mode of Transport
+Train - Diesel Fuel,UK,0.8,Gram,US Gallon,0.26,Gram,US Gallon,,Rail
+Other,UK,0,Gram,US Gallon,0,Gram,US Gallon,,Rail
+Agricultural Equipment - Gasoline,UK,1.26,Gram,US Gallon,0.22,Gram,US Gallon,,Road
+Agricultural Equipment - Diesel Fuel,UK,1.44,Gram,US Gallon,0.26,Gram,US Gallon,,Road
+Construction Equipment - Gasoline,UK,0.5,Gram,US Gallon,0.22,Gram,US Gallon,,Road
+Construction Equipment - Diesel Fuel,UK,0.58,Gram,US Gallon,0.26,Gram,US Gallon,,Road
+Other,UK,0,Gram,US Gallon,0,Gram,US Gallon,,Road
+Ship and Boat - Residual Fuel Oil,UK,0.86,Gram,US Gallon,0.3,Gram,US Gallon,,Water
+Ship and Boat - Diesel Fuel,UK,0.74,Gram,US Gallon,0.26,Gram,US Gallon,,Water
+Ship and Boat - Gasoline,UK,0.64,Gram,US Gallon,0.22,Gram,US Gallon,,Water
+Other,UK,0,Gram,US Gallon,0,Gram,US Gallon,,Water
+Other,UK,0,Gram,US Gallon,0,Gram,US Gallon,,AirCraft
+Train - Diesel Fuel,US,0.8,Gram,US Gallon,0.26,Gram,US Gallon,,Rail
+Agricultural Equipment - Gasoline,US,1.26,Gram,US Gallon,0.22,Gram,US Gallon,,Road
+Agricultural Equipment - Diesel Fuel,US,1.44,Gram,US Gallon,0.26,Gram,US Gallon,,Road
+Construction Equipment - Gasoline,US,0.5,Gram,US Gallon,0.22,Gram,US Gallon,,Road
+Construction Equipment - Diesel Fuel,US,0.58,Gram,US Gallon,0.26,Gram,US Gallon,,Road
+Bus - CNG,US,4.7184,Gram,US Gallon,0.42,Gram,US Gallon,,Road
+Bus - Ethanol,US,0.985,Gram,US Gallon,0.875,Gram,US Gallon,,Road
+Bus - Diesel,US,0.01887,Gram,US Gallon,0.01776,Gram,US Gallon,,Road
+Bus - Gasoline,US,0.105,Gram,US Gallon,0.085,Gram,US Gallon,,Road
+Passenger Car - Gasoline - Year 1984-1993,US,1.584,Gram,US Gallon,1.45575,Gram,US Gallon,,Road
+Passenger Car - Gasoline - Year 1994,US,1.19475,Gram,US Gallon,1.26,Gram,US Gallon,,Road
+Passenger Car - Gasoline - Year 1995,US,0.8055,Gram,US Gallon,1.06425,Gram,US Gallon,,Road
+Passenger Car - Gasoline - Year 1996,US,0.612,Gram,US Gallon,0.9585,Gram,US Gallon,,Road
+Passenger Car - Gasoline - Year 1997,US,0.603,Gram,US Gallon,0.9495,Gram,US Gallon,,Road
+Passenger Car - Gasoline - Year 1998,US,0.56025,Gram,US Gallon,0.88425,Gram,US Gallon,,Road
+Passenger Car - Gasoline - Year 1999,US,0.486,Gram,US Gallon,0.75825,Gram,US Gallon,,Road
+Passenger Car - Gasoline - Year 2000,US,0.4005,Gram,US Gallon,0.61425,Gram,US Gallon,,Road
+Passenger Car - Gasoline - Year 2001,US,0.2475,Gram,US Gallon,0.3555,Gram,US Gallon,,Road
+Passenger Car - Gasoline - Year 2002,US,0.24075,Gram,US Gallon,0.34425,Gram,US Gallon,,Road
+Passenger Car - Gasoline - Year 2003,US,0.2565,Gram,US Gallon,0.30375,Gram,US Gallon,,Road
+Passenger Car - Gasoline - Year 2004,US,0.32625,Gram,US Gallon,0.18675,Gram,US Gallon,,Road
+Passenger Car - Gasoline - Year 2005-present,US,0.33075,Gram,US Gallon,0.17775,Gram,US Gallon,,Road
+Passenger Car - Diesel - Year 1960-1982,US,0.0135,Gram,US Gallon,0.027,Gram,US Gallon,,Road
+Passenger Car - Diesel - Year 1983-present,US,0.01125,Gram,US Gallon,0.0225,Gram,US Gallon,,Road
+Passenger Car - Fuel Unknown,US,0.6975,Gram,US Gallon,0.72,Gram,US Gallon,,Road
+Light Goods Vehicle - CNG,US,11.9394,Gram,US Gallon,0.81,Gram,US Gallon,,Road
+Light Goods Vehicle - LPG,US,0.5994,Gram,US Gallon,1.0854,Gram,US Gallon,,Road
+Light Goods Vehicle - Ethanol,US,0.891,Gram,US Gallon,1.0854,Gram,US Gallon,,Road
+Light Goods Vehicle - Gasoline - Year 1987-1993,US,1.31706,Gram,US Gallon,1.6767,Gram,US Gallon,,Road
+Light Goods Vehicle - Gasoline - Year 1994,US,1.04652,Gram,US Gallon,1.59084,Gram,US Gallon,,Road
+Light Goods Vehicle - Gasoline - Year 1995,US,0.83754,Gram,US Gallon,1.47096,Gram,US Gallon,,Road
+Light Goods Vehicle - Gasoline - Year 1996,US,0.73224,Gram,US Gallon,1.41102,Gram,US Gallon,,Road
+Light Goods Vehicle - Gasoline - Year 1997,US,0.73224,Gram,US Gallon,1.41102,Gram,US Gallon,,Road
+Light Goods Vehicle - Gasoline - Year 1998,US,0.63342,Gram,US Gallon,1.17936,Gram,US Gallon,,Road
+Light Goods Vehicle - Gasoline - Year 1999,US,0.52002,Gram,US Gallon,0.91368,Gram,US Gallon,,Road
+Light Goods Vehicle - Gasoline - Year 2000,US,0.56052,Gram,US Gallon,1.00602,Gram,US Gallon,,Road
+Light Goods Vehicle - Gasoline - Year 2001,US,0.24462,Gram,US Gallon,0.26568,Gram,US Gallon,,Road
+Light Goods Vehicle - Gasoline - Year 2002,US,0.28836,Gram,US Gallon,0.36936,Gram,US Gallon,,Road
+Light Goods Vehicle - Gasoline - Year 2003,US,0.2511,Gram,US Gallon,0.18468,Gram,US Gallon,,Road
+Light Goods Vehicle - Gasoline - Year 2004,US,0.24624,Gram,US Gallon,0.21384,Gram,US Gallon,,Road
+Light Goods Vehicle - Gasoline - Year 2005-present,US,0.25434,Gram,US Gallon,0.16362,Gram,US Gallon,,Road
+Light Goods Vehicle - Diesel - Year 1960-1982,US,0.01782,Gram,US Gallon,0.02754,Gram,US Gallon,,Road
+Light Goods Vehicle - Diesel - Year 1983-1995,US,0.01458,Gram,US Gallon,0.02268,Gram,US Gallon,,Road
+Light Goods Vehicle - Diesel - Year 1996-present,US,0.0162,Gram,US Gallon,0.0243,Gram,US Gallon,,Road
+Light Goods Vehicle - Fuel Unknown,US,0.5832,Gram,US Gallon,0.7614,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Gasoline - Year 1985-1986,US,3.5992,Gram,US Gallon,0.4532,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Gasoline - Year 1987,US,3.234,Gram,US Gallon,0.74712,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Gasoline - Year 1988-1989,US,3.07296,Gram,US Gallon,0.82104,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Gasoline - Year 1990-1995,US,2.85648,Gram,US Gallon,1.00496,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Gasoline - Year 1996,US,1.12464,Gram,US Gallon,1.4784,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Gasoline - Year 1997,US,0.81312,Gram,US Gallon,1.51888,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Gasoline - Year 1998,US,0.56408,Gram,US Gallon,1.48984,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Gasoline - Year 1999,US,0.50864,Gram,US Gallon,1.2628,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Gasoline - Year 2000,US,0.43384,Gram,US Gallon,0.96096,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Gasoline - Year 2001,US,0.46464,Gram,US Gallon,1.0868,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Gasoline - Year 2002,US,0.48048,Gram,US Gallon,1.15016,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Gasoline - Year 2003,US,0.46904,Gram,US Gallon,1.0912,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Gasoline - Year 2004,US,0.30008,Gram,US Gallon,0.2508,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Gasoline - Year 2005-present,US,0.28688,Gram,US Gallon,0.15576,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Diesel - Year 1960-present,US,0.04488,Gram,US Gallon,0.04224,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - CNG,US,17.3008,Gram,US Gallon,1.54,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - LNG,US,17.3008,Gram,US Gallon,1.54,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - LPG,US,0.5808,Gram,US Gallon,1.54,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Ethanol,US,1.7336,Gram,US Gallon,1.54,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Rigid - Fuel Unknown,US,0.1848,Gram,US Gallon,0.1496,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Gasoline - Year 1985-1986,US,2.4131,Gram,US Gallon,0.30385,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Gasoline - Year 1987,US,2.16825,Gram,US Gallon,0.50091,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Gasoline - Year 1988-1989,US,2.06028,Gram,US Gallon,0.55047,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Gasoline - Year 1990-1995,US,1.91514,Gram,US Gallon,0.67378,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Gasoline - Year 1996,US,0.75402,Gram,US Gallon,0.9912,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Gasoline - Year 1997,US,0.54516,Gram,US Gallon,1.01834,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Gasoline - Year 1998,US,0.37819,Gram,US Gallon,0.99887,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Gasoline - Year 1999,US,0.34102,Gram,US Gallon,0.84665,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Gasoline - Year 2000,US,0.29087,Gram,US Gallon,0.64428,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Gasoline - Year 2001,US,0.31152,Gram,US Gallon,0.72865,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Gasoline - Year 2002,US,0.32214,Gram,US Gallon,0.77113,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Gasoline - Year 2003,US,0.31447,Gram,US Gallon,0.7316,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Gasoline - Year 2004,US,0.20119,Gram,US Gallon,0.16815,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Gasoline - Year 2005-present,US,0.19234,Gram,US Gallon,0.10443,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Diesel - Year 1960-present,US,0.03009,Gram,US Gallon,0.02832,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - CNG,US,11.5994,Gram,US Gallon,1.0325,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - LNG,US,11.5994,Gram,US Gallon,1.0325,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - LPG,US,0.3894,Gram,US Gallon,1.0325,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Ethanol,US,1.1623,Gram,US Gallon,1.0325,Gram,US Gallon,,Road
+Heavy Duty Vehicle - Articulated - Fuel Unknown,US,0.1239,Gram,US Gallon,0.1003,Gram,US Gallon,,Road
+Motorbike - Non-Catalyst Control,US,3.36,Gram,US Gallon,0.345,Gram,US Gallon,,Road
+Motorbike - Uncontrolled,US,4.495,Gram,US Gallon,0.435,Gram,US Gallon,,Road
+Motorbike - Control Unknown,US,3.5,Gram,US Gallon,0.35,Gram,US Gallon,,Road
+Ship and Boat - Residual Fuel Oil,US,0.86,Gram,US Gallon,0.3,Gram,US Gallon,,Water
+Ship and Boat - Diesel Fuel,US,0.74,Gram,US Gallon,0.26,Gram,US Gallon,,Water
+Ship and Boat - Gasoline,US,0.64,Gram,US Gallon,0.22,Gram,US Gallon,,Water
+Train - Diesel Fuel,Other,,,,,,,,Rail
+Other,Other,,,,,,,,Rail
+Agricultural Equipment - Gasoline,Other,,,,,,,,Road
+Agricultural Equipment - Diesel Fuel,Other,,,,,,,,Road
+Construction Equipment - Gasoline,Other,,,,,,,,Road
+Construction Equipment - Diesel Fuel,Other,,,,,,,,Road
+Other,Other,,,,,,,,Road
+Ship and Boat - Residual Fuel Oil,Other,,,,,,,,Water
+Ship and Boat - Diesel Fuel,Other,,,,,,,,Water
+Ship and Boat - Gasoline,Other,,,,,,,,Water
+Other,Other,,,,,,,,Water
+Other,Other,,,,,,,,AirCraft
