@@ -1,10 +1,12 @@
-
 #
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import os
 from flask_cors import CORS
+import json
+from Components.Supplier_Input import Supplier_Input
 from reference_ef import Reference_EF_Public, Reference_EF_Freight_CO2, Reference_EF_Freight_CH4_NO2, Reference_EF_Road, Reference_EF_Fuel_Use_CH4_N2O, Reference_EF_Fuel_Use_CO2, Reference_Unit_Conversion
 from reference_lookups import ReferenceLookup
+from Reference_Source_Product_Matrix import Reference_Source_Product_Matrix
 
 
 # Initialize Flask app and CORS at the top
@@ -302,6 +304,74 @@ def get_suppliers():
     except Exception as e:
         print(f"Error reading CSV: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
+
+# --- Load Reference_Source_Product_Matrix at startup ---
+source_product_matrix_csv_path = os.path.join(
+    os.path.dirname(__file__), 'data', 'Source_Product_Matrix.csv')
+reference_source_product_matrix = Reference_Source_Product_Matrix(
+    source_product_matrix_csv_path)
+
+# --- API endpoint: source_product_matrix ---
+
+
+@app.route('/api/source_product_matrix', methods=['GET'])
+def get_source_product_matrix():
+    supplier = request.args.get('supplier', '')
+    product = request.args.get('product', '')
+    location = request.args.get('location', '')
+    if not supplier or not product or not location:
+        return jsonify({'error': 'Missing supplier, product, or location parameter'}), 400
+    supplier_product_location = f"{supplier} - {product} - {location}"
+    print(
+        f"[DEBUG] /api/source_product_matrix called with: {supplier_product_location}")
+    results = reference_source_product_matrix.filter_by_supplier_product_location(
+        supplier_product_location)
+    return jsonify({'results': results})
+
+
+# --- API endpoint: compute_ghg_emissions ---
+@app.route('/api/compute_ghg_emissions', methods=['POST'])
+def compute_ghg_emissions():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'Missing JSON body'}), 400
+
+        # Extract and map fields to Supplier_Input
+        supplier_input = Supplier_Input(
+            Supplier_and_Container=data.get('Supplier_and_Container', ''),
+            Container_Weight=float(data.get('Container_Weight', 0)),
+            Number_Of_Containers=int(data.get('Number_Of_Containers', 0)),
+            Source_Description=data.get('Source_Description', ''),
+            Region=data.get('Region', ''),
+            Mode_of_Transport=data.get('Mode_of_Transport', ''),
+            Scope=data.get('Scope', ''),
+            Type_Of_Activity_Data=data.get('Type_Of_Activity_Data', ''),
+            Vehicle_Type=data.get('Vehicle_Type'),
+            Distance_Travelled=float(data['Distance_Travelled']) if data.get(
+                'Distance_Travelled') is not None else None,
+            Total_Weight_Of_Freight_InTonne=float(data['Total_Weight_Of_Freight_InTonne']) if data.get(
+                'Total_Weight_Of_Freight_InTonne') is not None else None,
+            Num_Of_Passenger=int(data['Num_Of_Passenger']) if data.get(
+                'Num_Of_Passenger') is not None else None,
+            Units_of_Measurement=data.get('Units_of_Measurement'),
+            Fuel_Used=data.get('Fuel_Used'),
+            Fuel_Amount=float(data['Fuel_Amount']) if data.get(
+                'Fuel_Amount') is not None else None,
+            Unit_Of_Fuel_Amount=data.get('Unit_Of_Fuel_Amount')
+        )
+
+        # Placeholder: actual GHG calculation logic goes here
+        # For now, just echo the parsed input
+        return jsonify({'status': 'success', 'input': supplier_input.__dict__})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+print('[DEBUG] Registered endpoints:')
+for rule in app.url_map.iter_rules():
+    print(rule)
 
 
 if __name__ == '__main__':
