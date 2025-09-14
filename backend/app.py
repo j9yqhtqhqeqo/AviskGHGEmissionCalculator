@@ -14,7 +14,7 @@ CORS(app)
 
 # --- Reference - Lookups.csv Lookups ---
 lookups_csv_path = os.path.join(
-    os.path.dirname(__file__), 'Reference - Lookups.csv')
+    os.path.dirname(__file__), 'data', 'Reference - Lookups.csv')
 lookup_columns = [
     'Region',
     'Mode of Transport',
@@ -72,7 +72,7 @@ def get_lookup_by_value(lookup_name):
 
 # Initialize Reference_Unit_Conversion instance (load once at startup)
 unit_conversion_csv_path = os.path.join(
-    os.path.dirname(__file__), 'Reference - Unit Conversion.csv')
+    os.path.dirname(__file__), 'data', 'Reference - Unit Conversion.csv')
 reference_unit_conversion = Reference_Unit_Conversion(unit_conversion_csv_path)
 
 # API endpoint for Reference_Unit_Conversion
@@ -100,7 +100,7 @@ def get_unit_conversion():
 
 # Initialize Reference_EF_Fuel_Use_CO2 instance (load once at startup)
 ef_fuel_use_co2_csv_path = os.path.join(
-    os.path.dirname(__file__), 'Reference - EF Fuel Use CO2.csv')
+    os.path.dirname(__file__), 'data', 'Reference - EF Fuel Use CO2.csv')
 reference_ef_fuel_use_co2 = Reference_EF_Fuel_Use_CO2(ef_fuel_use_co2_csv_path)
 
 # API endpoint for Reference_EF_Fuel_Use_CO2
@@ -128,7 +128,7 @@ def get_ef_fuel_use_co2_by_fuel_and_region():
 
 # Initialize Reference_EF_Fuel_Use_CH4_N2O instance (load once at startup)
 ef_fuel_use_ch4_n2o_csv_path = os.path.join(
-    os.path.dirname(__file__), 'Reference - EF Fuel Use CH4 N2O.csv')
+    os.path.dirname(__file__), 'data', 'Reference - EF Fuel Use CH4 N2O.csv')
 reference_ef_fuel_use_ch4_n2o = Reference_EF_Fuel_Use_CH4_N2O(
     ef_fuel_use_ch4_n2o_csv_path)
 
@@ -158,7 +158,7 @@ def get_ef_fuel_use_ch4_n2o_by_transport_and_region():
 
 # Initialize Reference_EF_Road instance (load once at startup)
 ef_road_csv_path = os.path.join(
-    os.path.dirname(__file__), 'Reference_EF_Road.csv')
+    os.path.dirname(__file__), 'data', 'Reference_EF_Road.csv')
 reference_ef_road = Reference_EF_Road(ef_road_csv_path)
 
 # API endpoint for Reference_EF_Road
@@ -187,18 +187,18 @@ def get_ef_road_by_vehicle_and_region():
 
 # Initialize Reference_EF_Public instance (load once at startup)
 ef_csv_path = os.path.join(os.path.dirname(
-    __file__), 'Reference_EF_Public.csv')
+    __file__), 'data', 'Reference_EF_Public.csv')
 reference_ef = Reference_EF_Public(ef_csv_path)
 
 
 # Initialize Reference_EF_Freight_CO2 instance (load once at startup)
 ef_freight_csv_path = os.path.join(os.path.dirname(
-    __file__), 'Reference_EF_Freight_CO2.csv')
+    __file__), 'data', 'Reference_EF_Freight_CO2.csv')
 reference_ef_freight = Reference_EF_Freight_CO2(ef_freight_csv_path)
 
 # Initialize Reference_EF_Freight_CH4_NO2 instance (load once at startup)
 ef_freight_ch4_no2_csv_path = os.path.join(
-    os.path.dirname(__file__), 'Reference_EF_Freight_CH4_NO2.csv')
+    os.path.dirname(__file__), 'data', 'Reference_EF_Freight_CH4_NO2.csv')
 reference_ef_freight_ch4_no2 = Reference_EF_Freight_CH4_NO2(
     ef_freight_ch4_no2_csv_path)
 
@@ -277,7 +277,8 @@ def home():
 @app.route('/api/suppliers', methods=['GET'])
 def get_suppliers():
     suppliers = []
-    csv_path = os.path.join(os.path.dirname(__file__), 'Supplier_List.csv')
+    csv_path = os.path.join(os.path.dirname(__file__),
+                            'data', 'Supplier_List.csv')
 
     print(f"Attempting to read CSV from: {csv_path}")
 
