@@ -1,7 +1,19 @@
 .activity-data-grid select.input-field.dropdown {
-  width: 16ch;
-  min-width: 120px;
-  max-width: 200px;
+  width: 100%;
+  min-width: 100px;
+  max-width: 150px;
+  padding: 2px 3px;
+  font-size: 12px;
+  border: 1px solid #bfc9d9;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5em top 50%;
+  background-size: 0.5em auto;
+  padding-right: 1.2em;
 }
 /* SupplierData.css */
 * {
@@ -10,30 +22,33 @@
 
 .supplier-data-container {
   font-family: Arial, sans-serif;
-  max-width: 1000px;
-  min-width: 2200px;
-  padding: 20px;
+  width: 100%;
+  padding: 5px;
   box-sizing: border-box; /* Include padding in width calculations */
 }
 
 .logo-container {
   display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
+  justify-content: flex-end;
+  margin-bottom: 5px;
+  padding: 5px;
 }
 
 .company-logo {
-  max-width: 300px;
+  max-width: 150px;
+  width: auto;
+  height: auto;
+  display: block;
 }
 
 .instructions-container {
-  margin-bottom: 30px;
+  margin-bottom: 5px;
 }
 
 .instructions-container h1 {
   font-size: 24px;
   color: #333;
-  margin-bottom: 10px;
+  margin-bottom: 2px;
 }
 
 .highlight {
@@ -43,13 +58,13 @@
 .data-entry-container h2 {
   color: #2a5783;
   font-size: 22px;
-  margin-bottom: 15px;
+  margin-bottom: 2px;
 }
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 30px;
+  margin-bottom: 5px;
   table-layout: fixed; /* Fixed table layout */
 }
 
@@ -63,7 +78,7 @@
   padding: 10px;
   display: flex;
   align-items: center;
-  max-width: 400px;
+  max-width: 600px; /* Increased from 400px to accommodate larger dropdown */
 }
 
 .table-cell:not(.header-cell) {
@@ -83,7 +98,7 @@
 
 .input-field {
   width: 100%;
-  padding: 8px;
+  padding: 2px;
   font-size: 16px;
   border: none;
   background: transparent;
@@ -92,7 +107,7 @@
 
 .dropdown {
   width: 100%;
-  padding: 8px;
+  padding: 2px;
   font-size: 16px;
   border: none;
   background: transparent;
@@ -106,7 +121,7 @@
 }
 
 .loading, .error {
-  padding: 10px;
+  padding: 2px;
   font-style: italic;
 }
 
@@ -119,19 +134,23 @@
   background-color: rgba(211, 47, 47, 0.05) !important;
 }
 
-
+/* Specific styling for Supplier and Container dropdown */
+.table-cell:not(.header-cell) .dropdown {
+  min-width: 300px; /* 50% increase from 200px base */
+  max-width: 600px; /* Allow more space for supplier dropdown */
+}
 
 .navigation-container {
-  margin-top: 30px;
+  margin-top: 5px;
   text-align: center;
 }
 
 .activity-data-button {
   background-color: white;
   border: 1px solid #ccc;
-  padding: 10px 30px;
+  padding: 5px 15px;
   font-size: 16px;
-  margin-top: 10px;
+  margin-top: 2px;
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -142,42 +161,52 @@
 
 /* --- Activity Data Grid Styling (matches datagrid.jpeg) --- */
 .activity-data-grid-container {
-  margin-top: 40px;
+  margin-top: 5px;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  padding: 24px 18px 32px 18px;
+  padding: 5px;
   width: 100%;
-  max-width: 2400px;
   overflow-x: auto;
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
 .activity-data-grid {
-  min-width: 1500px;
+  min-width: 100%;
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 18px;
+  margin-bottom: 2px;
   background: #f9fbfd;
   border-radius: 8px;
   overflow: hidden;
-  font-size: 15px;
+  font-size: 14px;
+  table-layout: auto;
 }
 
 .activity-data-grid th {
   background: #2a5783;
   color: #fff;
   font-weight: 600;
-  padding: 12px 8px;
+  padding: 8px 6px;
   border: 1px solid #d1dbe6;
-  text-align: left;
-  font-size: 15px;
+  text-align: center;
+  font-size: 12px;
+  white-space: normal; /* Allow text wrapping */
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1.2;
+  vertical-align: middle;
+  word-wrap: break-word;
 }
 
 .activity-data-grid td {
-  padding: 10px 8px;
+  padding: 6px 4px;
   border: 1px solid #d1dbe6;
   background: #fff;
   vertical-align: middle;
+  max-width: 150px;
+  overflow: hidden;
 }
 
 .activity-data-grid tbody tr:nth-child(even) td {
@@ -186,12 +215,13 @@
 
 .activity-data-grid input.input-field {
   width: 100%;
-  padding: 6px 8px;
-  font-size: 15px;
+  padding: 4px 6px;
+  font-size: 12px;
   border: 1px solid #bfc9d9;
   border-radius: 4px;
   background: #fff;
   transition: border 0.2s;
+  min-width: 80px;
 }
 
 .activity-data-grid input.input-field:focus {
@@ -232,4 +262,85 @@
 
 .add-row-button:hover {
   background: #17405e;
+}
+
+/* Specific column width adjustments */
+/* Target the Total Weight of Freight column (8th column) */
+.activity-data-grid th:nth-child(8),
+.activity-data-grid td:nth-child(8) {
+  width: 75px !important; /* 50% reduction from default ~150px */
+  max-width: 75px !important;
+  min-width: 75px !important;
+}
+
+.activity-data-grid td:nth-child(8) input.input-field {
+  width: 100% !important;
+  max-width: 70px !important;
+  min-width: 70px !important;
+  padding: 2px 3px !important;
+  font-size: 11px !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .activity-data-grid {
+    font-size: 12px;
+  }
+  
+  .activity-data-grid th {
+    padding: 6px 4px;
+    font-size: 11px;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.1;
+    word-wrap: break-word;
+  }
+  
+  .activity-data-grid td {
+    padding: 4px 3px;
+    max-width: 120px;
+  }
+  
+  .activity-data-grid input.input-field,
+  .activity-data-grid select.input-field.dropdown {
+    padding: 3px 4px;
+    font-size: 11px;
+    min-width: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .supplier-data-container {
+    padding: 10px;
+  }
+  
+  .activity-data-grid-container {
+    padding: 12px 8px 16px 8px;
+    max-height: 60vh;
+  }
+  
+  .activity-data-grid {
+    font-size: 10px;
+  }
+  
+  .activity-data-grid th {
+    padding: 4px 2px;
+    font-size: 9px;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.0;
+    word-wrap: break-word;
+  }
+  
+  .activity-data-grid td {
+    padding: 3px 2px;
+    max-width: 100px;
+  }
+  
+  .activity-data-grid input.input-field,
+  .activity-data-grid select.input-field.dropdown {
+    padding: 2px 3px;
+    font-size: 9px;
+    min-width: 50px;
+  }
 }

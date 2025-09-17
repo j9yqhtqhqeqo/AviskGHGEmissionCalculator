@@ -19,6 +19,9 @@ function SupplierData() {
   const [unitsOptions, setUnitsOptions] = useState([]);
   const [unitsLoading, setUnitsLoading] = useState(true);
   const [unitsError, setUnitsError] = useState(null);
+  const [fuelOptions, setFuelOptions] = useState([]);
+  const [fuelLoading, setFuelLoading] = useState(true);
+  const [fuelError, setFuelError] = useState(null);
   
   // Vehicle type dropdowns per row
   const [vehicleTypeOptions, setVehicleTypeOptions] = useState({});
@@ -29,8 +32,8 @@ function SupplierData() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     supplier: "",
-    containerWeight: "530",
-    numberOfContainers: "720,000",
+    containerWeight: "",
+    numberOfContainers: "",
   });
   const [suppliers, setSuppliers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,16 +47,76 @@ function SupplierData() {
   const [activityRows, setActivityRows] = useState([
     {
       sourceDescription: "",
-      region: "US",
-      modeOfTransport: "Water",
-      scope: "Scope 3",
-      typeOfActivityData: "Weight Distance (e.g. Freight Transport)",
-      vehicleType: "Watercraft - Shipping - Large Container Vessel (20000 tonnes)",
-      distanceTravelled: "1,000",
-      totalWeight: "381.6000",
+      region: "",
+      modeOfTransport: "",
+      scope: "",
+      typeOfActivityData: "",
+      vehicleType: "",
+      distanceTravelled: "",
+      totalWeight: "",
       numPassengers: "",
-      units: "Tonne Mile",
-      fuelUsed: "Jet Fuel",
+      units: "",
+      fuelUsed: "",
+      fuelAmount: "",
+      unitOfFuelAmount: "",
+    },
+    {
+      sourceDescription: "",
+      region: "",
+      modeOfTransport: "",
+      scope: "",
+      typeOfActivityData: "",
+      vehicleType: "",
+      distanceTravelled: "",
+      totalWeight: "",
+      numPassengers: "",
+      units: "",
+      fuelUsed: "",
+      fuelAmount: "",
+      unitOfFuelAmount: "",
+    },
+    {
+      sourceDescription: "",
+      region: "",
+      modeOfTransport: "",
+      scope: "",
+      typeOfActivityData: "",
+      vehicleType: "",
+      distanceTravelled: "",
+      totalWeight: "",
+      numPassengers: "",
+      units: "",
+      fuelUsed: "",
+      fuelAmount: "",
+      unitOfFuelAmount: "",
+    },
+    {
+      sourceDescription: "",
+      region: "",
+      modeOfTransport: "",
+      scope: "",
+      typeOfActivityData: "",
+      vehicleType: "",
+      distanceTravelled: "",
+      totalWeight: "",
+      numPassengers: "",
+      units: "",
+      fuelUsed: "",
+      fuelAmount: "",
+      unitOfFuelAmount: "",
+    },
+    {
+      sourceDescription: "",
+      region: "",
+      modeOfTransport: "",
+      scope: "",
+      typeOfActivityData: "",
+      vehicleType: "",
+      distanceTravelled: "",
+      totalWeight: "",
+      numPassengers: "",
+      units: "",
+      fuelUsed: "",
       fuelAmount: "",
       unitOfFuelAmount: "",
     },
@@ -239,11 +302,26 @@ function SupplierData() {
         setUnitsLoading(false);
       }
     };
+    const fetchFuelTypes = async () => {
+      try {
+        setFuelLoading(true);
+        const response = await fetch("http://127.0.0.1:5000/api/fuel_types");
+        if (!response.ok)
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        const data = await response.json();
+        setFuelOptions(data.fuel_types || []);
+        setFuelLoading(false);
+      } catch (err) {
+        setFuelError("Failed to load fuel types.");
+        setFuelLoading(false);
+      }
+    };
     fetchRegions();
     fetchMot();
     fetchScope();
     fetchActivityType();
     fetchUnits();
+    fetchFuelTypes();
   }, []);
 
   // Effect: fetch vehicle type options when region or modeOfTransport changes for any row
@@ -303,31 +381,26 @@ function SupplierData() {
   return (
     <div className="supplier-data-container">
       <div className="logo-container">
-        <picture>
-          <source srcSet="/saxco-logo.svg" type="image/svg+xml" />
-          <img
-            src="/saxco-logo.png"
-            alt="Saxco International"
-            className="company-logo"
-          />
-        </picture>
-      </div>
-
-      <div className="instructions-container">
-        <h1>Instructions</h1>
-        <p>
-          Select the{" "}
-          <span className="highlight">Supplier - Container - Location</span>{" "}
-          then enter the container weight and # of total containers.
-        </p>
+        <img
+          src="/saxcologo.jpeg"
+          alt="Saxco International"
+          className="company-logo"
+          onError={(e) => {
+            console.error('Logo failed to load:', e);
+            e.target.style.display = 'none';
+          }}
+          onLoad={() => {
+            console.log('Logo loaded successfully');
+          }}
+        />
       </div>
 
       <div className="data-entry-container">
-        <h2>Enter Supplier Data</h2>
+        <h2>Supplier Data</h2>
         <div className="data-table">
           <div className="table-row">
             <div className="table-cell header-cell">
-              Select Supplier and Container
+              Supplier and Container
             </div>
             <div className="table-cell">
               {loading ? (
@@ -353,7 +426,7 @@ function SupplierData() {
           </div>
 
           <div className="table-row">
-            <div className="table-cell header-cell">Enter Container Weight</div>
+            <div className="table-cell header-cell">Container Weight</div>
             <div className="table-cell">
               <input
                 type="text"
@@ -373,7 +446,7 @@ function SupplierData() {
           </div>
 
           <div className="table-row">
-            <div className="table-cell header-cell">Enter # of Containers</div>
+            <div className="table-cell header-cell"># of Containers</div>
             <div className="table-cell">
               <input
                 type="text"
@@ -546,6 +619,31 @@ function SupplierData() {
                         >
                           <option value="">Select Unit</option>
                           {unitsOptions.map((option, idx) => (
+                            <option key={idx} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      )
+                    ) : col.key === "fuelUsed" ? (
+                      fuelLoading ? (
+                        <div className="loading">Loading...</div>
+                      ) : fuelError ? (
+                        <div className="error">{fuelError}</div>
+                      ) : (
+                        <select
+                          className="input-field dropdown"
+                          value={row[col.key]}
+                          onChange={(e) =>
+                            handleActivityCellChange(
+                              rowIdx,
+                              col.key,
+                              e.target.value
+                            )
+                          }
+                        >
+                          <option value="">Select Fuel Type</option>
+                          {fuelOptions.map((option, idx) => (
                             <option key={idx} value={option}>
                               {option}
                             </option>

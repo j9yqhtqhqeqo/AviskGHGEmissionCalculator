@@ -402,6 +402,21 @@ def get_vehicle_and_size_by_region_and_mode():
     # Return unique values, sorted
     unique_vehicle_and_size = sorted(list(set(matches)))
     return jsonify({'region': region, 'mode_of_transport': mode_of_transport, 'vehicle_and_size': unique_vehicle_and_size})
+
+# API endpoint to get unique fuel types
+@app.route('/api/fuel_types', methods=['GET'])
+def get_fuel_types():
+    try:
+        # Get unique fuel types from reference_ef_fuel_use_co2
+        fuel_types = sorted(list(set([
+            row.get('Fuel', '') 
+            for row in reference_ef_fuel_use_co2.data 
+            if row.get('Fuel', '').strip()
+        ])))
+        return jsonify({'fuel_types': fuel_types})
+    except Exception as e:
+        print(f"Error getting fuel types: {str(e)}")
+        return jsonify({'error': 'Failed to retrieve fuel types'}), 500
 #
 
 # print('[DEBUG] Registered endpoints:')
