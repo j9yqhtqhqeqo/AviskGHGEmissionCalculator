@@ -1,13 +1,13 @@
-﻿Region,Mode of Transport,Type of Activity Data,Scope,Units ,IPCC GWP Version,Activity Data Columns
-US,Road,Fuel Use and Vehicle Distance,Scope 1,Tonne Mile,1995 IPCC Second Assessment Report (SAR),Region
-UK,Rail,Fuel Use,Scope 2,Tonne Kilometer,2001 IPCC Third Assessment Report (TAR),Mode of Transport
-Other,Water,Weight Distance (e.g. Freight Transport),Scope 3,Short Ton Mile,2007 IPCC Fourth Assessment Report,Scope
-,,,,Short Ton Kilometer,2014 IPCC Fifth Assessment Report,Type of Activity Data
-,,,,Passenger Mile,,Vehicle Type
-,,,,Passenger Kilometer,,Distance Travelled
-,,,,Mile,,Total Weight of Freight (tonne)
-,,,,Kilometer,,# of Passenger
-,,,,,,Units of Measurement (Tonne Miles)
-,,,,,,Fuel Used
-,,,,,,Fuel Amount
-,,,,,,Unit of Fuel Amount
+﻿Region,Mode of Transport,Type of Activity Data,Scope,Units ,IPCC GWP Version,Activity Data Columns,Unit of Fuel Amount
+US,Road,Fuel Use and Vehicle Distance,Scope 1,Tonne Mile,1995 IPCC Second Assessment Report (SAR),Region,US Gallon
+UK,Rail,Fuel Use,Scope 2,Tonne Kilometer,2001 IPCC Third Assessment Report (TAR),Mode of Transport,UK Gallon
+Other,Water,Weight Distance (e.g. Freight Transport),Scope 3,Short Ton Mile,2007 IPCC Fourth Assessment Report,Scope,Litre
+,,,,Short Ton Kilometer,2014 IPCC Fifth Assessment Report,Type of Activity Data,
+,,,,Passenger Mile,,Vehicle Type,
+,,,,Passenger Kilometer,,Distance Travelled,
+,,,,Mile,,Total Weight of Freight (tonne),
+,,,,Kilometer,,# of Passenger,
+,,,,,,Units of Measurement (Tonne Miles),
+,,,,,,Fuel Used,
+,,,,,,Fuel Amount,
+,,,,,,Unit of Fuel Amount,

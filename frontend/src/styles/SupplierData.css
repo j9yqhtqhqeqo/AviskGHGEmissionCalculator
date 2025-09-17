@@ -385,6 +385,42 @@
   background: #17405e;
 }
 
+/* Upload Data Button */
+.upload-data-button {
+  background: #2a5783;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(42,87,131,0.08);
+  transition: background 0.2s;
+}
+
+.upload-data-button:hover {
+  background: #17405e;
+}
+
+/* Export Data Button */
+.export-data-button {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(40,167,69,0.08);
+  transition: background 0.2s;
+}
+
+.export-data-button:hover {
+  background: #1e7e34;
+}
+
 /* Specific column width adjustments */
 /* Target the Total Weight of Freight column (8th column) */
 .activity-data-grid th:nth-child(8),

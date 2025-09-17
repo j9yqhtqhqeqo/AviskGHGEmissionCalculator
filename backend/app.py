@@ -29,7 +29,8 @@ lookup_columns = [
     'Scope',
     'Units ',
     'IPCC GWP Version',
-    'Activity Data Columns'
+    'Activity Data Columns',
+    'Unit of Fuel Amount'
 ]
 reference_lookups = {col: ReferenceLookup(
     lookups_csv_path, col) for col in lookup_columns}
@@ -47,6 +48,7 @@ def get_lookup_values(lookup_name):
         'units': 'Units ',
         'ipcc_gwp_version': 'IPCC GWP Version',
         'activity_data_columns': 'Activity Data Columns',
+        'unit_of_fuel_amount': 'Unit of Fuel Amount',
     }
     col = lookup_map.get(lookup_name.lower())
     if not col or col not in reference_lookups:
@@ -62,6 +64,12 @@ def get_scope_lookup():
     values = reference_lookups['Scope'].get_all()
     return jsonify({'lookup': 'scope', 'values': values})
 
+# Explicit endpoint for Unit of Fuel Amount lookup (optional, for clarity)
+@app.route('/api/lookup/unit_of_fuel_amount', methods=['GET'])
+def get_unit_of_fuel_amount_lookup():
+    values = reference_lookups['Unit of Fuel Amount'].get_all()
+    return jsonify({'lookup': 'unit_of_fuel_amount', 'values': values})
+
 
 @app.route('/api/lookup/<lookup_name>/value', methods=['GET'])
 def get_lookup_by_value(lookup_name):
@@ -75,6 +83,7 @@ def get_lookup_by_value(lookup_name):
         'units': 'Units ',
         'ipcc_gwp_version': 'IPCC GWP Version',
         'activity_data_columns': 'Activity Data Columns',
+        'unit_of_fuel_amount': 'Unit of Fuel Amount',
     }
     col = lookup_map.get(lookup_name.lower())
     if not col or col not in reference_lookups:
