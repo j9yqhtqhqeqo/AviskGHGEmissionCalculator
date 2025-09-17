@@ -12,6 +12,7 @@ class Supplier_Input:
     Mode_of_Transport: str
     Scope: str
     Type_Of_Activity_Data: str
+    Selected_Type_Of_Activity_Data: Optional[str] = None
     Vehicle_Type: Optional[str] = None
     Distance_Travelled: Optional[float] = None
     Total_Weight_Of_Freight_InTonne: Optional[float] = None
@@ -54,3 +55,13 @@ class Supplier_Input:
         self.Fuel_Used = Fuel_Used
         self.Fuel_Amount = Fuel_Amount
         self.Unit_Of_Fuel_Amount = Unit_Of_Fuel_Amount
+        # Compute Selected_Type_Of_Activity_Data using Excel logic
+        if self.Type_Of_Activity_Data == "Custom vehicle":
+            if self.Units_of_Measurement in ("Passenger Mile", "Passenger Kilometer"):
+                self.Selected_Type_Of_Activity_Data = "Passenger Distance (e.g. Public Transport)"
+            elif self.Units_of_Measurement in ("Tonne Mile", "Tonne Kilometer"):
+                self.Selected_Type_Of_Activity_Data = "Weight Distance (e.g. Freight Transport)"
+            else:
+                self.Selected_Type_Of_Activity_Data = "Vehicle Distance (e.g. Road Transport)"
+        else:
+            self.Selected_Type_Of_Activity_Data = self.Type_Of_Activity_Data

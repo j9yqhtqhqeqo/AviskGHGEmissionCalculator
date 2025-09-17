@@ -3,6 +3,155 @@ import { useNavigate } from "react-router-dom";
 import "../styles/SupplierData.css";
 
 function SupplierData() {
+  // State for region, mode_of_transport, scope, and type_of_activity_data dropdown options
+  const [regionOptions, setRegionOptions] = useState([]);
+  const [regionLoading, setRegionLoading] = useState(true);
+  const [regionError, setRegionError] = useState(null);
+  const [motOptions, setMotOptions] = useState([]);
+  const [motLoading, setMotLoading] = useState(true);
+  const [motError, setMotError] = useState(null);
+  const [scopeOptions, setScopeOptions] = useState([]);
+  const [scopeLoading, setScopeLoading] = useState(true);
+  const [scopeError, setScopeError] = useState(null);
+  const [activityTypeOptions, setActivityTypeOptions] = useState([]);
+  const [activityTypeLoading, setActivityTypeLoading] = useState(true);
+  const [activityTypeError, setActivityTypeError] = useState(null);
+
+  // Fetch region, mode_of_transport, scope, and type_of_activity_data options for dropdowns
+  useEffect(() => {
+    const fetchRegions = async () => {
+      try {
+        setRegionLoading(true);
+        const response = await fetch("http://127.0.0.1:5000/api/lookup/region");
+        if (!response.ok)
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        const data = await response.json();
+        setRegionOptions(data.values || []);
+        setRegionLoading(false);
+      } catch (err) {
+        setRegionError("Failed to load regions.");
+        setRegionLoading(false);
+      }
+    };
+    const fetchMot = async () => {
+      try {
+        setMotLoading(true);
+        const response = await fetch(
+          "http://127.0.0.1:5000/api/lookup/mode_of_transport"
+        );
+        if (!response.ok)
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        const data = await response.json();
+        setMotOptions(data.values || []);
+        setMotLoading(false);
+      } catch (err) {
+        setMotError("Failed to load modes of transport.");
+        setMotLoading(false);
+      }
+    };
+    const fetchScope = async () => {
+      try {
+        setScopeLoading(true);
+        const response = await fetch("http://127.0.0.1:5000/api/lookup/scope");
+        if (!response.ok)
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        const data = await response.json();
+        setScopeOptions(data.values || []);
+        setScopeLoading(false);
+      } catch (err) {
+        setScopeError("Failed to load scopes.");
+        setScopeLoading(false);
+      }
+    };
+    const fetchActivityType = async () => {
+      try {
+        setActivityTypeLoading(true);
+        const response = await fetch(
+          "http://127.0.0.1:5000/api/lookup/type_of_activity_data"
+        );
+        if (!response.ok)
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        const data = await response.json();
+        setActivityTypeOptions(data.values || []);
+        setActivityTypeLoading(false);
+      } catch (err) {
+        setActivityTypeError("Failed to load activity types.");
+        setActivityTypeLoading(false);
+      }
+    };
+    fetchRegions();
+    fetchMot();
+    fetchScope();
+    fetchActivityType();
+  }, []);
+  // Data grid state for activity/transportation data
+  const [activityRows, setActivityRows] = useState([
+    {
+      sourceDescription: "",
+      region: "US",
+      modeOfTransport: "Water",
+      scope: "Scope 3",
+      typeOfActivityData: "Weight Distance (e.g. Freight Transport)",
+      vehicleType:
+        "Watercraft - Shipping - Large Container Vessel (20000 tonnes)",
+      distanceTravelled: "1,000",
+      totalWeight: "381.6000",
+      numPassengers: "",
+      units: "Tonne Mile",
+      fuelUsed: "Jet Fuel",
+      fuelAmount: "",
+      unitOfFuelAmount: "",
+    },
+  ]);
+
+  const activityColumns = [
+    { key: "sourceDescription", label: "Source Description" },
+    { key: "region", label: "Region" },
+    { key: "modeOfTransport", label: "Mode of Transport" },
+    { key: "scope", label: "Scope" },
+    { key: "typeOfActivityData", label: "Type of Activity Data" },
+    { key: "vehicleType", label: "Vehicle Type" },
+    { key: "distanceTravelled", label: "Distance Travelled" },
+    { key: "totalWeight", label: "Total Weight of Freight (tonne)" },
+    { key: "numPassengers", label: "# of Passengers" },
+    { key: "units", label: "Units of Measurement (Tonne Miles)" },
+    { key: "fuelUsed", label: "Fuel Used" },
+    { key: "fuelAmount", label: "Fuel Amount" },
+    { key: "unitOfFuelAmount", label: "Unit of Fuel Amount" },
+  ];
+
+  const handleActivityCellChange = (rowIdx, key, value) => {
+    setActivityRows((prevRows) => {
+      const updated = [...prevRows];
+      updated[rowIdx] = { ...updated[rowIdx], [key]: value };
+      return updated;
+    });
+  };
+
+  const handleAddActivityRow = () => {
+    setActivityRows((prevRows) => [
+      ...prevRows,
+      {
+        sourceDescription: "",
+        region: "",
+        modeOfTransport: "",
+        scope: "",
+        typeOfActivityData: "",
+        vehicleType: "",
+        distanceTravelled: "",
+        totalWeight: "",
+        numPassengers: "",
+        units: "",
+        fuelUsed: "",
+        fuelAmount: "",
+        unitOfFuelAmount: "",
+      },
+    ]);
+  };
+
+  const handleRemoveActivityRow = (rowIdx) => {
+    setActivityRows((prevRows) => prevRows.filter((_, idx) => idx !== rowIdx));
+  };
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     supplier: "",
@@ -187,13 +336,152 @@ function SupplierData() {
         </div>
       </div>
 
-      <div className="navigation-container">
-        <p>Proceed to "Activity Data" to enter transportation data.</p>
-        <button
-          className="activity-data-button"
-          onClick={handleActivityDataClick}
-        >
-          Enter Activity Data
+      <div className="activity-data-grid-container">
+        <h2>Transportation/Activity Data</h2>
+        <table className="activity-data-grid">
+          <thead>
+            <tr>
+              {activityColumns.map((col) => (
+                <th key={col.key}>{col.label}</th>
+              ))}
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {activityRows.map((row, rowIdx) => (
+              <tr key={rowIdx}>
+                {activityColumns.map((col) => (
+                  <td key={col.key}>
+                    {col.key === "region" ? (
+                      regionLoading ? (
+                        <div className="loading">Loading...</div>
+                      ) : regionError ? (
+                        <div className="error">{regionError}</div>
+                      ) : (
+                        <select
+                          className="input-field dropdown"
+                          value={row[col.key]}
+                          onChange={(e) =>
+                            handleActivityCellChange(
+                              rowIdx,
+                              col.key,
+                              e.target.value
+                            )
+                          }
+                        >
+                          <option value="">Select Region</option>
+                          {regionOptions.map((option, idx) => (
+                            <option key={idx} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      )
+                    ) : col.key === "modeOfTransport" ? (
+                      motLoading ? (
+                        <div className="loading">Loading...</div>
+                      ) : motError ? (
+                        <div className="error">{motError}</div>
+                      ) : (
+                        <select
+                          className="input-field dropdown"
+                          value={row[col.key]}
+                          onChange={(e) =>
+                            handleActivityCellChange(
+                              rowIdx,
+                              col.key,
+                              e.target.value
+                            )
+                          }
+                        >
+                          <option value="">Select Mode of Transport</option>
+                          {motOptions.map((option, idx) => (
+                            <option key={idx} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      )
+                    ) : col.key === "scope" ? (
+                      scopeLoading ? (
+                        <div className="loading">Loading...</div>
+                      ) : scopeError ? (
+                        <div className="error">{scopeError}</div>
+                      ) : (
+                        <select
+                          className="input-field dropdown"
+                          value={row[col.key]}
+                          onChange={(e) =>
+                            handleActivityCellChange(
+                              rowIdx,
+                              col.key,
+                              e.target.value
+                            )
+                          }
+                        >
+                          <option value="">Select Scope</option>
+                          {scopeOptions.map((option, idx) => (
+                            <option key={idx} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      )
+                    ) : col.key === "typeOfActivityData" ? (
+                      activityTypeLoading ? (
+                        <div className="loading">Loading...</div>
+                      ) : activityTypeError ? (
+                        <div className="error">{activityTypeError}</div>
+                      ) : (
+                        <select
+                          className="input-field dropdown"
+                          value={row[col.key]}
+                          onChange={(e) =>
+                            handleActivityCellChange(
+                              rowIdx,
+                              col.key,
+                              e.target.value
+                            )
+                          }
+                        >
+                          <option value="">Select Type of Activity Data</option>
+                          {activityTypeOptions.map((option, idx) => (
+                            <option key={idx} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      )
+                    ) : (
+                      <input
+                        type="text"
+                        value={row[col.key]}
+                        onChange={(e) =>
+                          handleActivityCellChange(
+                            rowIdx,
+                            col.key,
+                            e.target.value
+                          )
+                        }
+                        className="input-field"
+                      />
+                    )}
+                  </td>
+                ))}
+                <td>
+                  <button
+                    onClick={() => handleRemoveActivityRow(rowIdx)}
+                    disabled={activityRows.length === 1}
+                  >
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button className="add-row-button" onClick={handleAddActivityRow}>
+          Add Row
         </button>
       </div>
     </div>

@@ -1,3 +1,8 @@
+.activity-data-grid select.input-field.dropdown {
+  width: 16ch;
+  min-width: 120px;
+  max-width: 200px;
+}
 /* SupplierData.css */
 * {
   box-sizing: border-box;
@@ -6,7 +11,7 @@
 .supplier-data-container {
   font-family: Arial, sans-serif;
   max-width: 1000px;
-  margin: 0 auto;
+  min-width: 2200px;
   padding: 20px;
   box-sizing: border-box; /* Include padding in width calculations */
 }
@@ -58,6 +63,7 @@
   padding: 10px;
   display: flex;
   align-items: center;
+  max-width: 400px;
 }
 
 .table-cell:not(.header-cell) {
@@ -81,6 +87,7 @@
   font-size: 16px;
   border: none;
   background: transparent;
+  min-width: 200px;
 }
 
 .dropdown {
@@ -112,18 +119,7 @@
   background-color: rgba(211, 47, 47, 0.05) !important;
 }
 
-.error-message {
-  color: #d32f2f;
-  font-size: 12px;
-  margin-top: 4px;
-  position: absolute;
-  margin-left: 10px;
-  margin-top: 34px;
-}
 
-.table-cell {
-  position: relative;
-}
 
 .navigation-container {
   margin-top: 30px;
@@ -142,4 +138,98 @@
 
 .activity-data-button:hover {
   background-color: #f5f5f5;
+}
+
+/* --- Activity Data Grid Styling (matches datagrid.jpeg) --- */
+.activity-data-grid-container {
+  margin-top: 40px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 24px 18px 32px 18px;
+  width: 100%;
+  max-width: 2400px;
+  overflow-x: auto;
+}
+
+.activity-data-grid {
+  min-width: 1500px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+  background: #f9fbfd;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 15px;
+}
+
+.activity-data-grid th {
+  background: #2a5783;
+  color: #fff;
+  font-weight: 600;
+  padding: 12px 8px;
+  border: 1px solid #d1dbe6;
+  text-align: left;
+  font-size: 15px;
+}
+
+.activity-data-grid td {
+  padding: 10px 8px;
+  border: 1px solid #d1dbe6;
+  background: #fff;
+  vertical-align: middle;
+}
+
+.activity-data-grid tbody tr:nth-child(even) td {
+  background: #f2f6fa;
+}
+
+.activity-data-grid input.input-field {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 15px;
+  border: 1px solid #bfc9d9;
+  border-radius: 4px;
+  background: #fff;
+  transition: border 0.2s;
+}
+
+.activity-data-grid input.input-field:focus {
+  border: 1.5px solid #2a5783;
+  outline: none;
+}
+
+.activity-data-grid button {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.activity-data-grid button:disabled {
+  background: #ccc;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.add-row-button {
+  background: #2a5783;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 28px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 10px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(42,87,131,0.08);
+  transition: background 0.2s;
+}
+
+.add-row-button:hover {
+  background: #17405e;
 }

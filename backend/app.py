@@ -1,12 +1,13 @@
 #
 from flask import Flask, jsonify, request
+import csv
 import os
 from flask_cors import CORS
 import json
 from Components.Supplier_Input import Supplier_Input
-from reference_ef import Reference_EF_Public, Reference_EF_Freight_CO2, Reference_EF_Freight_CH4_NO2, Reference_EF_Road, Reference_EF_Fuel_Use_CH4_N2O, Reference_EF_Fuel_Use_CO2, Reference_Unit_Conversion
-from reference_lookups import ReferenceLookup
-from Reference_Source_Product_Matrix import Reference_Source_Product_Matrix
+from Components.reference_ef import Reference_EF_Public, Reference_EF_Freight_CO2, Reference_EF_Freight_CH4_NO2, Reference_EF_Road, Reference_EF_Fuel_Use_CH4_N2O, Reference_EF_Fuel_Use_CO2, Reference_Unit_Conversion
+from Components.reference_lookups import ReferenceLookup
+from Components.Reference_Source_Product_Matrix import Reference_Source_Product_Matrix
 
 
 # Initialize Flask app and CORS at the top
@@ -48,6 +49,14 @@ def get_lookup_values(lookup_name):
         return jsonify({'error': f'Unknown lookup: {lookup_name}'}), 404
     values = reference_lookups[col].get_all()
     return jsonify({'lookup': lookup_name, 'values': values})
+
+# Explicit endpoint for Scope lookup (optional, for clarity)
+
+
+@app.route('/api/lookup/scope', methods=['GET'])
+def get_scope_lookup():
+    values = reference_lookups['Scope'].get_all()
+    return jsonify({'lookup': 'scope', 'values': values})
 
 
 @app.route('/api/lookup/<lookup_name>/value', methods=['GET'])
@@ -110,6 +119,7 @@ reference_ef_fuel_use_co2 = Reference_EF_Fuel_Use_CO2(ef_fuel_use_co2_csv_path)
 
 @app.route('/api/ef_fuel_use_co2', methods=['GET'])
 def get_ef_fuel_use_co2_by_fuel_and_region():
+    print("[DEBUG] /api/ef_fuel_use_co2 endpoint called")
     from flask import request
     fuel = request.args.get('fuel', '')
     region = request.args.get('region', '')
@@ -369,9 +379,9 @@ def compute_ghg_emissions():
         return jsonify({'error': str(e)}), 500
 
 
-print('[DEBUG] Registered endpoints:')
-for rule in app.url_map.iter_rules():
-    print(rule)
+# print('[DEBUG] Registered endpoints:')
+# for rule in app.url_map.iter_rules():
+#     print(rule)
 
 
 if __name__ == '__main__':
