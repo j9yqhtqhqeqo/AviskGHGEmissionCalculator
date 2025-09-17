@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/SupplierData.css";
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
 
 function SupplierData() {
   const navigate = useNavigate();
@@ -700,7 +700,9 @@ function SupplierData() {
     const fetchUnitOfFuelAmount = async () => {
       try {
         setUnitOfFuelAmountLoading(true);
-        const response = await fetch("http://127.0.0.1:5000/api/lookup/unit_of_fuel_amount");
+        const response = await fetch(
+          "http://127.0.0.1:5000/api/lookup/unit_of_fuel_amount"
+        );
         if (!response.ok)
           throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
@@ -750,12 +752,12 @@ function SupplierData() {
 
     // Validate file type
     const validTypes = [
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-      'application/vnd.ms-excel', // .xls
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+      "application/vnd.ms-excel", // .xls
     ];
-    
+
     if (!validTypes.includes(file.type)) {
-      alert('Please select a valid Excel file (.xlsx or .xls)');
+      alert("Please select a valid Excel file (.xlsx or .xls)");
       return;
     }
 
@@ -763,84 +765,98 @@ function SupplierData() {
     reader.onload = (e) => {
       try {
         const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        
+        const workbook = XLSX.read(data, { type: "array" });
+
         // Get the first worksheet
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
-        
+
         // Convert to JSON
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        
+
         if (jsonData.length < 2) {
-          alert('Excel file must contain at least a header row and one data row');
+          alert(
+            "Excel file must contain at least a header row and one data row"
+          );
           return;
         }
 
         // Map Excel columns to our data structure
         const headers = jsonData[0];
         const dataRows = jsonData.slice(1);
-        
-        const mappedData = dataRows.map(row => {
+
+        const mappedData = dataRows.map((row) => {
           const rowData = {};
           activityColumns.forEach((col, index) => {
             // Try to match column by name or position
-            const headerIndex = headers.findIndex(header => 
-              header && header.toString().toLowerCase().includes(col.label.toLowerCase().split(' ')[0])
+            const headerIndex = headers.findIndex(
+              (header) =>
+                header &&
+                header
+                  .toString()
+                  .toLowerCase()
+                  .includes(col.label.toLowerCase().split(" ")[0])
             );
             const valueIndex = headerIndex !== -1 ? headerIndex : index;
-            rowData[col.key] = row[valueIndex] ? row[valueIndex].toString() : '';
+            rowData[col.key] = row[valueIndex]
+              ? row[valueIndex].toString()
+              : "";
           });
           return rowData;
         });
 
         // Filter out completely empty rows
-        const filteredData = mappedData.filter(row => 
-          Object.values(row).some(value => value && value.trim() !== '')
+        const filteredData = mappedData.filter((row) =>
+          Object.values(row).some((value) => value && value.trim() !== "")
         );
 
         if (filteredData.length === 0) {
-          alert('No valid data found in the Excel file');
+          alert("No valid data found in the Excel file");
           return;
         }
 
         // Update the activity rows state
         setActivityRows(filteredData);
-        alert(`Successfully imported ${filteredData.length} rows from Excel file`);
-        
+        alert(
+          `Successfully imported ${filteredData.length} rows from Excel file`
+        );
       } catch (error) {
-        console.error('Error parsing Excel file:', error);
-        alert('Error parsing Excel file. Please ensure it is a valid Excel format.');
+        console.error("Error parsing Excel file:", error);
+        alert(
+          "Error parsing Excel file. Please ensure it is a valid Excel format."
+        );
       }
     };
 
     reader.readAsArrayBuffer(file);
-    
+
     // Reset the file input
-    event.target.value = '';
+    event.target.value = "";
   };
 
   const handleExportData = () => {
     try {
       // Filter out completely empty rows
-      const dataToExport = activityRows.filter(row => 
-        Object.values(row).some(value => value && value.toString().trim() !== '')
+      const dataToExport = activityRows.filter((row) =>
+        Object.values(row).some(
+          (value) => value && value.toString().trim() !== ""
+        )
       );
 
       if (dataToExport.length === 0) {
-        alert('No data to export. Please add some data to the grid first.');
+        alert("No data to export. Please add some data to the grid first.");
         return;
       }
 
       // Create headers using the column labels
-      const headers = activityColumns.map(col => col.label);
-      
+      const headers = activityColumns.map((col) => col.label);
+
       // Convert data to array format for Excel
       const excelData = [
         headers, // Header row
-        ...dataToExport.map(row => 
-          activityColumns.map(col => row[col.key] || '')
-        )
+        ...dataToExport.map((row) =>
+          activityColumns.map((col) => row[col.key] || "")
+        ),
       ];
 
       // Create workbook and worksheet
@@ -851,27 +867,28 @@ function SupplierData() {
       const colWidths = headers.map((header, index) => {
         const maxLength = Math.max(
           header.length,
-          ...dataToExport.map(row => (row[activityColumns[index].key] || '').toString().length)
+          ...dataToExport.map(
+            (row) => (row[activityColumns[index].key] || "").toString().length
+          )
         );
         return { wch: Math.min(Math.max(maxLength + 2, 10), 50) };
       });
-      worksheet['!cols'] = colWidths;
+      worksheet["!cols"] = colWidths;
 
       // Add worksheet to workbook
-      XLSX.utils.book_append_sheet(workbook, worksheet, 'Transportation Data');
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Transportation Data");
 
       // Generate filename with current date
-      const currentDate = new Date().toISOString().split('T')[0];
+      const currentDate = new Date().toISOString().split("T")[0];
       const filename = `transportation_activity_data_${currentDate}.xlsx`;
 
       // Write and download the file
       XLSX.writeFile(workbook, filename);
-      
+
       alert(`Successfully exported ${dataToExport.length} rows to ${filename}`);
-      
     } catch (error) {
-      console.error('Error exporting data:', error);
-      alert('Error exporting data. Please try again.');
+      console.error("Error exporting data:", error);
+      alert("Error exporting data. Please try again.");
     }
   };
 
@@ -1136,26 +1153,27 @@ function SupplierData() {
       </div>
 
       <div className="activity-data-grid-container">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "15px",
+          }}
+        >
           <h2 style={{ margin: 0 }}>Transportation/Activity Data</h2>
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div style={{ display: "flex", gap: "10px" }}>
             <input
               ref={fileInputRef}
               type="file"
               accept=".xlsx,.xls"
               onChange={handleFileUpload}
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
             />
-            <button 
-              className="upload-data-button"
-              onClick={handleUploadClick}
-            >
+            <button className="upload-data-button" onClick={handleUploadClick}>
               Upload Data
             </button>
-            <button 
-              className="export-data-button"
-              onClick={handleExportData}
-            >
+            <button className="export-data-button" onClick={handleExportData}>
               Export Data
             </button>
           </div>

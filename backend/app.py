@@ -65,6 +65,8 @@ def get_scope_lookup():
     return jsonify({'lookup': 'scope', 'values': values})
 
 # Explicit endpoint for Unit of Fuel Amount lookup (optional, for clarity)
+
+
 @app.route('/api/lookup/unit_of_fuel_amount', methods=['GET'])
 def get_unit_of_fuel_amount_lookup():
     values = reference_lookups['Unit of Fuel Amount'].get_all()
