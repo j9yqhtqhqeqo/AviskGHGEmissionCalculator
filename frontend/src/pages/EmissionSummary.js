@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/EmissionSummary.css";
 import saxcoLogo from "../assets/saxcologo.jpeg";
 
 function EmissionSummary() {
+  const [informationalMessages, setInformationalMessages] = useState([]);
+
+  useEffect(() => {
+    // Retrieve informational messages from sessionStorage
+    const storedMessages = sessionStorage.getItem("informationalMessages");
+    if (storedMessages) {
+      try {
+        const messages = JSON.parse(storedMessages);
+        setInformationalMessages(messages);
+      } catch (error) {
+        console.error("Error parsing informational messages:", error);
+      }
+    }
+  }, []);
+
   return (
     <div className="emission-summary-container">
       {/* Header with Logo */}
@@ -232,6 +247,31 @@ function EmissionSummary() {
           </tbody>
         </table>
       </div>
+
+      {/* Informational Messages Section */}
+      {informationalMessages.length > 0 && (
+        <div className="informational-messages-section">
+          <h2>Important Information</h2>
+          <div className="messages-container">
+            {informationalMessages.map((messageObj, index) => (
+              <div key={index} className="info-message">
+                <div className="info-icon">ℹ️</div>
+                <div className="info-text">
+                  {typeof messageObj === "string"
+                    ? messageObj
+                    : messageObj.message}
+                  {messageObj.row && (
+                    <span className="row-indicator">
+                      {" "}
+                      (Row {messageObj.row})
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

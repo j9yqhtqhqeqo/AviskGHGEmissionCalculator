@@ -34,45 +34,347 @@ function SupplierData() {
 
   // Helper function to format number with commas
   const formatNumberWithCommas = (value) => {
-    if (!value || value === '') return '';
-    
+    if (!value || value === "") return "";
+
     // Convert to string and remove any existing commas
-    const stringValue = value.toString().replace(/,/g, '');
-    
+    const stringValue = value.toString().replace(/,/g, "");
+
     // Only format if it's a valid number
     if (!/^\d*\.?\d*$/.test(stringValue)) return value;
-    
+
     // Split by decimal point
-    const parts = stringValue.split('.');
-    
+    const parts = stringValue.split(".");
+
     // Add commas to the integer part only if it has more than 3 digits
     if (parts[0].length > 3) {
-      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-    
+
     // Return formatted number
-    return parts.length > 1 ? parts.join('.') : parts[0];
+    return parts.length > 1 ? parts.join(".") : parts[0];
   };
 
   // Helper function to remove commas for calculation/storage
   const removeCommas = (value) => {
-    return value ? value.toString().replace(/,/g, '') : '';
+    return value ? value.toString().replace(/,/g, "") : "";
+  };
+
+  // Validation rules based on Validations.csv
+  const validateActivityData = (rows) => {
+    const errors = [];
+
+    rows.forEach((row, index) => {
+      const rowNumber = index + 1;
+
+      // Skip empty rows
+      if (
+        !row.typeOfActivityData &&
+        !row.vehicleType &&
+        !row.distanceTravelled &&
+        !row.numPassengers &&
+        !row.fuelUsed &&
+        !row.fuelAmount
+      ) {
+        return;
+      }
+
+      // Vehicle Type and Fuel compatibility validations (ERRORS - blocking)
+      if (row.typeOfActivityData === "Vehicle Distance (e.g. Road Transport)") {
+        // CNG vehicle validations
+        if (row.vehicleType && row.vehicleType.includes("CNG")) {
+          errors.push({
+            row: rowNumber,
+            message:
+              "Sorry. Emission factors are not available for CNG vehicles based on vehicle distance.",
+          });
+        }
+
+        // Fuel Unknown validations
+        if (row.vehicleType && row.vehicleType.includes("Fuel Unknown")) {
+          errors.push({
+            row: rowNumber,
+            message:
+              "Sorry. Emission factors based on vehicle distance are not available when the Fuel Used is not known.",
+          });
+        }
+
+        // Required fields for Vehicle Distance
+        if (!row.vehicleType) {
+          errors.push({
+            row: rowNumber,
+            message: "Please select Vehicle Type",
+          });
+        }
+        if (!row.distanceTravelled) {
+          errors.push({
+            row: rowNumber,
+            message: "Please enter Distance Travelled",
+          });
+        }
+      }
+
+      // Passenger Distance validations
+      if (
+        row.typeOfActivityData === "Passenger Distance (e.g. Public Transport)"
+      ) {
+        if (!row.vehicleType) {
+          errors.push({
+            row: rowNumber,
+            message: "Please select Vehicle Type",
+          });
+        }
+        if (!row.distanceTravelled) {
+          errors.push({
+            row: rowNumber,
+            message: "Please enter Distance Travelled",
+          });
+        }
+        if (!row.numPassengers) {
+          errors.push({
+            row: rowNumber,
+            message: "Please enter # of Passengers",
+          });
+        }
+      }
+
+      // Weight Distance validations
+      if (
+        row.typeOfActivityData === "Weight Distance (e.g. Freight Transport)"
+      ) {
+        if (!row.vehicleType) {
+          errors.push({
+            row: rowNumber,
+            message: "Please select Vehicle Type",
+          });
+        }
+        if (!row.distanceTravelled) {
+          errors.push({
+            row: rowNumber,
+            message: "Please enter Distance Travelled",
+          });
+        }
+        if (!row.totalWeight) {
+          errors.push({
+            row: rowNumber,
+            message:
+              "Please enter gross weight of vehicle, which includes the weight of both the vehicle and the goods",
+          });
+        }
+        // Note: Informational message about freight transport is handled in getInformationalMessages
+      }
+
+      // Fuel Use validations
+      if (row.typeOfActivityData === "Fuel Use") {
+        if (!row.fuelUsed) {
+          errors.push({
+            row: rowNumber,
+            message: "Please select Fuel Used",
+          });
+        }
+        if (!row.fuelAmount) {
+          errors.push({
+            row: rowNumber,
+            message: "Please enter Fuel Amount",
+          });
+        }
+      }
+
+      // Custom Fuel validations
+      if (row.typeOfActivityData === "Custom Fuel") {
+        if (!row.fuelUsed) {
+          errors.push({
+            row: rowNumber,
+            message:
+              "Please select Fuel Used. This selection allows users to use their own 'custom' emission factors that have been entered into the tool on the 'Settings' tab.",
+          });
+        }
+      }
+
+      // Custom Vehicle validations
+      if (row.typeOfActivityData === "Custom Vehicle") {
+        if (!row.vehicleType) {
+          errors.push({
+            row: rowNumber,
+            message:
+              "Please select Vehicle Type. This selection allows users to use their own 'custom' emission factors that have been entered into the tool on the 'Settings' tab.",
+          });
+        }
+        if (!row.distanceTravelled) {
+          errors.push({
+            row: rowNumber,
+            message: "Please enter Distance Travelled",
+          });
+        }
+      }
+
+      // Fuel Use and Vehicle Distance validations
+      if (row.typeOfActivityData === "Fuel Use and Vehicle Distance") {
+        if (!row.vehicleType) {
+          errors.push({
+            row: rowNumber,
+            message: "Please select Vehicle Type",
+          });
+        }
+        if (!row.distanceTravelled) {
+          errors.push({
+            row: rowNumber,
+            message: "Please enter Distance Travelled",
+          });
+        }
+        if (!row.fuelUsed) {
+          errors.push({
+            row: rowNumber,
+            message: "Please select Fuel Used",
+          });
+        }
+      }
+
+      // Distance and Unit validations
+      if (row.distanceTravelled && !row.units) {
+        errors.push({
+          row: rowNumber,
+          message: "Please select Unit of Distance",
+        });
+      }
+      if (!row.distanceTravelled && row.units) {
+        errors.push({
+          row: rowNumber,
+          message: "Please enter Distance Travelled",
+        });
+      }
+
+      // Fuel Amount and Unit validations
+      if (row.fuelAmount && !row.unitOfFuelAmount) {
+        errors.push({
+          row: rowNumber,
+          message: "Please enter Unit of Fuel Amount",
+        });
+      }
+      if (!row.fuelAmount && row.unitOfFuelAmount) {
+        errors.push({
+          row: rowNumber,
+          message: "Please enter Fuel Amount",
+        });
+      }
+
+      // Fuel Used and Fuel Amount dependency
+      if (row.fuelUsed && !row.fuelAmount) {
+        errors.push({
+          row: rowNumber,
+          message: "Please enter Fuel Amount",
+        });
+      }
+      if (!row.fuelUsed && row.fuelAmount) {
+        errors.push({
+          row: rowNumber,
+          message: "Please select Fuel Used",
+        });
+      }
+    });
+
+    return errors;
+  };
+
+  // Check for regional-specific warnings
+  const getRegionalWarnings = (region, modeOfTransport, scope) => {
+    const warnings = [];
+
+    if (region === "Other") {
+      warnings.push(
+        'The default emission factors for "Other" regions are either global defaults (for CO2 emissions based on fuel use) or from UK DEFRA. These values should only be used in the absence of more specific emission factors.'
+      );
+    }
+
+    if (region === "UK") {
+      warnings.push(
+        "The default emission factors are sourced from the UK DEFRA (http://www.defra.gov.uk/environment/business/reporting/pdf/passenger-transport.pdf)."
+      );
+
+      if (modeOfTransport === "Road") {
+        warnings.push(
+          "Sorry. UK-specific emission factors are not available to calculate the CH4 and N2O emissions"
+        );
+      }
+    }
+
+    if (region === "US") {
+      warnings.push(
+        "The default emission factors are sourced from the US EPA Climate Leaders program or from the UK DEFRA (for air travel only)."
+      );
+    }
+
+    if (modeOfTransport === "Road" && scope === "Scope 1") {
+      warnings.push(
+        "Fuel use data are preferred for calculating CO2 emissions. Vehicle distance data are preferred for CH4 and N2O."
+      );
+    }
+
+    if (modeOfTransport === "Aircraft") {
+      warnings.push(
+        "Sorry. Emission factors are not available to calculate the CH4 and N2O emissions (which contribute <5% to the total GHG emissions from aircraft). Domestic' flights are < 300 miles/483 km; short-haul flights are ≥ 300 miles/483 km and <700 miles/1126 km, and long haul flights are anything ≥ 700 miles/1126 km."
+      );
+    }
+
+    return warnings;
+  };
+
+  // Get informational messages for the summary page (non-blocking)
+  const getInformationalMessages = (rows, region, modeOfTransport, scope) => {
+    const messages = [];
+
+    // Regional warnings (these are informational, not errors)
+    const regionalMessages = getRegionalWarnings(
+      region,
+      modeOfTransport,
+      scope
+    );
+    messages.push(...regionalMessages);
+
+    // Activity-specific informational messages
+    rows.forEach((row, index) => {
+      const rowNumber = index + 1;
+
+      // Skip empty rows
+      if (
+        !row.typeOfActivityData &&
+        !row.vehicleType &&
+        !row.distanceTravelled &&
+        !row.numPassengers &&
+        !row.fuelUsed &&
+        !row.fuelAmount
+      ) {
+        return;
+      }
+
+      // Weight Distance informational message
+      if (
+        row.typeOfActivityData === "Weight Distance (e.g. Freight Transport)"
+      ) {
+        messages.push({
+          row: rowNumber,
+          message:
+            "Emissions from freight transport can also be calculated using Vehicle distance data.",
+        });
+      }
+    });
+
+    return messages;
   };
 
   // Helper function to handle numerical input validation with comma formatting
   const handleNumericalInput = (value) => {
     // Handle empty input
-    if (value === '') return '';
-    
+    if (value === "") return "";
+
     // Remove commas for validation
     const cleanValue = removeCommas(value);
-    
+
     // Allow only digits and one decimal point
     if (/^\d*\.?\d*$/.test(cleanValue)) {
       // Format with commas and return
       return formatNumberWithCommas(cleanValue);
     }
-    
+
     // If invalid, return the previous valid value (without the last character)
     const previousValue = value.slice(0, -1);
     return formatNumberWithCommas(removeCommas(previousValue));
@@ -232,7 +534,7 @@ function SupplierData() {
     if (isNumericalField(key)) {
       processedValue = handleNumericalInput(value);
     }
-    
+
     setActivityRows((prevRows) => {
       const updated = [...prevRows];
       updated[rowIdx] = { ...updated[rowIdx], [key]: processedValue };
@@ -428,8 +730,10 @@ function SupplierData() {
     }
 
     // For numerical inputs (containerWeight and numberOfContainers), apply comma formatting
-    const isNumericField = ["containerWeight", "numberOfContainers"].includes(name);
-    
+    const isNumericField = ["containerWeight", "numberOfContainers"].includes(
+      name
+    );
+
     if (isNumericField) {
       const formattedValue = handleNumericalInput(value);
       setFormData({
@@ -495,10 +799,111 @@ function SupplierData() {
         <button
           className="update-summary-button"
           onClick={() => {
+            // Validate activity data (only blocking errors)
+            const validationErrors = validateActivityData(activityRows);
+
+            if (validationErrors.length > 0) {
+              // Display validation errors
+              const errorMessages = validationErrors
+                .map((error) => `Row ${error.row}: ${error.message}`)
+                .join("\n\n");
+
+              alert(
+                `Please correct the following errors before proceeding:\n\n${errorMessages}`
+              );
+              return;
+            }
+
+            // Additional supplier data validations
+            const supplierErrors = [];
+
+            if (!formData.supplier || !formData.supplier.trim()) {
+              supplierErrors.push("Please select Supplier");
+            }
+
+            if (
+              !formData.containerWeight ||
+              !formData.containerWeight.toString().trim()
+            ) {
+              supplierErrors.push("Please enter Container Weight");
+            }
+
+            if (
+              !formData.numberOfContainers ||
+              !formData.numberOfContainers.toString().trim()
+            ) {
+              supplierErrors.push("Please enter Number of Containers");
+            }
+
+            if (supplierErrors.length > 0) {
+              alert(
+                `Please correct the following supplier information errors:\n\n${supplierErrors.join(
+                  "\n"
+                )}`
+              );
+              return;
+            }
+
+            // Check if at least one activity row has data
+            const hasActivityData = activityRows.some(
+              (row) =>
+                row.typeOfActivityData ||
+                row.vehicleType ||
+                row.distanceTravelled ||
+                row.numPassengers ||
+                row.fuelUsed ||
+                row.fuelAmount ||
+                row.totalWeight
+            );
+
+            if (!hasActivityData) {
+              alert(
+                "Please enter at least one row of activity data before proceeding."
+              );
+              return;
+            }
+
+            // Collect informational messages for the summary page
+            const firstRowWithData = activityRows.find(
+              (row) => row.region || row.modeOfTransport || row.scope
+            );
+
+            let informationalMessages = [];
+            if (firstRowWithData) {
+              informationalMessages = getInformationalMessages(
+                activityRows,
+                firstRowWithData.region,
+                firstRowWithData.modeOfTransport,
+                firstRowWithData.scope
+              );
+            }
+
+            // Store data for the summary page
+            sessionStorage.setItem("supplierData", JSON.stringify(formData));
+            sessionStorage.setItem(
+              "activityData",
+              JSON.stringify(activityRows)
+            );
+            sessionStorage.setItem(
+              "informationalMessages",
+              JSON.stringify(informationalMessages)
+            );
+
+            // Navigate to emission summary
             navigate("/emission-summary");
           }}
         >
-          Update Emission Summary
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <div style={{ fontSize: "24px" }}>📊</div>
+            <div>Update Emission Summary</div>
+          </div>
         </button>
       </div>
 

@@ -19,6 +19,59 @@
   height: auto;
 }
 
+/* Informational Messages Section */
+.informational-messages-section {
+  background-color: #e8f4fd;
+  border: 2px solid #4a90e2;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+.informational-messages-section h2 {
+  color: #2c5282;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  margin-top: 0;
+}
+
+.messages-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-message {
+  display: flex;
+  align-items: flex-start;
+  background-color: white;
+  border: 1px solid #b3d4f0;
+  border-radius: 6px;
+  padding: 12px;
+  gap: 10px;
+}
+
+.info-icon {
+  font-size: 16px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.info-text {
+  color: #2c5282;
+  font-size: 14px;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.row-indicator {
+  color: #667eaa;
+  font-weight: bold;
+  font-style: italic;
+}
+
 /* Total Emissions Box */
 .total-emissions-box {
   display: flex;
@@ -171,6 +224,24 @@
 @media (max-width: 768px) {
   .emission-summary-container {
     padding: 10px;
+  }
+  
+  .informational-messages-section {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .informational-messages-section h2 {
+    font-size: 16px;
+  }
+  
+  .info-message {
+    padding: 10px;
+    gap: 8px;
+  }
+  
+  .info-text {
+    font-size: 13px;
   }
   
   .summary-table,

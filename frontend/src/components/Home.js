@@ -159,10 +159,11 @@ function Home() {
         {/* Right Column - Information Box */}
         <div
           style={{
-            width: "350px",
+            width: "280px",
             border: "2px solid #333",
-            padding: "20px",
+            padding: "15px",
             backgroundColor: "#f9f9f9",
+            height: "fit-content",
           }}
         >
           <p
@@ -192,9 +193,9 @@ function Home() {
             }}
           >
             The Saxco carbon calculator was originally developed by NPV
-            Associates. Version 1.0. (2022) )
+            Associates.(2022)
           </p>
-
+          <br />
           <p
             style={{
               fontSize: "14px",
@@ -205,7 +206,7 @@ function Home() {
               fontWeight: "bold",
             }}
           >
-            The latest Web Version is developed by Avisk Analytics. Version 1.0.
+            The latest Web Version is developed by Avisk Inc. Version 1.0.
             (2025)
           </p>
         </div>
