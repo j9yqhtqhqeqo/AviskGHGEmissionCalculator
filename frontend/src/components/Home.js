@@ -24,7 +24,7 @@ function Home() {
           <img
             src="/saxcologo.jpeg"
             alt="Saxco International"
-            style={{ maxWidth: "250px", height: "auto" }}
+            style={{ maxWidth: "150px", height: "auto" }}
           />
         </div>
 
@@ -205,7 +205,8 @@ function Home() {
               fontWeight: "bold",
             }}
           >
-             The latest Web Version is developed by Avisk Analytics. Version 1.0. (2025)
+            The latest Web Version is developed by Avisk Analytics. Version 1.0.
+            (2025)
           </p>
         </div>
       </div>

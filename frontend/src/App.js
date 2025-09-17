@@ -5,6 +5,7 @@ import "./App.css";
 // Import pages
 import Home from "./components/Home";
 import SupplierData from "./pages/SupplierData";
+import EmissionSummary from "./pages/EmissionSummary";
 
 function App() {
   return (
@@ -18,12 +19,16 @@ function App() {
             <li>
               <Link to="/supplier-data">Supplier Data</Link>
             </li>
+            <li>
+              <Link to="/emission-summary">Emission Summary</Link>
+            </li>
           </ul>
         </nav>
 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/supplier-data" element={<SupplierData />} />
+          <Route path="/emission-summary" element={<EmissionSummary />} />
           {/* Add future routes here */}
         </Routes>
       </div>

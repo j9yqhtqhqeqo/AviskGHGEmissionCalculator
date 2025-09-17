@@ -3,6 +3,80 @@ import { useNavigate } from "react-router-dom";
 import "../styles/SupplierData.css";
 
 function SupplierData() {
+  const navigate = useNavigate();
+
+  // Activity columns definition
+  const activityColumns = [
+    { key: "sourceDescription", label: "Source/Description" },
+    { key: "region", label: "Region" },
+    { key: "modeOfTransport", label: "Mode of Transport" },
+    { key: "scope", label: "Scope" },
+    { key: "typeOfActivityData", label: "Type of Activity Data" },
+    { key: "vehicleType", label: "Vehicle Type" },
+    { key: "distanceTravelled", label: "Distance Travelled" },
+    { key: "totalWeight", label: "Total Weight of Freight (tonne)" },
+    { key: "numPassengers", label: "# of Passengers" },
+    { key: "units", label: "Units of Measurement (Tonne Miles)" },
+    { key: "fuelUsed", label: "Fuel Used" },
+    { key: "fuelAmount", label: "Fuel Amount" },
+    { key: "unitOfFuelAmount", label: "Unit of Fuel Amount" },
+  ];
+
+  // Helper function to determine if a field should accept only numerical values
+  const isNumericalField = (fieldKey) => {
+    return [
+      "distanceTravelled",
+      "numPassengers",
+      "fuelAmount",
+      "totalWeight",
+    ].includes(fieldKey);
+  };
+
+  // Helper function to format number with commas
+  const formatNumberWithCommas = (value) => {
+    if (!value || value === '') return '';
+    
+    // Convert to string and remove any existing commas
+    const stringValue = value.toString().replace(/,/g, '');
+    
+    // Only format if it's a valid number
+    if (!/^\d*\.?\d*$/.test(stringValue)) return value;
+    
+    // Split by decimal point
+    const parts = stringValue.split('.');
+    
+    // Add commas to the integer part only if it has more than 3 digits
+    if (parts[0].length > 3) {
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    
+    // Return formatted number
+    return parts.length > 1 ? parts.join('.') : parts[0];
+  };
+
+  // Helper function to remove commas for calculation/storage
+  const removeCommas = (value) => {
+    return value ? value.toString().replace(/,/g, '') : '';
+  };
+
+  // Helper function to handle numerical input validation with comma formatting
+  const handleNumericalInput = (value) => {
+    // Handle empty input
+    if (value === '') return '';
+    
+    // Remove commas for validation
+    const cleanValue = removeCommas(value);
+    
+    // Allow only digits and one decimal point
+    if (/^\d*\.?\d*$/.test(cleanValue)) {
+      // Format with commas and return
+      return formatNumberWithCommas(cleanValue);
+    }
+    
+    // If invalid, return the previous valid value (without the last character)
+    const previousValue = value.slice(0, -1);
+    return formatNumberWithCommas(removeCommas(previousValue));
+  };
   // State for region, mode_of_transport, scope, type_of_activity_data, and vehicle type dropdown options
   const [regionOptions, setRegionOptions] = useState([]);
   const [regionLoading, setRegionLoading] = useState(true);
@@ -22,14 +96,13 @@ function SupplierData() {
   const [fuelOptions, setFuelOptions] = useState([]);
   const [fuelLoading, setFuelLoading] = useState(true);
   const [fuelError, setFuelError] = useState(null);
-  
+
   // Vehicle type dropdowns per row
   const [vehicleTypeOptions, setVehicleTypeOptions] = useState({});
   const [vehicleTypeLoading, setVehicleTypeLoading] = useState({});
   const [vehicleTypeError, setVehicleTypeError] = useState({});
 
   // Supplier data state
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     supplier: "",
     containerWeight: "",
@@ -122,22 +195,6 @@ function SupplierData() {
     },
   ]);
 
-  const activityColumns = [
-    { key: "sourceDescription", label: "Source Description" },
-    { key: "region", label: "Region" },
-    { key: "modeOfTransport", label: "Mode of Transport" },
-    { key: "scope", label: "Scope" },
-    { key: "typeOfActivityData", label: "Type of Activity Data" },
-    { key: "vehicleType", label: "Vehicle Type" },
-    { key: "distanceTravelled", label: "Distance Travelled" },
-    { key: "totalWeight", label: "Total Weight of Freight (tonne)" },
-    { key: "numPassengers", label: "# of Passengers" },
-    { key: "units", label: "Units of Measurement (Tonne Miles)" },
-    { key: "fuelUsed", label: "Fuel Used" },
-    { key: "fuelAmount", label: "Fuel Amount" },
-    { key: "unitOfFuelAmount", label: "Unit of Fuel Amount" },
-  ];
-
   // Fetch vehicle type options for a specific row
   const fetchVehicleTypeOptions = async (rowIdx, region, modeOfTransport) => {
     if (!region || !modeOfTransport) {
@@ -148,22 +205,37 @@ function SupplierData() {
     setVehicleTypeError((prev) => ({ ...prev, [rowIdx]: null }));
     try {
       const response = await fetch(
-        `http://127.0.0.1:5000/api/vehicle_and_size?region=${encodeURIComponent(region)}&mode_of_transport=${encodeURIComponent(modeOfTransport)}`
+        `http://127.0.0.1:5000/api/vehicle_and_size?region=${encodeURIComponent(
+          region
+        )}&mode_of_transport=${encodeURIComponent(modeOfTransport)}`
       );
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      if (!response.ok)
+        throw new Error(`HTTP error! Status: ${response.status}`);
       const data = await response.json();
-      setVehicleTypeOptions((prev) => ({ ...prev, [rowIdx]: data.vehicle_and_size || [] }));
+      setVehicleTypeOptions((prev) => ({
+        ...prev,
+        [rowIdx]: data.vehicle_and_size || [],
+      }));
       setVehicleTypeLoading((prev) => ({ ...prev, [rowIdx]: false }));
     } catch (err) {
-      setVehicleTypeError((prev) => ({ ...prev, [rowIdx]: "Failed to load vehicle types." }));
+      setVehicleTypeError((prev) => ({
+        ...prev,
+        [rowIdx]: "Failed to load vehicle types.",
+      }));
       setVehicleTypeLoading((prev) => ({ ...prev, [rowIdx]: false }));
     }
   };
 
   const handleActivityCellChange = (rowIdx, key, value) => {
+    // Apply comma formatting for numerical fields
+    let processedValue = value;
+    if (isNumericalField(key)) {
+      processedValue = handleNumericalInput(value);
+    }
+    
     setActivityRows((prevRows) => {
       const updated = [...prevRows];
-      updated[rowIdx] = { ...updated[rowIdx], [key]: value };
+      updated[rowIdx] = { ...updated[rowIdx], [key]: processedValue };
       return updated;
     });
   };
@@ -334,7 +406,14 @@ function SupplierData() {
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(activityRows.map(row => ({ region: row.region, modeOfTransport: row.modeOfTransport })))]);
+  }, [
+    JSON.stringify(
+      activityRows.map((row) => ({
+        region: row.region,
+        modeOfTransport: row.modeOfTransport,
+      }))
+    ),
+  ]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -348,7 +427,27 @@ function SupplierData() {
       return;
     }
 
-    // For numerical inputs, validate that only numbers, commas, periods, and no spaces are entered
+    // For numerical inputs (containerWeight and numberOfContainers), apply comma formatting
+    const isNumericField = ["containerWeight", "numberOfContainers"].includes(name);
+    
+    if (isNumericField) {
+      const formattedValue = handleNumericalInput(value);
+      setFormData({
+        ...formData,
+        [name]: formattedValue,
+      });
+
+      // Clear validation error if the input is now valid
+      if (validationErrors[name]) {
+        setValidationErrors({
+          ...validationErrors,
+          [name]: false,
+        });
+      }
+      return;
+    }
+
+    // For non-numeric fields, validate that only numbers, commas, periods, and no spaces are entered
     const numericRegex = /^[0-9,.]*$/;
 
     if (numericRegex.test(value) || value === "") {
@@ -386,22 +485,28 @@ function SupplierData() {
           alt="Saxco International"
           className="company-logo"
           onError={(e) => {
-            console.error('Logo failed to load:', e);
-            e.target.style.display = 'none';
+            console.error("Logo failed to load:", e);
+            e.target.style.display = "none";
           }}
           onLoad={() => {
-            console.log('Logo loaded successfully');
+            console.log("Logo loaded successfully");
           }}
         />
+        <button
+          className="update-summary-button"
+          onClick={() => {
+            navigate("/emission-summary");
+          }}
+        >
+          Update Emission Summary
+        </button>
       </div>
 
       <div className="data-entry-container">
         <h2>Supplier Data</h2>
         <div className="data-table">
           <div className="table-row">
-            <div className="table-cell header-cell">
-              Supplier and Container
-            </div>
+            <div className="table-cell header-cell">Supplier and Container</div>
             <div className="table-cell">
               {loading ? (
                 <div className="loading">Loading suppliers...</div>
@@ -592,12 +697,22 @@ function SupplierData() {
                         <select
                           className="input-field dropdown"
                           value={row[col.key]}
-                          onChange={(e) => handleActivityCellChange(rowIdx, col.key, e.target.value)}
+                          onChange={(e) =>
+                            handleActivityCellChange(
+                              rowIdx,
+                              col.key,
+                              e.target.value
+                            )
+                          }
                         >
                           <option value="">Select Vehicle Type</option>
-                          {(vehicleTypeOptions[rowIdx] || []).map((option, idx) => (
-                            <option key={idx} value={option}>{option}</option>
-                          ))}
+                          {(vehicleTypeOptions[rowIdx] || []).map(
+                            (option, idx) => (
+                              <option key={idx} value={option}>
+                                {option}
+                              </option>
+                            )
+                          )}
                         </select>
                       )
                     ) : col.key === "units" ? (
@@ -654,14 +769,17 @@ function SupplierData() {
                       <input
                         type="text"
                         value={row[col.key]}
-                        onChange={(e) =>
-                          handleActivityCellChange(
-                            rowIdx,
-                            col.key,
-                            e.target.value
-                          )
-                        }
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          if (isNumericalField(col.key)) {
+                            value = handleNumericalInput(value);
+                          }
+                          handleActivityCellChange(rowIdx, col.key, value);
+                        }}
                         className="input-field"
+                        placeholder={
+                          isNumericalField(col.key) ? "Enter number" : ""
+                        }
                       />
                     )}
                   </td>
