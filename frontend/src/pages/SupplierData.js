@@ -16,6 +16,9 @@ function SupplierData() {
   const [activityTypeOptions, setActivityTypeOptions] = useState([]);
   const [activityTypeLoading, setActivityTypeLoading] = useState(true);
   const [activityTypeError, setActivityTypeError] = useState(null);
+  const [unitsOptions, setUnitsOptions] = useState([]);
+  const [unitsLoading, setUnitsLoading] = useState(true);
+  const [unitsError, setUnitsError] = useState(null);
   
   // Vehicle type dropdowns per row
   const [vehicleTypeOptions, setVehicleTypeOptions] = useState({});
@@ -222,10 +225,25 @@ function SupplierData() {
         setActivityTypeLoading(false);
       }
     };
+    const fetchUnits = async () => {
+      try {
+        setUnitsLoading(true);
+        const response = await fetch("http://127.0.0.1:5000/api/lookup/units");
+        if (!response.ok)
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        const data = await response.json();
+        setUnitsOptions(data.values || []);
+        setUnitsLoading(false);
+      } catch (err) {
+        setUnitsError("Failed to load units.");
+        setUnitsLoading(false);
+      }
+    };
     fetchRegions();
     fetchMot();
     fetchScope();
     fetchActivityType();
+    fetchUnits();
   }, []);
 
   // Effect: fetch vehicle type options when region or modeOfTransport changes for any row
@@ -506,6 +524,31 @@ function SupplierData() {
                           <option value="">Select Vehicle Type</option>
                           {(vehicleTypeOptions[rowIdx] || []).map((option, idx) => (
                             <option key={idx} value={option}>{option}</option>
+                          ))}
+                        </select>
+                      )
+                    ) : col.key === "units" ? (
+                      unitsLoading ? (
+                        <div className="loading">Loading...</div>
+                      ) : unitsError ? (
+                        <div className="error">{unitsError}</div>
+                      ) : (
+                        <select
+                          className="input-field dropdown"
+                          value={row[col.key]}
+                          onChange={(e) =>
+                            handleActivityCellChange(
+                              rowIdx,
+                              col.key,
+                              e.target.value
+                            )
+                          }
+                        >
+                          <option value="">Select Unit</option>
+                          {unitsOptions.map((option, idx) => (
+                            <option key={idx} value={option}>
+                              {option}
+                            </option>
                           ))}
                         </select>
                       )
