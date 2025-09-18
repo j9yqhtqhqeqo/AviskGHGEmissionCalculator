@@ -363,34 +363,94 @@ def compute_ghg_emissions():
         if not data:
             return jsonify({'error': 'Missing JSON body'}), 400
 
-        # Extract and map fields to Supplier_Input
-        supplier_input = Supplier_Input(
-            Supplier_and_Container=data.get('Supplier_and_Container', ''),
-            Container_Weight=float(data.get('Container_Weight', 0)),
-            Number_Of_Containers=int(data.get('Number_Of_Containers', 0)),
-            Source_Description=data.get('Source_Description', ''),
-            Region=data.get('Region', ''),
-            Mode_of_Transport=data.get('Mode_of_Transport', ''),
-            Scope=data.get('Scope', ''),
-            Type_Of_Activity_Data=data.get('Type_Of_Activity_Data', ''),
-            Vehicle_Type=data.get('Vehicle_Type'),
-            Distance_Travelled=float(data['Distance_Travelled']) if data.get(
-                'Distance_Travelled') is not None else None,
-            Total_Weight_Of_Freight_InTonne=float(data['Total_Weight_Of_Freight_InTonne']) if data.get(
-                'Total_Weight_Of_Freight_InTonne') is not None else None,
-            Num_Of_Passenger=int(data['Num_Of_Passenger']) if data.get(
-                'Num_Of_Passenger') is not None else None,
-            Units_of_Measurement=data.get('Units_of_Measurement'),
-            Fuel_Used=data.get('Fuel_Used'),
-            Fuel_Amount=float(data['Fuel_Amount']) if data.get(
-                'Fuel_Amount') is not None else None,
-            Unit_Of_Fuel_Amount=data.get('Unit_Of_Fuel_Amount')
-        )
+        print("[DEBUG] /api/compute_ghg_emissions endpoint called")
+        print(f"[DEBUG] Received raw JSON data: {json.dumps(data, indent=2)}")
+
+        # Extract supplier data
+        supplier_data = data.get('supplier_data', {})
+        activity_rows = data.get('activity_rows', [])
+
+        print(f"[DEBUG] Supplier data: {json.dumps(supplier_data, indent=2)}")
+        print(f"[DEBUG] Number of activity rows: {len(activity_rows)}")
+
+        # Process each activity row
+        processed_inputs = []
+        for i, row_data in enumerate(activity_rows):
+            print(f"[DEBUG] Processing activity row {i + 1}:")
+            print(f"[DEBUG] Raw row data: {json.dumps(row_data, indent=2)}")
+
+            # Print individual field values for this row
+            print(
+                f"[DEBUG] Row {i + 1} - Source_Description: {row_data.get('Source_Description', '')}")
+            print(
+                f"[DEBUG] Row {i + 1} - Region: {row_data.get('Region', '')}")
+            print(
+                f"[DEBUG] Row {i + 1} - Mode_of_Transport: {row_data.get('Mode_of_Transport', '')}")
+            print(f"[DEBUG] Row {i + 1} - Scope: {row_data.get('Scope', '')}")
+            print(
+                f"[DEBUG] Row {i + 1} - Type_Of_Activity_Data: {row_data.get('Type_Of_Activity_Data', '')}")
+            print(
+                f"[DEBUG] Row {i + 1} - Vehicle_Type: {row_data.get('Vehicle_Type')}")
+            print(
+                f"[DEBUG] Row {i + 1} - Distance_Travelled: {row_data.get('Distance_Travelled')}")
+            print(
+                f"[DEBUG] Row {i + 1} - Total_Weight_Of_Freight_InTonne: {row_data.get('Total_Weight_Of_Freight_InTonne')}")
+            print(
+                f"[DEBUG] Row {i + 1} - Num_Of_Passenger: {row_data.get('Num_Of_Passenger')}")
+            print(
+                f"[DEBUG] Row {i + 1} - Units_of_Measurement: {row_data.get('Units_of_Measurement')}")
+            print(
+                f"[DEBUG] Row {i + 1} - Fuel_Used: {row_data.get('Fuel_Used')}")
+            print(
+                f"[DEBUG] Row {i + 1} - Fuel_Amount: {row_data.get('Fuel_Amount')}")
+            print(
+                f"[DEBUG] Row {i + 1} - Unit_Of_Fuel_Amount: {row_data.get('Unit_Of_Fuel_Amount')}")
+
+            # Create Supplier_Input object for this row
+            supplier_input = Supplier_Input(
+                Supplier_and_Container=supplier_data.get(
+                    'Supplier_and_Container', ''),
+                Container_Weight=float(
+                    supplier_data.get('Container_Weight', 0)),
+                Number_Of_Containers=int(
+                    supplier_data.get('Number_Of_Containers', 0)),
+                Source_Description=row_data.get('Source_Description', ''),
+                Region=row_data.get('Region', ''),
+                Mode_of_Transport=row_data.get('Mode_of_Transport', ''),
+                Scope=row_data.get('Scope', ''),
+                Type_Of_Activity_Data=row_data.get(
+                    'Type_Of_Activity_Data', ''),
+                Vehicle_Type=row_data.get('Vehicle_Type'),
+                Distance_Travelled=float(row_data['Distance_Travelled']) if row_data.get(
+                    'Distance_Travelled') is not None else None,
+                Total_Weight_Of_Freight_InTonne=float(row_data['Total_Weight_Of_Freight_InTonne']) if row_data.get(
+                    'Total_Weight_Of_Freight_InTonne') is not None else None,
+                Num_Of_Passenger=int(row_data['Num_Of_Passenger']) if row_data.get(
+                    'Num_Of_Passenger') is not None else None,
+                Units_of_Measurement=row_data.get('Units_of_Measurement'),
+                Fuel_Used=row_data.get('Fuel_Used'),
+                Fuel_Amount=float(row_data['Fuel_Amount']) if row_data.get(
+                    'Fuel_Amount') is not None else None,
+                Unit_Of_Fuel_Amount=row_data.get('Unit_Of_Fuel_Amount')
+            )
+
+            print(
+                f"[DEBUG] Row {i + 1} - Created Supplier_Input object: {supplier_input.__dict__}")
+            processed_inputs.append(supplier_input.__dict__)
+
+        print(
+            f"[DEBUG] Successfully processed {len(processed_inputs)} activity rows")
 
         # Placeholder: actual GHG calculation logic goes here
-        # For now, just echo the parsed input
-        return jsonify({'status': 'success', 'input': supplier_input.__dict__})
+        # For now, just echo the parsed inputs
+        return jsonify({
+            'status': 'success',
+            'supplier_data': supplier_data,
+            'processed_rows': len(processed_inputs),
+            'inputs': processed_inputs
+        })
     except Exception as e:
+        print(f"[ERROR] Exception in compute_ghg_emissions: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 # API endpoint to get unique Vehicle and Size for a given region and mode of transport

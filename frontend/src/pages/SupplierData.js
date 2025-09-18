@@ -16,7 +16,6 @@ function SupplierData() {
     { key: "vehicleType", label: "Vehicle Type" },
     { key: "distanceTravelled", label: "Distance Travelled" },
     { key: "totalWeight", label: "Total Weight of Freight (tonne)" },
-    { key: "numPassengers", label: "# of Passengers" },
     { key: "units", label: "Units of Measurement (Tonne Miles)" },
     { key: "fuelUsed", label: "Fuel Used" },
     { key: "fuelAmount", label: "Fuel Amount" },
@@ -25,12 +24,9 @@ function SupplierData() {
 
   // Helper function to determine if a field should accept only numerical values
   const isNumericalField = (fieldKey) => {
-    return [
-      "distanceTravelled",
-      "numPassengers",
-      "fuelAmount",
-      "totalWeight",
-    ].includes(fieldKey);
+    return ["distanceTravelled", "fuelAmount", "totalWeight"].includes(
+      fieldKey
+    );
   };
 
   // Helper function to format number with commas
@@ -72,7 +68,6 @@ function SupplierData() {
         !row.typeOfActivityData &&
         !row.vehicleType &&
         !row.distanceTravelled &&
-        !row.numPassengers &&
         !row.fuelUsed &&
         !row.fuelAmount
       ) {
@@ -128,12 +123,6 @@ function SupplierData() {
           errors.push({
             row: rowNumber,
             message: "Please enter Distance Travelled",
-          });
-        }
-        if (!row.numPassengers) {
-          errors.push({
-            row: rowNumber,
-            message: "Please enter # of Passengers",
           });
         }
       }
@@ -244,32 +233,44 @@ function SupplierData() {
         });
       }
 
-      // Fuel Amount and Unit validations
-      if (row.fuelAmount && !row.unitOfFuelAmount) {
-        errors.push({
-          row: rowNumber,
-          message: "Please enter Unit of Fuel Amount",
-        });
-      }
-      if (!row.fuelAmount && row.unitOfFuelAmount) {
-        errors.push({
-          row: rowNumber,
-          message: "Please enter Fuel Amount",
-        });
-      }
+      // Unit of Fuel Amount and Fuel Amount dependency validations
+      // Skip fuel validations for Weight Distance activity type as it doesn't require fuel data
+      if (
+        row.typeOfActivityData !== "Weight Distance (e.g. Freight Transport)"
+      ) {
+        // If Unit of Fuel Amount is selected, then Fuel Amount must be provided
+        if (
+          row.unitOfFuelAmount &&
+          row.unitOfFuelAmount.trim() &&
+          (!row.fuelAmount || !row.fuelAmount.toString().trim())
+        ) {
+          errors.push({
+            row: rowNumber,
+            message: "Please enter Fuel Amount",
+          });
+        }
 
-      // Fuel Used and Fuel Amount dependency
-      if (row.fuelUsed && !row.fuelAmount) {
-        errors.push({
-          row: rowNumber,
-          message: "Please enter Fuel Amount",
-        });
-      }
-      if (!row.fuelUsed && row.fuelAmount) {
-        errors.push({
-          row: rowNumber,
-          message: "Please select Fuel Used",
-        });
+        // Fuel Used and Fuel Amount dependency
+        if (
+          row.fuelUsed &&
+          row.fuelUsed.trim() &&
+          (!row.fuelAmount || !row.fuelAmount.toString().trim())
+        ) {
+          errors.push({
+            row: rowNumber,
+            message: "Please enter Fuel Amount",
+          });
+        }
+        if (
+          (!row.fuelUsed || !row.fuelUsed.trim()) &&
+          row.fuelAmount &&
+          row.fuelAmount.toString().trim()
+        ) {
+          errors.push({
+            row: rowNumber,
+            message: "Please select Fuel Used",
+          });
+        }
       }
     });
 
@@ -340,7 +341,6 @@ function SupplierData() {
         !row.typeOfActivityData &&
         !row.vehicleType &&
         !row.distanceTravelled &&
-        !row.numPassengers &&
         !row.fuelUsed &&
         !row.fuelAmount
       ) {
@@ -433,7 +433,6 @@ function SupplierData() {
       vehicleType: "",
       distanceTravelled: "",
       totalWeight: "",
-      numPassengers: "",
       units: "",
       fuelUsed: "",
       fuelAmount: "",
@@ -448,7 +447,6 @@ function SupplierData() {
       vehicleType: "",
       distanceTravelled: "",
       totalWeight: "",
-      numPassengers: "",
       units: "",
       fuelUsed: "",
       fuelAmount: "",
@@ -463,7 +461,6 @@ function SupplierData() {
       vehicleType: "",
       distanceTravelled: "",
       totalWeight: "",
-      numPassengers: "",
       units: "",
       fuelUsed: "",
       fuelAmount: "",
@@ -478,7 +475,6 @@ function SupplierData() {
       vehicleType: "",
       distanceTravelled: "",
       totalWeight: "",
-      numPassengers: "",
       units: "",
       fuelUsed: "",
       fuelAmount: "",
@@ -493,7 +489,6 @@ function SupplierData() {
       vehicleType: "",
       distanceTravelled: "",
       totalWeight: "",
-      numPassengers: "",
       units: "",
       fuelUsed: "",
       fuelAmount: "",
@@ -561,7 +556,6 @@ function SupplierData() {
         vehicleType: "",
         distanceTravelled: "",
         totalWeight: "",
-        numPassengers: "",
         units: "",
         fuelUsed: "",
         fuelAmount: "",
@@ -573,6 +567,31 @@ function SupplierData() {
   const handleRemoveActivityRow = (rowIdx) => {
     setActivityRows((prevRows) => prevRows.filter((_, idx) => idx !== rowIdx));
   };
+
+  // Restore data from sessionStorage on component mount
+  useEffect(() => {
+    const restoreData = () => {
+      try {
+        // Restore form data
+        const savedSupplierData = sessionStorage.getItem("supplierData");
+        if (savedSupplierData) {
+          const parsedData = JSON.parse(savedSupplierData);
+          setFormData(parsedData);
+        }
+
+        // Restore activity rows
+        const savedActivityData = sessionStorage.getItem("activityData");
+        if (savedActivityData) {
+          const parsedActivityData = JSON.parse(savedActivityData);
+          setActivityRows(parsedActivityData);
+        }
+      } catch (error) {
+        console.error("Error restoring data from sessionStorage:", error);
+      }
+    };
+
+    restoreData();
+  }, []);
 
   // Fetch suppliers from backend API
   useEffect(() => {
@@ -588,11 +607,11 @@ function SupplierData() {
         const data = await response.json();
         setSuppliers(data.suppliers || []);
 
-        // Set default supplier if available
+        // Set default supplier if available and no supplier is already selected
         if (data.suppliers && data.suppliers.length > 0) {
           setFormData((prevState) => ({
             ...prevState,
-            supplier: data.suppliers[0],
+            supplier: prevState.supplier || data.suppliers[0],
           }));
         }
 
@@ -798,9 +817,24 @@ function SupplierData() {
                   .includes(col.label.toLowerCase().split(" ")[0])
             );
             const valueIndex = headerIndex !== -1 ? headerIndex : index;
-            rowData[col.key] = row[valueIndex]
-              ? row[valueIndex].toString()
-              : "";
+
+            // Get the raw value from Excel
+            const rawValue = row[valueIndex];
+
+            // Only set the value if it's not null, undefined, or empty
+            if (
+              rawValue !== null &&
+              rawValue !== undefined &&
+              rawValue !== ""
+            ) {
+              const stringValue = rawValue.toString().trim();
+              // Only assign if the trimmed value is not empty
+              if (stringValue !== "") {
+                rowData[col.key] = stringValue;
+              }
+            }
+            // If no valid value found, don't set the property at all
+            // This prevents empty strings from triggering validation
           });
           return rowData;
         });
@@ -973,7 +1007,7 @@ function SupplierData() {
         />
         <button
           className="update-summary-button"
-          onClick={() => {
+          onClick={async () => {
             // Validate activity data (only blocking errors)
             const validationErrors = validateActivityData(activityRows);
 
@@ -1025,7 +1059,6 @@ function SupplierData() {
                 row.typeOfActivityData ||
                 row.vehicleType ||
                 row.distanceTravelled ||
-                row.numPassengers ||
                 row.fuelUsed ||
                 row.fuelAmount ||
                 row.totalWeight
@@ -1035,6 +1068,89 @@ function SupplierData() {
               alert(
                 "Please enter at least one row of activity data before proceeding."
               );
+              return;
+            }
+
+            // Send data to compute_ghg_emissions API with all grid data in a single call
+            try {
+              console.log("Sending all data to compute_ghg_emissions API...");
+
+              // Filter rows that have data
+              const rowsWithData = activityRows.filter(
+                (row) =>
+                  row.typeOfActivityData ||
+                  row.vehicleType ||
+                  row.distanceTravelled ||
+                  row.fuelUsed ||
+                  row.fuelAmount ||
+                  row.totalWeight
+              );
+
+              // Prepare supplier data
+              const supplierData = {
+                Supplier_and_Container: formData.supplier,
+                Container_Weight:
+                  parseFloat(removeCommas(formData.containerWeight)) || 0,
+                Number_Of_Containers:
+                  parseInt(removeCommas(formData.numberOfContainers)) || 0,
+              };
+
+              // Prepare activity rows data
+              const activityRowsData = rowsWithData.map((row, index) => ({
+                Source_Description: row.sourceDescription || "",
+                Region: row.region || "",
+                Mode_of_Transport: row.modeOfTransport || "",
+                Scope: row.scope || "",
+                Type_Of_Activity_Data: row.typeOfActivityData || "",
+                Vehicle_Type: row.vehicleType || null,
+                Distance_Travelled: row.distanceTravelled
+                  ? parseFloat(removeCommas(row.distanceTravelled))
+                  : null,
+                Total_Weight_Of_Freight_InTonne: row.totalWeight
+                  ? parseFloat(removeCommas(row.totalWeight))
+                  : null,
+                Units_of_Measurement: row.units || null,
+                Fuel_Used: row.fuelUsed || null,
+                Fuel_Amount: row.fuelAmount
+                  ? parseFloat(removeCommas(row.fuelAmount))
+                  : null,
+                Unit_Of_Fuel_Amount: row.unitOfFuelAmount || null,
+              }));
+
+              // Combine all data into single API payload
+              const apiData = {
+                supplier_data: supplierData,
+                activity_rows: activityRowsData,
+              };
+
+              console.log("Combined API payload:", apiData);
+              console.log(
+                `Sending ${activityRowsData.length} activity rows with supplier data`
+              );
+
+              const response = await fetch(
+                "http://127.0.0.1:5000/api/compute_ghg_emissions",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(apiData),
+                }
+              );
+
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+
+              const result = await response.json();
+              console.log("API response:", result);
+              console.log(
+                "Successfully sent all data to compute_ghg_emissions API"
+              );
+            } catch (error) {
+              console.error("Error sending data to API:", error);
+              alert(`Error processing emission calculations: ${error.message}`);
               return;
             }
 
