@@ -10,18 +10,14 @@ class ReferenceLookup:
         self.load_csv(csv_path)
 
     def load_csv(self, csv_path):
-        print(
-            f"Loading {os.path.basename(csv_path)} for lookup '{self.lookup_column}'")
         with open(csv_path, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file)
             self.header = reader.fieldnames
-            print(f"CSV Header: {self.header}")
             count = 0
             for row in reader:
                 if row.get(self.lookup_column):
                     self.data.append(row)
                     count += 1
-            print(f"Loaded {count} rows with '{self.lookup_column}'.")
 
     def get_all(self):
         # Return all unique values for the lookup column

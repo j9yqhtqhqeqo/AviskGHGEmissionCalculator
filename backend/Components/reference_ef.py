@@ -9,7 +9,6 @@ class Reference_Unit_Conversion:
         self.load_matrix(csv_path)
 
     def load_matrix(self, csv_path):
-        print(f"Loading Reference - Unit Conversion.csv from: {csv_path}")
         with open(csv_path, 'r', encoding='utf-8-sig') as file:
             reader = csv.reader(file)
             rows = list(reader)
@@ -39,8 +38,6 @@ class Reference_Unit_Conversion:
                     self.matrix[row_header][col_header] = value.strip(
                     ) if value else ''
                 i += 1
-            print(
-                f"Loaded unit conversion matrix: {len(self.row_headers)} rows, {len(self.col_headers)} columns.")
 
     def get_conversion(self, from_unit, to_unit):
         # Case-insensitive lookup
@@ -63,18 +60,15 @@ class Reference_EF_Fuel_Use_CO2:
         self.load_csv(csv_path)
 
     def load_csv(self, csv_path):
-        print(f"Loading Reference - EF Fuel Use CO2.csv from: {csv_path}")
         with open(csv_path, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file)
             self.header = reader.fieldnames
-            print(f"CSV Header: {self.header}")
             count = 0
             for row in reader:
                 # Only add rows with a Fuel value
                 if row.get('Fuel'):
                     self.data.append(row)
                     count += 1
-            print(f"Loaded {count} rows with 'Fuel'.")
 
     def get_by_fuel_and_region(self, fuel, region):
         # Case-insensitive match for both fuel and region
@@ -83,8 +77,6 @@ class Reference_EF_Fuel_Use_CO2:
             if row['Fuel'].strip().lower() == fuel.strip().lower()
             and row['Region'].strip().lower() == region.strip().lower()
         ]
-        print(
-            f"Query for fuel='{fuel}', region='{region}' found {len(results)} result(s).")
         return results
 
 # Reference_EF_Fuel_Use_CH4_N2O: for Reference - EF Fuel Use CH4 N2O.csv
@@ -97,18 +89,15 @@ class Reference_EF_Fuel_Use_CH4_N2O:
         self.load_csv(csv_path)
 
     def load_csv(self, csv_path):
-        print(f"Loading Reference - EF Fuel Use CH4 N2O.csv from: {csv_path}")
         with open(csv_path, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file)
             self.header = reader.fieldnames
-            print(f"CSV Header: {self.header}")
             count = 0
             for row in reader:
                 # Only add rows with a Transport and Fuel value
                 if row.get('Transport and Fuel'):
                     self.data.append(row)
                     count += 1
-            print(f"Loaded {count} rows with 'Transport and Fuel'.")
 
     def get_by_transport_and_region(self, transport_and_fuel, region):
         # Case-insensitive match for both transport_and_fuel and region
@@ -117,9 +106,8 @@ class Reference_EF_Fuel_Use_CH4_N2O:
             if row['Transport and Fuel'].strip().lower() == transport_and_fuel.strip().lower()
             and row['Region'].strip().lower() == region.strip().lower()
         ]
-        print(
-            f"Query for transport_and_fuel='{transport_and_fuel}', region='{region}' found {len(results)} result(s).")
         return results
+
 # Reference_EF_Road: for Reference_EF_Road.csv
 
 
@@ -130,19 +118,15 @@ class Reference_EF_Road:
         self.load_csv(csv_path)
 
     def load_csv(self, csv_path):
-        print(f"Loading Reference_EF_Road.csv from: {csv_path}")
         with open(csv_path, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file)
             self.header = reader.fieldnames
-            print(f"CSV Header: {self.header}")
             count = 0
             for row in reader:
                 # Only add rows with a Vehicle and Fuel and Vehicle Year value
                 if row.get('Vehicle and Fuel and Vehicle Year'):
                     self.data.append(row)
                     count += 1
-            print(
-                f"Loaded {count} rows with 'Vehicle and Fuel and Vehicle Year'.")
 
     def get_by_vehicle_and_region(self, vehicle_fuel_year, region):
         # Case-insensitive match for both vehicle_fuel_year and region
@@ -151,8 +135,6 @@ class Reference_EF_Road:
             if row['Vehicle and Fuel and Vehicle Year'].strip().lower() == vehicle_fuel_year.strip().lower()
             and row['Region'].strip().lower() == region.strip().lower()
         ]
-        print(
-            f"Query for vehicle_fuel_year='{vehicle_fuel_year}', region='{region}' found {len(results)} result(s).")
         return results
 
 
@@ -163,18 +145,15 @@ class Reference_EF_Freight_CH4_NO2:
         self.load_csv(csv_path)
 
     def load_csv(self, csv_path):
-        print(f"Loading Reference_EF_Freight_CH4_NO2.csv from: {csv_path}")
         with open(csv_path, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file)
             self.header = reader.fieldnames
-            print(f"CSV Header: {self.header}")
             count = 0
             for row in reader:
                 # Only add rows with a Vehicle Type value
                 if row.get('Vehicle Type'):
                     self.data.append(row)
                     count += 1
-            print(f"Loaded {count} rows with 'Vehicle Type'.")
 
     def get_by_vehicle_and_region(self, vehicle_type, region):
         # Case-insensitive match for both vehicle_type and region
@@ -183,8 +162,6 @@ class Reference_EF_Freight_CH4_NO2:
             if row['Vehicle Type'].strip().lower() == vehicle_type.strip().lower()
             and row['Region'].strip().lower() == region.strip().lower()
         ]
-        print(
-            f"Query for vehicle_type='{vehicle_type}', region='{region}' found {len(results)} result(s).")
         return results
 
 
@@ -195,18 +172,15 @@ class Reference_EF_Public:
         self.load_csv(csv_path)
 
     def load_csv(self, csv_path):
-        print(f"Loading Reference_EF_Public.csv from: {csv_path}")
         with open(csv_path, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file)
             self.header = reader.fieldnames
-            print(f"CSV Header: {self.header}")
             count = 0
             for row in reader:
                 # Only add rows with a Vehicle and Type value
                 if row.get('Vehicle and Type'):
                     self.data.append(row)
                     count += 1
-            print(f"Loaded {count} rows with 'Vehicle and Type'.")
 
     def get_by_vehicle_and_region(self, vehicle_type, region):
         # Case-insensitive match for both vehicle_type and region
@@ -215,8 +189,6 @@ class Reference_EF_Public:
             if row['Vehicle and Type'].strip().lower() == vehicle_type.strip().lower()
             and row['Region'].strip().lower() == region.strip().lower()
         ]
-        print(
-            f"Query for vehicle_type='{vehicle_type}', region='{region}' found {len(results)} result(s).")
         return results
 
 # Reference_EF_Freight_CO2: similar to Reference_EF_Public but for Reference_EF_Freight_CO2.csv
@@ -229,18 +201,15 @@ class Reference_EF_Freight_CO2:
         self.load_csv(csv_path)
 
     def load_csv(self, csv_path):
-        print(f"Loading Reference_EF_Freight_CO2.csv from: {csv_path}")
         with open(csv_path, 'r', encoding='utf-8-sig') as file:
             reader = csv.DictReader(file)
             self.header = reader.fieldnames
-            print(f"CSV Header: {self.header}")
             count = 0
             for row in reader:
                 # Only add rows with a Vehicle and Size value
                 if row.get('Vehicle and Size'):
                     self.data.append(row)
                     count += 1
-            print(f"Loaded {count} rows with 'Vehicle and Size'.")
 
     def get_by_vehicle_and_region(self, vehicle_size, region):
         # Case-insensitive match for both vehicle_size and region
@@ -249,6 +218,4 @@ class Reference_EF_Freight_CO2:
             if row['Vehicle and Size'].strip().lower() == vehicle_size.strip().lower()
             and row['Region'].strip().lower() == region.strip().lower()
         ]
-        print(
-            f"Query for vehicle_size='{vehicle_size}', region='{region}' found {len(results)} result(s).")
         return results

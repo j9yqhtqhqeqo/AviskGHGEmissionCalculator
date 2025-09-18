@@ -12,6 +12,7 @@ from Components.Supplier_Input import Supplier_Input
 from Components.reference_ef import Reference_EF_Public, Reference_EF_Freight_CO2, Reference_EF_Freight_CH4_NO2, Reference_EF_Road, Reference_EF_Fuel_Use_CH4_N2O, Reference_EF_Fuel_Use_CO2, Reference_Unit_Conversion
 from Components.reference_lookups import ReferenceLookup
 from Components.Reference_Source_Product_Matrix import Reference_Source_Product_Matrix
+from Services.Co2FossilFuelCalculator import Co2FossilFuelCalculator
 
 
 # Initialize Flask app and CORS at the top
@@ -109,18 +110,11 @@ def get_unit_conversion():
     from flask import request
     from_unit = request.args.get('from_unit', '')
     to_unit = request.args.get('to_unit', '')
-    print(
-        f"Received API request for unit conversion: from '{from_unit}' to '{to_unit}'")
     if not from_unit or not to_unit:
-        print("Missing from_unit or to_unit in query.")
         return jsonify({'error': 'Both from_unit and to_unit query parameters are required'}), 400
     value = reference_unit_conversion.get_conversion(from_unit, to_unit)
     if value is None or value == '':
-        print(
-            f"No conversion value found for from_unit: {from_unit}, to_unit: {to_unit}")
         return jsonify({'error': f'No conversion value found for from_unit: {from_unit}, to_unit: {to_unit}'}), 404
-    print(
-        f"Returning conversion value: {value} for from_unit: {from_unit}, to_unit: {to_unit}")
     return jsonify({'from_unit': from_unit, 'to_unit': to_unit, 'value': value})
 
 
@@ -134,22 +128,14 @@ reference_ef_fuel_use_co2 = Reference_EF_Fuel_Use_CO2(ef_fuel_use_co2_csv_path)
 
 @app.route('/api/ef_fuel_use_co2', methods=['GET'])
 def get_ef_fuel_use_co2_by_fuel_and_region():
-    print("[DEBUG] /api/ef_fuel_use_co2 endpoint called")
     from flask import request
     fuel = request.args.get('fuel', '')
     region = request.args.get('region', '')
-    print(
-        f"Received API request for fuel: '{fuel}', region: '{region}' (Fuel Use CO2)")
     if not fuel or not region:
-        print("Missing fuel or region in query.")
         return jsonify({'error': 'Both fuel and region query parameters are required'}), 400
     results = reference_ef_fuel_use_co2.get_by_fuel_and_region(fuel, region)
     if not results:
-        print(
-            f"No data found for fuel: {fuel}, region: {region}")
         return jsonify({'error': f'No data found for fuel: {fuel}, region: {region}'}), 404
-    print(
-        f"Returning {len(results)} result(s) for fuel: {fuel}, region: {region}")
     return jsonify({'results': results})
 
 
@@ -167,19 +153,12 @@ def get_ef_fuel_use_ch4_n2o_by_transport_and_region():
     from flask import request
     transport_and_fuel = request.args.get('transport_and_fuel', '')
     region = request.args.get('region', '')
-    print(
-        f"Received API request for transport_and_fuel: '{transport_and_fuel}', region: '{region}' (Fuel Use CH4 N2O)")
     if not transport_and_fuel or not region:
-        print("Missing transport_and_fuel or region in query.")
         return jsonify({'error': 'Both transport_and_fuel and region query parameters are required'}), 400
     results = reference_ef_fuel_use_ch4_n2o.get_by_transport_and_region(
         transport_and_fuel, region)
     if not results:
-        print(
-            f"No data found for transport_and_fuel: {transport_and_fuel}, region: {region}")
         return jsonify({'error': f'No data found for transport_and_fuel: {transport_and_fuel}, region: {region}'}), 404
-    print(
-        f"Returning {len(results)} result(s) for transport_and_fuel: {transport_and_fuel}, region: {region}")
     return jsonify({'results': results})
 
 
@@ -196,19 +175,12 @@ def get_ef_road_by_vehicle_and_region():
     from flask import request
     vehicle_fuel_year = request.args.get('vehicle_fuel_year', '')
     region = request.args.get('region', '')
-    print(
-        f"Received API request for vehicle_fuel_year: '{vehicle_fuel_year}', region: '{region}' (Road)")
     if not vehicle_fuel_year or not region:
-        print("Missing vehicle_fuel_year or region in query.")
         return jsonify({'error': 'Both vehicle_fuel_year and region query parameters are required'}), 400
     results = reference_ef_road.get_by_vehicle_and_region(
         vehicle_fuel_year, region)
     if not results:
-        print(
-            f"No data found for vehicle_fuel_year: {vehicle_fuel_year}, region: {region}")
         return jsonify({'error': f'No data found for vehicle_fuel_year: {vehicle_fuel_year}, region: {region}'}), 404
-    print(
-        f"Returning {len(results)} result(s) for vehicle_fuel_year: {vehicle_fuel_year}, region: {region}")
     return jsonify({'results': results})
 
 
@@ -237,19 +209,12 @@ def get_ef_freight_ch4_no2_by_vehicle_and_region():
     from flask import request
     vehicle_type = request.args.get('vehicle_type', '')
     region = request.args.get('region', '')
-    print(
-        f"Received API request for vehicle_type: '{vehicle_type}', region: '{region}' (CH4/NO2)")
     if not vehicle_type or not region:
-        print("Missing vehicle_type or region in query.")
         return jsonify({'error': 'Both vehicle_type and region query parameters are required'}), 400
     results = reference_ef_freight_ch4_no2.get_by_vehicle_and_region(
         vehicle_type, region)
     if not results:
-        print(
-            f"No data found for vehicle_type: {vehicle_type}, region: {region}")
         return jsonify({'error': f'No data found for vehicle_type: {vehicle_type}, region: {region}'}), 404
-    print(
-        f"Returning {len(results)} result(s) for vehicle_type: {vehicle_type}, region: {region}")
     return jsonify({'results': results})
 
  # API endpoint for Reference_EF_Freight_CO2 (renamed to include co2)
@@ -260,19 +225,12 @@ def get_ef_freight_co2_by_vehicle_and_region():
     from flask import request
     vehicle_size = request.args.get('vehicle_size', '')
     region = request.args.get('region', '')
-    print(
-        f"Received API request for vehicle_size: '{vehicle_size}', region: '{region}'")
     if not vehicle_size or not region:
-        print("Missing vehicle_size or region in query.")
         return jsonify({'error': 'Both vehicle_size and region query parameters are required'}), 400
     results = reference_ef_freight.get_by_vehicle_and_region(
         vehicle_size, region)
     if not results:
-        print(
-            f"No data found for vehicle_size: {vehicle_size}, region: {region}")
         return jsonify({'error': f'No data found for vehicle_size: {vehicle_size}, region: {region}'}), 404
-    print(
-        f"Returning {len(results)} result(s) for vehicle_size: {vehicle_size}, region: {region}")
     return jsonify({'results': results})
 
 
@@ -281,18 +239,11 @@ def get_ef_by_vehicle_and_region():
     from flask import request
     vehicle_type = request.args.get('vehicle_type', '')
     region = request.args.get('region', '')
-    print(
-        f"Received API request for vehicle_type: '{vehicle_type}', region: '{region}'")
     if not vehicle_type or not region:
-        print("Missing vehicle_type or region in query.")
         return jsonify({'error': 'Both vehicle_type and region query parameters are required'}), 400
     results = reference_ef.get_by_vehicle_and_region(vehicle_type, region)
     if not results:
-        print(
-            f"No data found for vehicle_type: {vehicle_type}, region: {region}")
         return jsonify({'error': f'No data found for vehicle_type: {vehicle_type}, region: {region}'}), 404
-    print(
-        f"Returning {len(results)} result(s) for vehicle_type: {vehicle_type}, region: {region}")
     return jsonify({'results': results})
 
 
@@ -307,27 +258,21 @@ def get_suppliers():
     csv_path = os.path.join(os.path.dirname(__file__),
                             'data', 'Supplier_List.csv')
 
-    print(f"Attempting to read CSV from: {csv_path}")
-
     try:
         with open(csv_path, 'r', encoding='utf-8-sig') as file:
             csv_reader = csv.reader(file)
             # Skip header row
             header = next(csv_reader)
-            print(f"CSV Header: {header}")
 
             for row in csv_reader:
                 if row:  # Check if row is not empty
                     # Remove quotes and trim whitespace
                     supplier = row[0].strip('"').strip()
                     suppliers.append(supplier)
-                    print(f"Added supplier: {supplier}")
 
         result = {'suppliers': suppliers}
-        print(f"Total suppliers: {len(suppliers)}")
         return jsonify(result)
     except Exception as e:
-        print(f"Error reading CSV: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 
@@ -348,8 +293,6 @@ def get_source_product_matrix():
     if not supplier or not product or not location:
         return jsonify({'error': 'Missing supplier, product, or location parameter'}), 400
     supplier_product_location = f"{supplier} - {product} - {location}"
-    print(
-        f"[DEBUG] /api/source_product_matrix called with: {supplier_product_location}")
     results = reference_source_product_matrix.filter_by_supplier_product_location(
         supplier_product_location)
     return jsonify({'results': results})
@@ -363,49 +306,13 @@ def compute_ghg_emissions():
         if not data:
             return jsonify({'error': 'Missing JSON body'}), 400
 
-        print("[DEBUG] /api/compute_ghg_emissions endpoint called")
-        print(f"[DEBUG] Received raw JSON data: {json.dumps(data, indent=2)}")
-
         # Extract supplier data
         supplier_data = data.get('supplier_data', {})
         activity_rows = data.get('activity_rows', [])
 
-        print(f"[DEBUG] Supplier data: {json.dumps(supplier_data, indent=2)}")
-        print(f"[DEBUG] Number of activity rows: {len(activity_rows)}")
-
         # Process each activity row
-        processed_inputs = []
+        supplier_input_objects = []
         for i, row_data in enumerate(activity_rows):
-            print(f"[DEBUG] Processing activity row {i + 1}:")
-            print(f"[DEBUG] Raw row data: {json.dumps(row_data, indent=2)}")
-
-            # Print individual field values for this row
-            print(
-                f"[DEBUG] Row {i + 1} - Source_Description: {row_data.get('Source_Description', '')}")
-            print(
-                f"[DEBUG] Row {i + 1} - Region: {row_data.get('Region', '')}")
-            print(
-                f"[DEBUG] Row {i + 1} - Mode_of_Transport: {row_data.get('Mode_of_Transport', '')}")
-            print(f"[DEBUG] Row {i + 1} - Scope: {row_data.get('Scope', '')}")
-            print(
-                f"[DEBUG] Row {i + 1} - Type_Of_Activity_Data: {row_data.get('Type_Of_Activity_Data', '')}")
-            print(
-                f"[DEBUG] Row {i + 1} - Vehicle_Type: {row_data.get('Vehicle_Type')}")
-            print(
-                f"[DEBUG] Row {i + 1} - Distance_Travelled: {row_data.get('Distance_Travelled')}")
-            print(
-                f"[DEBUG] Row {i + 1} - Total_Weight_Of_Freight_InTonne: {row_data.get('Total_Weight_Of_Freight_InTonne')}")
-            print(
-                f"[DEBUG] Row {i + 1} - Num_Of_Passenger: {row_data.get('Num_Of_Passenger')}")
-            print(
-                f"[DEBUG] Row {i + 1} - Units_of_Measurement: {row_data.get('Units_of_Measurement')}")
-            print(
-                f"[DEBUG] Row {i + 1} - Fuel_Used: {row_data.get('Fuel_Used')}")
-            print(
-                f"[DEBUG] Row {i + 1} - Fuel_Amount: {row_data.get('Fuel_Amount')}")
-            print(
-                f"[DEBUG] Row {i + 1} - Unit_Of_Fuel_Amount: {row_data.get('Unit_Of_Fuel_Amount')}")
-
             # Create Supplier_Input object for this row
             supplier_input = Supplier_Input(
                 Supplier_and_Container=supplier_data.get(
@@ -434,23 +341,23 @@ def compute_ghg_emissions():
                 Unit_Of_Fuel_Amount=row_data.get('Unit_Of_Fuel_Amount')
             )
 
-            print(
-                f"[DEBUG] Row {i + 1} - Created Supplier_Input object: {supplier_input.__dict__}")
-            processed_inputs.append(supplier_input.__dict__)
+            supplier_input_objects.append(supplier_input)
 
-        print(
-            f"[DEBUG] Successfully processed {len(processed_inputs)} activity rows")
+        # Calculate CO2 emissions using Co2FossilFuelCalculator
+        co2_calculator = Co2FossilFuelCalculator()
 
-        # Placeholder: actual GHG calculation logic goes here
-        # For now, just echo the parsed inputs
+        co2_results = co2_calculator.calculate_co2_emissions(
+            supplier_input_objects)
+
+        # Return comprehensive results including CO2 emissions
         return jsonify({
             'status': 'success',
             'supplier_data': supplier_data,
-            'processed_rows': len(processed_inputs),
-            'inputs': processed_inputs
+            'processed_rows': len(supplier_input_objects),
+            'co2_emissions_results': co2_results,
+            'total_co2_emissions': sum(result['co2_emissions'] for result in co2_results)
         })
     except Exception as e:
-        print(f"[ERROR] Exception in compute_ghg_emissions: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 # API endpoint to get unique Vehicle and Size for a given region and mode of transport
@@ -488,13 +395,7 @@ def get_fuel_types():
         ])))
         return jsonify({'fuel_types': fuel_types})
     except Exception as e:
-        print(f"Error getting fuel types: {str(e)}")
         return jsonify({'error': 'Failed to retrieve fuel types'}), 500
-#
-
-# print('[DEBUG] Registered endpoints:')
-# for rule in app.url_map.iter_rules():
-#     print(rule)
 
 
 if __name__ == '__main__':
