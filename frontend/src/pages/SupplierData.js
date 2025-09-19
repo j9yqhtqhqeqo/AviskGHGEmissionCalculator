@@ -2,6 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/SupplierData.css";
 import * as XLSX from "xlsx";
+import {
+  getApiUrl,
+  isDebugEnabled,
+  isConsoleLoggingEnabled,
+} from "../config/config";
 
 function SupplierData() {
   const navigate = useNavigate();
@@ -509,7 +514,7 @@ function SupplierData() {
     setVehicleTypeError((prev) => ({ ...prev, [rowIdx]: null }));
     try {
       const response = await fetch(
-        `http://127.0.0.1:5000/api/vehicle_and_size?region=${encodeURIComponent(
+        `${getApiUrl("vehicleAndSize")}?region=${encodeURIComponent(
           region
         )}&mode_of_transport=${encodeURIComponent(modeOfTransport)}`
       );
@@ -598,7 +603,7 @@ function SupplierData() {
     const fetchSuppliers = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://127.0.0.1:5000/api/suppliers");
+        const response = await fetch(getApiUrl("suppliers"));
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -631,7 +636,7 @@ function SupplierData() {
     const fetchRegions = async () => {
       try {
         setRegionLoading(true);
-        const response = await fetch("http://127.0.0.1:5000/api/lookup/region");
+        const response = await fetch(getApiUrl("region"));
         if (!response.ok)
           throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
@@ -645,9 +650,7 @@ function SupplierData() {
     const fetchMot = async () => {
       try {
         setMotLoading(true);
-        const response = await fetch(
-          "http://127.0.0.1:5000/api/lookup/mode_of_transport"
-        );
+        const response = await fetch(getApiUrl("modeOfTransport"));
         if (!response.ok)
           throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
@@ -661,7 +664,7 @@ function SupplierData() {
     const fetchScope = async () => {
       try {
         setScopeLoading(true);
-        const response = await fetch("http://127.0.0.1:5000/api/lookup/scope");
+        const response = await fetch(getApiUrl("scope"));
         if (!response.ok)
           throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
@@ -675,9 +678,7 @@ function SupplierData() {
     const fetchActivityType = async () => {
       try {
         setActivityTypeLoading(true);
-        const response = await fetch(
-          "http://127.0.0.1:5000/api/lookup/type_of_activity_data"
-        );
+        const response = await fetch(getApiUrl("typeOfActivityData"));
         if (!response.ok)
           throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
@@ -691,7 +692,7 @@ function SupplierData() {
     const fetchUnits = async () => {
       try {
         setUnitsLoading(true);
-        const response = await fetch("http://127.0.0.1:5000/api/lookup/units");
+        const response = await fetch(getApiUrl("units"));
         if (!response.ok)
           throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
@@ -705,7 +706,7 @@ function SupplierData() {
     const fetchFuelTypes = async () => {
       try {
         setFuelLoading(true);
-        const response = await fetch("http://127.0.0.1:5000/api/fuel_types");
+        const response = await fetch(getApiUrl("fuelTypes"));
         if (!response.ok)
           throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
@@ -719,9 +720,7 @@ function SupplierData() {
     const fetchUnitOfFuelAmount = async () => {
       try {
         setUnitOfFuelAmountLoading(true);
-        const response = await fetch(
-          "http://127.0.0.1:5000/api/lookup/unit_of_fuel_amount"
-        );
+        const response = await fetch(getApiUrl("unitOfFuelAmount"));
         if (!response.ok)
           throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
@@ -1128,16 +1127,13 @@ function SupplierData() {
                 `Sending ${activityRowsData.length} activity rows with supplier data`
               );
 
-              const response = await fetch(
-                "http://127.0.0.1:5000/api/compute_ghg_emissions",
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(apiData),
-                }
-              );
+              const response = await fetch(getApiUrl("computeGhgEmissions"), {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(apiData),
+              });
 
               if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
