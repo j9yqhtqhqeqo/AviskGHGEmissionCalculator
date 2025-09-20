@@ -3,10 +3,10 @@ US,Road,Fuel Use and Vehicle Distance,Scope 1,Tonne Mile,1995 IPCC Second Assess
 UK,Rail,Fuel Use,Scope 2,Tonne Kilometer,2001 IPCC Third Assessment Report (TAR),Mode of Transport,UK Gallon
 Other,Water,Weight Distance (e.g. Freight Transport),Scope 3,Short Ton Mile,2007 IPCC Fourth Assessment Report,Scope,Litre
 ,,,,Short Ton Kilometer,2014 IPCC Fifth Assessment Report,Type of Activity Data,
-,,,,Passenger Mile,,Vehicle Type,
-,,,,Passenger Kilometer,,Distance Travelled,
-,,,,Mile,,Total Weight of Freight (tonne),
-,,,,Kilometer,,# of Passenger,
+,,,,,,Vehicle Type,
+,,,,,,Distance Travelled,
+,,,,,,Total Weight of Freight (tonne),
+,,,,,,# of Passenger,
 ,,,,,,Units of Measurement (Tonne Miles),
 ,,,,,,Fuel Used,
 ,,,,,,Fuel Amount,

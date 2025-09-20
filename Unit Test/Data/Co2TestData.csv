@@ -1,0 +1,12 @@
+﻿Source Description,Region,Mode of Transport,Scope,Type of Activity Data,Vehicle Type,Distance Travelled,Total Weight of Freight (tonne),Units of Measurement (Tonne Miles),"Fossil Fuel CO2
+(metric tonnes)"
+Test1,US,Water,Scope 3,Weight Distance (e.g. Freight Transport),Watercraft - Shipping - Large Bulk Carrier (14201 tonnes deadweight),5000,381.6,Tonne Mile,100.954079
+Test2,US,Road,Scope 3,Weight Distance (e.g. Freight Transport),Road Vehicle - HGV - Rigid - Engine Size 3.5 - 7.5 tonnes,2000,381.6,Tonne Mile,249.8613456
+Test3,US,Rail,Scope 3,Weight Distance (e.g. Freight Transport),Rail,1000,381.6,Tonne Mile,10.6001783
+Test4,UK,Water,Scope 4,Weight Distance (e.g. Freight Transport),Road Vehicle - HGV - Rigid - Engine Size Unknown,3000,381.6,Tonne Mile,462.7129864
+Test5,UK,Road,Scope 5,Weight Distance (e.g. Freight Transport),Road Vehicle - HGV - Articulated - Engine Size Unknown,15000,381.6,Tonne Mile,817.0020856
+Test6,UK,Rail,Scope 6,Weight Distance (e.g. Freight Transport),Rail,22000,381.6,Tonne Mile,385.0567953
+Test7,Other,Road,Scope 7,Weight Distance (e.g. Freight Transport),Road Vehicle - HGV - Articulated - Engine Size Unknown,3400,381.6,Tonne Mile,424.7642875
+Test8,Other,Water,Scope 8,Weight Distance (e.g. Freight Transport),Watercraft - Shipping - Small Bulk Carrier (1720 tonnes deadweight),55000,381.6,Tonne Mile,1110.494869
+Test9,Other,Rail,Scope 3,Weight Distance (e.g. Freight Transport),Rail,13500,381.6,Tonne Mile,143.102407
+Test10,US,Road,Scope 3,Weight Distance (e.g. Freight Transport),Road Vehicle - Light Goods Vehicle - Diesel - Engine Size ≤3.5 tonnes,4000,381.6,Tonne Mile,499.7226911

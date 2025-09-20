@@ -169,8 +169,10 @@ class Co2FossilFuelCalculator:
                     if distance_travelled is not None and total_weight is not None and emission_factor > 0:
                         co2_emissions = emission_factor * \
                             float(distance_travelled) * float(total_weight)
+                        print(f"CO2 Emissions: {co2_emissions}")
                     else:
                         co2_emissions = 0.0
+                        print(f"CO2 Emissions: {co2_emissions}")
 
                 else:
                     pass

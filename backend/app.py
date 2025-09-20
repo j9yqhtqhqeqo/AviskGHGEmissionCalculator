@@ -6,6 +6,7 @@
 from flask import Flask, jsonify, request
 import csv
 import os
+import logging
 from flask_cors import CORS
 import json
 from Components.Supplier_Input import Supplier_Input
@@ -22,6 +23,13 @@ config = get_config()
 # Initialize Flask app and CORS at the top
 app = Flask(__name__)
 CORS(app, origins=config.CORS_ORIGINS)
+
+# Configure logging to reduce verbose output
+if config.DEBUG:
+    # Reduce werkzeug (Flask development server) logging level
+    logging.getLogger('werkzeug').setLevel(logging.WARNING)
+    # Set Flask app logger to WARNING level
+    app.logger.setLevel(logging.WARNING)
 
 # --- Reference - Lookups.csv Lookups ---
 lookups_csv_path = config.get_csv_path('lookups')

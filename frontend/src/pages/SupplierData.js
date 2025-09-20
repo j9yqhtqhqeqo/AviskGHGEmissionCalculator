@@ -27,6 +27,25 @@ function SupplierData() {
     { key: "unitOfFuelAmount", label: "Unit of Fuel Amount" },
   ];
 
+  // Helper function to calculate total weight of freight
+  const calculateTotalWeight = (numberOfContainers, containerWeight) => {
+    if (
+      !numberOfContainers ||
+      numberOfContainers === "" ||
+      !containerWeight ||
+      containerWeight === ""
+    )
+      return "";
+    const cleanContainers = removeCommas(numberOfContainers.toString());
+    const cleanWeight = removeCommas(containerWeight.toString());
+    const numContainers = parseFloat(cleanContainers);
+    const weight = parseFloat(cleanWeight);
+    if (isNaN(numContainers) || isNaN(weight)) return "";
+    return formatNumberWithCommas(
+      ((numContainers * weight) / 1000000).toString()
+    );
+  };
+
   // Helper function to determine if a field should accept only numerical values
   const isNumericalField = (fieldKey) => {
     return ["distanceTravelled", "fuelAmount", "totalWeight"].includes(
@@ -433,7 +452,7 @@ function SupplierData() {
       sourceDescription: "",
       region: "",
       modeOfTransport: "",
-      scope: "",
+      scope: "Scope 3",
       typeOfActivityData: "",
       vehicleType: "",
       distanceTravelled: "",
@@ -447,7 +466,7 @@ function SupplierData() {
       sourceDescription: "",
       region: "",
       modeOfTransport: "",
-      scope: "",
+      scope: "Scope 3",
       typeOfActivityData: "",
       vehicleType: "",
       distanceTravelled: "",
@@ -461,7 +480,7 @@ function SupplierData() {
       sourceDescription: "",
       region: "",
       modeOfTransport: "",
-      scope: "",
+      scope: "Scope 3",
       typeOfActivityData: "",
       vehicleType: "",
       distanceTravelled: "",
@@ -475,7 +494,7 @@ function SupplierData() {
       sourceDescription: "",
       region: "",
       modeOfTransport: "",
-      scope: "",
+      scope: "Scope 3",
       typeOfActivityData: "",
       vehicleType: "",
       distanceTravelled: "",
@@ -489,7 +508,7 @@ function SupplierData() {
       sourceDescription: "",
       region: "",
       modeOfTransport: "",
-      scope: "",
+      scope: "Scope 3",
       typeOfActivityData: "",
       vehicleType: "",
       distanceTravelled: "",
@@ -549,18 +568,38 @@ function SupplierData() {
     });
   };
 
+  // Update activity rows when number of containers or container weight changes
+  useEffect(() => {
+    const newTotalWeight = calculateTotalWeight(
+      formData.numberOfContainers,
+      formData.containerWeight
+    );
+
+    setActivityRows((prevRows) => {
+      return prevRows.map((row) => ({
+        ...row,
+        totalWeight: newTotalWeight,
+      }));
+    });
+  }, [formData.numberOfContainers, formData.containerWeight]);
+
   const handleAddActivityRow = () => {
+    const newTotalWeight = calculateTotalWeight(
+      formData.numberOfContainers,
+      formData.containerWeight
+    );
+
     setActivityRows((prevRows) => [
       ...prevRows,
       {
         sourceDescription: "",
         region: "",
         modeOfTransport: "",
-        scope: "",
+        scope: "Scope 3",
         typeOfActivityData: "",
         vehicleType: "",
         distanceTravelled: "",
-        totalWeight: "",
+        totalWeight: newTotalWeight,
         units: "",
         fuelUsed: "",
         fuelAmount: "",
@@ -597,6 +636,22 @@ function SupplierData() {
 
     restoreData();
   }, []);
+
+  // Initialize total weight for existing rows on component mount
+  useEffect(() => {
+    const newTotalWeight = calculateTotalWeight(
+      formData.numberOfContainers,
+      formData.containerWeight
+    );
+    if (newTotalWeight) {
+      setActivityRows((prevRows) => {
+        return prevRows.map((row) => ({
+          ...row,
+          totalWeight: newTotalWeight,
+        }));
+      });
+    }
+  }, []); // Only run on mount
 
   // Fetch suppliers from backend API
   useEffect(() => {
@@ -1520,6 +1575,20 @@ function SupplierData() {
                         className="input-field"
                         placeholder={
                           isNumericalField(col.key) ? "Enter number" : ""
+                        }
+                        readOnly={col.key === "totalWeight"}
+                        style={
+                          col.key === "totalWeight"
+                            ? {
+                                backgroundColor: "#f5f5f5",
+                                cursor: "not-allowed",
+                              }
+                            : {}
+                        }
+                        title={
+                          col.key === "totalWeight"
+                            ? "Auto-calculated from (# of Containers × Container Weight) ÷ 1,000,000"
+                            : ""
                         }
                       />
                     )}
