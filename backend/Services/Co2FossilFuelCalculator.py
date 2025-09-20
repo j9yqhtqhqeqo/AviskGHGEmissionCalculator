@@ -19,31 +19,6 @@ class Co2FossilFuelCalculator:
         self.reference_ef_freight_co2 = reference_ef_freight_co2
         self.reference_unit_conversion = reference_unit_conversion
 
-    def calculate_emissions(self, fuel_amount, fuel_type, emission_factor=None):
-        """
-        Calculate CO2 emissions from fossil fuel consumption.
-
-        Args:
-            fuel_amount (float): Amount of fuel consumed
-            fuel_type (str): Type of fossil fuel used
-            emission_factor (float, optional): Custom emission factor
-
-        Returns:
-            float: CO2 emissions in appropriate units
-        """
-        if fuel_amount is None or fuel_amount <= 0:
-            return 0.0
-
-        if emission_factor is None or emission_factor <= 0:
-            return 0.0
-
-        try:
-            # Basic calculation: fuel_amount * emission_factor
-            co2_emissions = float(fuel_amount) * float(emission_factor)
-            return co2_emissions
-        except (ValueError, TypeError):
-            return 0.0
-
     def get_emission_factor_by_vehicle_and_region(self, vehicle_type, region=None, units_of_measurement='',):
         """
         Get the appropriate emission factor for the given vehicle type and region.
@@ -95,9 +70,6 @@ class Co2FossilFuelCalculator:
                         # are not available in the basic unit conversion matrix
                         co2_factor_unit_conversion_numerator = 0.0
 
-                print(
-                    f"CO2 Factor Unit Conversion Numerator: {co2_factor_unit_conversion_numerator}")
-
                 # 2. CO2 in Factor Unit Conversion Denominator = Lookup using Reference_Unit_Conversion
                 co2_factor_unit_conversion_denominator = 0.0
                 if units_of_measurement and co2_unit_denominator and self.reference_unit_conversion:
@@ -113,9 +85,6 @@ class Co2FossilFuelCalculator:
                     except (ValueError, TypeError, Exception):
                         # Handle cases where compound units are not available in the conversion matrix
                         co2_factor_unit_conversion_denominator = 0.0
-
-                print(
-                    f"CO2 Factor Unit Conversion Denominator: {co2_factor_unit_conversion_denominator}")
 
                 # 3. Calculate CO2 Emission Factor = emission_factor * numerator * denominator
                 co2_emission_factor = 0.0
@@ -175,8 +144,38 @@ class Co2FossilFuelCalculator:
                 region = getattr(supplier_input, 'Region', None)
                 units_of_measurement = getattr(
                     supplier_input, 'Units_of_Measurement', '')
+                distance_travelled = getattr(
+                    supplier_input, 'Distance_Travelled', None)
+                total_weight = getattr(
+                    supplier_input, 'Total_Weight_Of_Freight_InTonne', None)
 
-                # Skip calculation if no fuel data available
+                # print(f"=== DEBUG: Processing supplier input ===")
+                # print(f"Fuel Used: {fuel_used}")
+                # print(f"Fuel Amount: {fuel_amount}")
+                # print(f"Vehicle Type: {vehicle_type}")
+                # print(f"Region: {region}")
+                # print(f"Units of Measurement: {units_of_measurement}")
+
+                # Get emission factor for the vehicle type and region (try even if no fuel data)
+                emission_factor = 0.0
+                co2_emissions = 0.0
+
+                if vehicle_type and region:
+                    emission_factor = self.get_emission_factor_by_vehicle_and_region(
+                        vehicle_type, region, units_of_measurement)
+
+                    # Calculate CO2 emissions = emission_factor * Distance_Travelled * Total_Weight_Of_Freight_InTonne
+
+                    if distance_travelled is not None and total_weight is not None and emission_factor > 0:
+                        co2_emissions = emission_factor * \
+                            float(distance_travelled) * float(total_weight)
+                    else:
+                        co2_emissions = 0.0
+
+                else:
+                    pass
+
+                # Skip calculation if no fuel data available, but still record the emission factor attempt
                 if not fuel_used or fuel_amount is None:
                     results.append({
                         'supplier_info': {
@@ -189,18 +188,14 @@ class Co2FossilFuelCalculator:
                             'fuel_amount': fuel_amount,
                             'unit': getattr(supplier_input, 'Unit_Of_Fuel_Amount', '')
                         },
-                        'emission_factor': 0.0,
+                        'emission_factor': emission_factor,
                         'status': 'No fuel data available'
                     })
                     continue
 
-                # Get emission factor for the vehicle type and region
-                emission_factor = self.get_emission_factor_by_vehicle_and_region(
-                    vehicle_type, region, units_of_measurement) if vehicle_type else 0.0
-
-                # Calculate CO2 emissions
-                co2_emissions = self.calculate_emissions(
-                    fuel_amount, fuel_used, emission_factor)
+                # # Calculate CO2 emissions
+                # co2_emissions = self.calculate_emissions(
+                #     fuel_amount, fuel_used, emission_factor)
 
                 # Add result to results array
                 results.append({

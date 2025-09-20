@@ -282,6 +282,44 @@ def get_source_product_matrix():
     return jsonify({'results': results})
 
 
+# API endpoint to get unique Vehicle and Size for a given region and mode of transport
+
+
+@app.route('/api/vehicle_and_size', methods=['GET'])
+def get_vehicle_and_size_by_region_and_mode():
+    region = request.args.get('region', '')
+    mode_of_transport = request.args.get('mode_of_transport', '')
+    if not region or not mode_of_transport:
+        return jsonify({'error': 'Both region and mode_of_transport query parameters are required'}), 400
+    # Filter rows from reference_ef_freight by region and mode of transport
+    matches = [
+        row['Vehicle and Size']
+        for row in reference_ef_freight.data
+        if row.get('Region', '').strip().lower() == region.strip().lower()
+        and row.get('Mode of Transport', '').strip().lower() == mode_of_transport.strip().lower()
+        and row.get('Vehicle and Size')
+    ]
+    # Return unique values, sorted
+    unique_vehicle_and_size = sorted(list(set(matches)))
+    return jsonify({'region': region, 'mode_of_transport': mode_of_transport, 'vehicle_and_size': unique_vehicle_and_size})
+
+# API endpoint to get unique fuel types
+
+
+@app.route('/api/fuel_types', methods=['GET'])
+def get_fuel_types():
+    try:
+        # Get unique fuel types from reference_ef_fuel_use_co2
+        fuel_types = sorted(list(set([
+            row.get('Fuel', '')
+            for row in reference_ef_fuel_use_co2.data
+            if row.get('Fuel', '').strip()
+        ])))
+        return jsonify({'fuel_types': fuel_types})
+    except Exception as e:
+        return jsonify({'error': 'Failed to retrieve fuel types'}), 500
+
+
 # --- API endpoint: compute_ghg_emissions ---
 @app.route('/api/compute_ghg_emissions', methods=['POST'])
 def compute_ghg_emissions():
@@ -347,43 +385,6 @@ def compute_ghg_emissions():
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
-# API endpoint to get unique Vehicle and Size for a given region and mode of transport
-
-
-@app.route('/api/vehicle_and_size', methods=['GET'])
-def get_vehicle_and_size_by_region_and_mode():
-    region = request.args.get('region', '')
-    mode_of_transport = request.args.get('mode_of_transport', '')
-    if not region or not mode_of_transport:
-        return jsonify({'error': 'Both region and mode_of_transport query parameters are required'}), 400
-    # Filter rows from reference_ef_freight by region and mode of transport
-    matches = [
-        row['Vehicle and Size']
-        for row in reference_ef_freight.data
-        if row.get('Region', '').strip().lower() == region.strip().lower()
-        and row.get('Mode of Transport', '').strip().lower() == mode_of_transport.strip().lower()
-        and row.get('Vehicle and Size')
-    ]
-    # Return unique values, sorted
-    unique_vehicle_and_size = sorted(list(set(matches)))
-    return jsonify({'region': region, 'mode_of_transport': mode_of_transport, 'vehicle_and_size': unique_vehicle_and_size})
-
-# API endpoint to get unique fuel types
-
-
-@app.route('/api/fuel_types', methods=['GET'])
-def get_fuel_types():
-    try:
-        # Get unique fuel types from reference_ef_fuel_use_co2
-        fuel_types = sorted(list(set([
-            row.get('Fuel', '')
-            for row in reference_ef_fuel_use_co2.data
-            if row.get('Fuel', '').strip()
-        ])))
-        return jsonify({'fuel_types': fuel_types})
-    except Exception as e:
-        return jsonify({'error': 'Failed to retrieve fuel types'}), 500
 
 
 if __name__ == '__main__':
