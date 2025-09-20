@@ -177,29 +177,7 @@ class Co2FossilFuelCalculator:
                 else:
                     pass
 
-                # Skip calculation if no fuel data available, but still record the emission factor attempt
-                if not fuel_used or fuel_amount is None:
-                    results.append({
-                        'supplier_info': {
-                            'supplier_container': getattr(supplier_input, 'Supplier_and_Container', ''),
-                            'source_description': getattr(supplier_input, 'Source_Description', '')
-                        },
-                        'co2_emissions': 0.0,
-                        'fuel_data': {
-                            'fuel_used': fuel_used,
-                            'fuel_amount': fuel_amount,
-                            'unit': getattr(supplier_input, 'Unit_Of_Fuel_Amount', '')
-                        },
-                        'emission_factor': emission_factor,
-                        'status': 'No fuel data available'
-                    })
-                    continue
-
-                # # Calculate CO2 emissions
-                # co2_emissions = self.calculate_emissions(
-                #     fuel_amount, fuel_used, emission_factor)
-
-                # Add result to results array
+                # Add result to results array (regardless of fuel data availability)
                 results.append({
                     'supplier_info': {
                         'supplier_container': getattr(supplier_input, 'Supplier_and_Container', ''),
@@ -212,7 +190,7 @@ class Co2FossilFuelCalculator:
                         'unit': getattr(supplier_input, 'Unit_Of_Fuel_Amount', '')
                     },
                     'emission_factor': emission_factor if emission_factor is not None else 0.0,
-                    'status': 'Success'
+                    'status': 'Success' if co2_emissions > 0 else 'No emissions calculated'
                 })
 
             except Exception as e:
