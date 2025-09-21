@@ -170,16 +170,117 @@ function EmissionSummary() {
       </div>
 
       {/* Total Emissions Box */}
-      <div className="total-emissions-box">
-        <div className="total-emissions-label">
-          Total Emissions
+      <div
+        className="total-emissions-box"
+        style={{
+          backgroundColor: (() => {
+            if (totals.totalEmissions === 0) return "#4caf50"; // Bright green for zero emissions (startup)
+            // Color progression for industrial scale
+            if (totals.totalEmissions <= 1000) return "#fff9c4"; // Light yellow for 1-1000 tonnes
+            if (totals.totalEmissions <= 2000) return "#9e9e9e"; // Light grey for 1001-2000
+            if (totals.totalEmissions <= 3000) return "#757575"; // Medium grey for 2001-3000
+            if (totals.totalEmissions <= 4000) return "#616161"; // Darker grey for 3001-4000
+            if (totals.totalEmissions <= 5000) return "#424242"; // Very dark grey for 4001-5000
+            return "#303030"; // Almost black for 5000+ tonnes
+          })(),
+          boxShadow: (() => {
+            if (totals.totalEmissions === 0)
+              return "0 4px 12px rgba(76, 175, 80, 0.3)";
+            if (totals.totalEmissions <= 1000)
+              return "0 4px 12px rgba(255, 249, 196, 0.5)";
+            return "0 4px 12px rgba(66, 66, 66, 0.3)";
+          })(),
+          border: (() => {
+            if (totals.totalEmissions === 0) return "2px solid #66bb6a";
+            if (totals.totalEmissions <= 1000) return "2px solid #f9a825";
+            return "2px solid #757575";
+          })(),
+        }}
+      >
+        <div
+          className="total-emissions-label"
+          style={{
+            borderRight: (() => {
+              if (totals.totalEmissions === 0) return "2px solid #66bb6a";
+              if (totals.totalEmissions <= 1000) return "2px solid #f9a825";
+              return "2px solid #757575";
+            })(),
+            borderBottom:
+              window.innerWidth <= 768
+                ? (() => {
+                    if (totals.totalEmissions === 0) return "2px solid #66bb6a";
+                    if (totals.totalEmissions <= 1000)
+                      return "2px solid #f9a825";
+                    return "2px solid #757575";
+                  })()
+                : "none",
+            color: (() => {
+              if (totals.totalEmissions <= 1000 && totals.totalEmissions > 0)
+                return "#333"; // Dark text for light yellow
+              return "white"; // White text for dark backgrounds
+            })(),
+          }}
+        >
+          🌍 Total GHG Emissions
           <br />
           (metric tonnes
           <br />
-          CO2e)
+          CO₂e)
         </div>
         <div className="total-emissions-value">
-          {totals.totalEmissions.toFixed(2)}
+          <div
+            style={{
+              fontSize: "28px",
+              fontWeight: "bold",
+              marginBottom: "5px",
+              color: (() => {
+                if (totals.totalEmissions <= 1000 && totals.totalEmissions > 0)
+                  return "#333"; // Dark text for light yellow
+                return "white"; // White text for dark backgrounds
+              })(),
+            }}
+          >
+            {totals.totalEmissions.toFixed(2)}
+          </div>
+          <div
+            style={{
+              fontSize: "14px",
+              opacity: "0.9",
+              color: (() => {
+                if (totals.totalEmissions <= 1000 && totals.totalEmissions > 0)
+                  return "#333"; // Dark text for light yellow
+                return "white"; // White text for dark backgrounds
+              })(),
+            }}
+          >
+            metric tonnes CO₂e
+          </div>
+          <div
+            style={{
+              fontSize: "12px",
+              marginTop: "5px",
+              opacity: "0.8",
+              color: (() => {
+                if (totals.totalEmissions <= 1000 && totals.totalEmissions > 0)
+                  return "#333"; // Dark text for light yellow
+                return "white"; // White text for dark backgrounds
+              })(),
+            }}
+          >
+            {(() => {
+              if (totals.totalEmissions === 0)
+                return "No Emissions Calculated 🌱";
+              if (totals.totalEmissions <= 1000)
+                return "Good Industrial Performance 🌿";
+              if (totals.totalEmissions <= 2000)
+                return "Moderate Industrial Impact 🔲";
+              if (totals.totalEmissions <= 3000)
+                return "High Industrial Impact ⬛";
+              if (totals.totalEmissions <= 4000)
+                return "Very High Industrial Impact 🖤";
+              return "Critical Industrial Impact 💀";
+            })()}
+          </div>
         </div>
       </div>
 
@@ -398,61 +499,61 @@ function EmissionSummary() {
           <tbody>
             <tr>
               <td>CO2 per Mile</td>
-              <td>0.00022</td>
+              <td>2482</td>
               <td>
                 {totals.totalEmissions.toFixed(2)} metric tonnes of CO2e is
                 equivalent to emissions from{" "}
-                {(totals.totalEmissions / 0.00022).toFixed(0)} miles driven by
-                an average gas-powered passenger vehicle
+                {(totals.totalEmissions * 2482).toFixed(0)} miles driven by an
+                average gas-powered passenger vehicle
               </td>
             </tr>
             <tr>
               <td>CO2 per Gallon</td>
-              <td>0.00887</td>
+              <td>113</td>
               <td>
                 {totals.totalEmissions.toFixed(2)} metric tonnes of CO2e is
                 equivalent to CO2 emissions from{" "}
-                {(totals.totalEmissions / 0.00887).toFixed(0)} gallons of gas
+                {(totals.totalEmissions * 113).toFixed(0)} gallons of gas
                 consumed
               </td>
             </tr>
             <tr>
               <td>Recycling Factor</td>
-              <td>0.84</td>
+              <td>43.3</td>
               <td>
                 {totals.totalEmissions.toFixed(2)} metric tonnes of CO2e is
                 equivalent to greenhouse gas emissions avoided by{" "}
-                {(totals.totalEmissions / 0.84).toFixed(1)} trash bags of waste
+                {(totals.totalEmissions * 43.3).toFixed(1)} trash bags of waste
                 recycled instead of landfilled
               </td>
             </tr>
             <tr>
               <td>Wind Power Factor</td>
-              <td>0.0015</td>
+              <td>0.0003</td>
               <td>
                 {totals.totalEmissions.toFixed(2)} metric tonnes of CO2e is
                 equivalent to greenhouse gas emissions avoided by{" "}
-                {(totals.totalEmissions / 0.0015).toFixed(1)} wind turbines
+                {(totals.totalEmissions * 0.0003).toFixed(4)} wind turbines
                 running for a year
               </td>
             </tr>
             <tr>
               <td>Tree Seedling Factor</td>
-              <td>0.84</td>
+              <td>16.5</td>
               <td>
                 {totals.totalEmissions.toFixed(2)} metric tonnes of CO2e is
                 equivalent to carbon sequestered by{" "}
-                {(totals.totalEmissions / 0.84).toFixed(1)} tree seedlings grown
+                {(totals.totalEmissions * 16.5).toFixed(1)} tree seedlings grown
                 for 10 years
               </td>
             </tr>
             <tr>
               <td>Forest Factor</td>
-              <td>0.84</td>
+              <td>1.2</td>
               <td>
                 {totals.totalEmissions.toFixed(2)} metric tonnes of CO2e is
                 equivalent to carbon sequestered by{" "}
-                {(totals.totalEmissions / 0.84).toFixed(1)} acres of US forests
+                {(totals.totalEmissions * 1.2).toFixed(1)} acres of US forests
                 in one year
               </td>
             </tr>

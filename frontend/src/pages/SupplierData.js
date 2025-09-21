@@ -468,6 +468,28 @@ function SupplierData() {
     numberOfContainers: false,
   });
 
+  // Total emissions state for display after calculation
+  const [totalEmissions, setTotalEmissions] = useState(0);
+
+  // Load total emissions from sessionStorage on component mount
+  useEffect(() => {
+    // Try to load existing emissions from sessionStorage
+    const storedResults = sessionStorage.getItem("emissionResults");
+    if (storedResults) {
+      try {
+        const results = JSON.parse(storedResults);
+        if (results.total_emissions !== undefined) {
+          setTotalEmissions(results.total_emissions);
+        }
+      } catch (error) {
+        console.error("Error parsing stored emission results:", error);
+        setTotalEmissions(0);
+      }
+    } else {
+      setTotalEmissions(0);
+    }
+  }, []);
+
   // Data grid state for activity/transportation data
   const [activityRows, setActivityRows] = useState([
     {
@@ -1191,78 +1213,140 @@ function SupplierData() {
             console.log("Logo loaded successfully");
           }}
         />
-        <button
-          className="update-summary-button"
-          onClick={async () => {
-            // Validate activity data (only blocking errors)
-            const validationErrors = validateActivityData(activityRows);
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "20px",
+            flexWrap: "wrap",
+          }}
+        >
+          {/* Total Emissions Display - Always visible, left side of button */}
+          <div
+            style={{
+              backgroundColor: (() => {
+                if (totalEmissions === 0) return "#4caf50"; // Bright green for zero emissions (startup)
+                // Color progression for industrial scale
+                if (totalEmissions <= 1000) return "#fff9c4"; // Light yellow for 1-1000 tonnes
+                if (totalEmissions <= 2000) return "#9e9e9e"; // Light grey for 1001-2000
+                if (totalEmissions <= 3000) return "#757575"; // Medium grey for 2001-3000
+                if (totalEmissions <= 4000) return "#616161"; // Darker grey for 3001-4000
+                if (totalEmissions <= 5000) return "#424242"; // Very dark grey for 4001-5000
+                return "#303030"; // Almost black for 5000+ tonnes
+              })(),
+              color: (() => {
+                if (totalEmissions <= 1000 && totalEmissions > 0) return "#333"; // Dark text for light yellow
+                return "white"; // White text for dark backgrounds
+              })(),
+              padding: "15px 25px",
+              borderRadius: "12px",
+              textAlign: "center",
+              boxShadow: (() => {
+                if (totalEmissions === 0)
+                  return "0 4px 12px rgba(76, 175, 80, 0.3)";
+                if (totalEmissions <= 1000)
+                  return "0 4px 12px rgba(255, 249, 196, 0.5)";
+                return "0 4px 12px rgba(66, 66, 66, 0.3)";
+              })(),
+              border: (() => {
+                if (totalEmissions === 0) return "2px solid #66bb6a";
+                if (totalEmissions <= 1000) return "2px solid #f9a825";
+                return "2px solid #757575";
+              })(),
+              animation:
+                totalEmissions > 0 ? "fadeIn 0.5s ease-in-out" : "none",
+              minWidth: "300px",
+              transition: "all 0.3s ease-in-out",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "16px",
+                marginBottom: "5px",
+                fontWeight: "bold",
+              }}
+            >
+              🌍 Total GHG Emissions
+            </div>
+            <div
+              style={{
+                fontSize: "28px",
+                fontWeight: "bold",
+                marginBottom: "5px",
+              }}
+            >
+              {totalEmissions.toFixed(2)}
+            </div>
+            <div style={{ fontSize: "14px", opacity: "0.9" }}>
+              metric tonnes CO₂e
+            </div>
+            <div style={{ fontSize: "12px", marginTop: "5px", opacity: "0.8" }}>
+              {(() => {
+                if (totalEmissions === 0) return "Ready to Calculate 🌱";
+                if (totalEmissions <= 1000)
+                  return "Good Industrial Performance 🌿";
+                if (totalEmissions <= 2000)
+                  return "Moderate Industrial Impact �";
+                if (totalEmissions <= 3000) return "High Industrial Impact ⬛";
+                if (totalEmissions <= 4000)
+                  return "Very High Industrial Impact 🖤";
+                return "Critical Industrial Impact 💀";
+              })()}
+            </div>
+          </div>
 
-            if (validationErrors.length > 0) {
-              // Display validation errors
-              const errorMessages = validationErrors
-                .map((error) => `Row ${error.row}: ${error.message}`)
-                .join("\n\n");
+          <button
+            className="update-summary-button"
+            onClick={async () => {
+              // Validate activity data (only blocking errors)
+              const validationErrors = validateActivityData(activityRows);
 
-              alert(
-                `Please correct the following errors before proceeding:\n\n${errorMessages}`
-              );
-              return;
-            }
+              if (validationErrors.length > 0) {
+                // Display validation errors
+                const errorMessages = validationErrors
+                  .map((error) => `Row ${error.row}: ${error.message}`)
+                  .join("\n\n");
 
-            // Additional supplier data validations
-            const supplierErrors = [];
+                alert(
+                  `Please correct the following errors before proceeding:\n\n${errorMessages}`
+                );
+                return;
+              }
 
-            if (!formData.supplier || !formData.supplier.trim()) {
-              supplierErrors.push("Please select Supplier");
-            }
+              // Additional supplier data validations
+              const supplierErrors = [];
 
-            if (
-              !formData.containerWeight ||
-              !formData.containerWeight.toString().trim()
-            ) {
-              supplierErrors.push("Please enter Container (bottle/can) Weight");
-            }
+              if (!formData.supplier || !formData.supplier.trim()) {
+                supplierErrors.push("Please select Supplier");
+              }
 
-            if (
-              !formData.numberOfContainers ||
-              !formData.numberOfContainers.toString().trim()
-            ) {
-              supplierErrors.push("Please enter Number of Containers");
-            }
+              if (
+                !formData.containerWeight ||
+                !formData.containerWeight.toString().trim()
+              ) {
+                supplierErrors.push(
+                  "Please enter Container (bottle/can) Weight"
+                );
+              }
 
-            if (supplierErrors.length > 0) {
-              alert(
-                `Please correct the following supplier information errors:\n\n${supplierErrors.join(
-                  "\n"
-                )}`
-              );
-              return;
-            }
+              if (
+                !formData.numberOfContainers ||
+                !formData.numberOfContainers.toString().trim()
+              ) {
+                supplierErrors.push("Please enter Number of Containers");
+              }
 
-            // Check if at least one activity row has data
-            const hasActivityData = activityRows.some(
-              (row) =>
-                row.typeOfActivityData ||
-                row.vehicleType ||
-                row.distanceTravelled ||
-                row.fuelUsed ||
-                row.fuelAmount ||
-                row.totalWeight
-            );
+              if (supplierErrors.length > 0) {
+                alert(
+                  `Please correct the following supplier information errors:\n\n${supplierErrors.join(
+                    "\n"
+                  )}`
+                );
+                return;
+              }
 
-            if (!hasActivityData) {
-              alert(
-                "Please enter at least one row of activity data before proceeding."
-              );
-              return;
-            }
-
-            // Send data to compute_ghg_emissions API with all grid data in a single call
-            try {
-              console.log("Sending all data to compute_ghg_emissions API...");
-
-              // Filter rows that have data
-              const rowsWithData = activityRows.filter(
+              // Check if at least one activity row has data
+              const hasActivityData = activityRows.some(
                 (row) =>
                   row.typeOfActivityData ||
                   row.vehicleType ||
@@ -1272,129 +1356,159 @@ function SupplierData() {
                   row.totalWeight
               );
 
-              // Prepare supplier data (emission factor will be looked up by backend)
-              const supplierData = {
+              if (!hasActivityData) {
+                alert(
+                  "Please enter at least one row of activity data before proceeding."
+                );
+                return;
+              }
+
+              // Send data to compute_ghg_emissions API with all grid data in a single call
+              try {
+                console.log("Sending all data to compute_ghg_emissions API...");
+
+                // Filter rows that have data
+                const rowsWithData = activityRows.filter(
+                  (row) =>
+                    row.typeOfActivityData ||
+                    row.vehicleType ||
+                    row.distanceTravelled ||
+                    row.fuelUsed ||
+                    row.fuelAmount ||
+                    row.totalWeight
+                );
+
+                // Prepare supplier data (emission factor will be looked up by backend)
+                const supplierData = {
+                  Supplier_and_Container: formData.supplier,
+                  Container_Weight:
+                    parseFloat(removeCommas(formData.containerWeight)) || 0,
+                  Number_Of_Containers:
+                    parseInt(removeCommas(formData.numberOfContainers)) || 0,
+                  // Supplier_Emission_Factor removed - backend will lookup from Reference Matrix
+                };
+
+                // Prepare activity rows data
+                const activityRowsData = rowsWithData.map((row, index) => ({
+                  Source_Description: row.sourceDescription || "",
+                  Region: row.region || "",
+                  Mode_of_Transport: row.modeOfTransport || "",
+                  Scope: row.scope || "",
+                  Type_Of_Activity_Data: row.typeOfActivityData || "",
+                  Vehicle_Type: row.vehicleType || null,
+                  Distance_Travelled: row.distanceTravelled
+                    ? parseFloat(removeCommas(row.distanceTravelled))
+                    : null,
+                  Total_Weight_Of_Freight_InTonne: row.totalWeight
+                    ? parseFloat(removeCommas(row.totalWeight))
+                    : null,
+                  Units_of_Measurement: row.units || null,
+                  Fuel_Used: row.fuelUsed || null,
+                  Fuel_Amount: row.fuelAmount
+                    ? parseFloat(removeCommas(row.fuelAmount))
+                    : null,
+                  Unit_Of_Fuel_Amount: row.unitOfFuelAmount || null,
+                }));
+
+                // Combine all data into single API payload
+                const apiData = {
+                  supplier_data: supplierData,
+                  activity_rows: activityRowsData,
+                };
+
+                console.log("Combined API payload:", apiData);
+                console.log(
+                  `Sending ${activityRowsData.length} activity rows with supplier data`
+                );
+
+                const response = await fetch(getApiUrl("computeGhgEmissions"), {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(apiData),
+                });
+
+                if (!response.ok) {
+                  throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log("API response:", result);
+                console.log(
+                  "Successfully sent all data to compute_ghg_emissions API"
+                );
+
+                // Store the emission results for the summary page
+                sessionStorage.setItem(
+                  "emissionResults",
+                  JSON.stringify(result)
+                );
+
+                // Store total emissions for display on this page
+                setTotalEmissions(result.total_emissions);
+              } catch (error) {
+                console.error("Error sending data to API:", error);
+                alert(
+                  `Error processing emission calculations: ${error.message}`
+                );
+                return;
+              }
+
+              // Collect informational messages for the summary page
+              const firstRowWithData = activityRows.find(
+                (row) => row.region || row.modeOfTransport || row.scope
+              );
+
+              let informationalMessages = [];
+              if (firstRowWithData) {
+                informationalMessages = getInformationalMessages(
+                  activityRows,
+                  firstRowWithData.region,
+                  firstRowWithData.modeOfTransport,
+                  firstRowWithData.scope
+                );
+              }
+
+              // Store data for the summary page (update supplier data format to match API)
+              const supplierDataForStorage = {
                 Supplier_and_Container: formData.supplier,
                 Container_Weight:
                   parseFloat(removeCommas(formData.containerWeight)) || 0,
                 Number_Of_Containers:
                   parseInt(removeCommas(formData.numberOfContainers)) || 0,
-                // Supplier_Emission_Factor removed - backend will lookup from Reference Matrix
+                // Removed Supplier_Emission_Factor - backend now handles lookup
               };
 
-              // Prepare activity rows data
-              const activityRowsData = rowsWithData.map((row, index) => ({
-                Source_Description: row.sourceDescription || "",
-                Region: row.region || "",
-                Mode_of_Transport: row.modeOfTransport || "",
-                Scope: row.scope || "",
-                Type_Of_Activity_Data: row.typeOfActivityData || "",
-                Vehicle_Type: row.vehicleType || null,
-                Distance_Travelled: row.distanceTravelled
-                  ? parseFloat(removeCommas(row.distanceTravelled))
-                  : null,
-                Total_Weight_Of_Freight_InTonne: row.totalWeight
-                  ? parseFloat(removeCommas(row.totalWeight))
-                  : null,
-                Units_of_Measurement: row.units || null,
-                Fuel_Used: row.fuelUsed || null,
-                Fuel_Amount: row.fuelAmount
-                  ? parseFloat(removeCommas(row.fuelAmount))
-                  : null,
-                Unit_Of_Fuel_Amount: row.unitOfFuelAmount || null,
-              }));
-
-              // Combine all data into single API payload
-              const apiData = {
-                supplier_data: supplierData,
-                activity_rows: activityRowsData,
-              };
-
-              console.log("Combined API payload:", apiData);
-              console.log(
-                `Sending ${activityRowsData.length} activity rows with supplier data`
+              sessionStorage.setItem(
+                "supplierData",
+                JSON.stringify(supplierDataForStorage)
+              );
+              sessionStorage.setItem(
+                "activityData",
+                JSON.stringify(activityRows)
+              );
+              sessionStorage.setItem(
+                "informationalMessages",
+                JSON.stringify(informationalMessages)
               );
 
-              const response = await fetch(getApiUrl("computeGhgEmissions"), {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(apiData),
-              });
-
-              if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-              }
-
-              const result = await response.json();
-              console.log("API response:", result);
-              console.log(
-                "Successfully sent all data to compute_ghg_emissions API"
-              );
-
-              // Store the emission results for the summary page
-              sessionStorage.setItem("emissionResults", JSON.stringify(result));
-            } catch (error) {
-              console.error("Error sending data to API:", error);
-              alert(`Error processing emission calculations: ${error.message}`);
-              return;
-            }
-
-            // Collect informational messages for the summary page
-            const firstRowWithData = activityRows.find(
-              (row) => row.region || row.modeOfTransport || row.scope
-            );
-
-            let informationalMessages = [];
-            if (firstRowWithData) {
-              informationalMessages = getInformationalMessages(
-                activityRows,
-                firstRowWithData.region,
-                firstRowWithData.modeOfTransport,
-                firstRowWithData.scope
-              );
-            }
-
-            // Store data for the summary page (update supplier data format to match API)
-            const supplierDataForStorage = {
-              Supplier_and_Container: formData.supplier,
-              Container_Weight:
-                parseFloat(removeCommas(formData.containerWeight)) || 0,
-              Number_Of_Containers:
-                parseInt(removeCommas(formData.numberOfContainers)) || 0,
-              // Removed Supplier_Emission_Factor - backend now handles lookup
-            };
-
-            sessionStorage.setItem(
-              "supplierData",
-              JSON.stringify(supplierDataForStorage)
-            );
-            sessionStorage.setItem(
-              "activityData",
-              JSON.stringify(activityRows)
-            );
-            sessionStorage.setItem(
-              "informationalMessages",
-              JSON.stringify(informationalMessages)
-            );
-
-            // Navigate to emission summary
-            navigate("/emission-summary");
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "8px",
+              // Calculation complete - user can now view results via "View Emission Summary" button
             }}
           >
-            <div style={{ fontSize: "24px" }}>📊</div>
-            <div>Update Emission Summary</div>
-          </div>
-        </button>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <div style={{ fontSize: "24px" }}>📊</div>
+              <div>Calculate Emissions</div>
+            </div>
+          </button>
+        </div>
       </div>
 
       <div className="data-entry-container">

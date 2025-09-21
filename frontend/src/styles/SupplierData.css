@@ -405,7 +405,7 @@
 
 /* Export Data Button */
 .export-data-button {
-  background: #28a745;
+  background: #2a5783;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -413,12 +413,12 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(40,167,69,0.08);
+  box-shadow: 0 1px 3px rgba(42,87,131,0.08);
   transition: background 0.2s;
 }
 
 .export-data-button:hover {
-  background: #1e7e34;
+  background: #17405e;
 }
 
 /* Specific column width adjustments */
@@ -526,4 +526,16 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
+}
+
+/* Animation for total emissions display */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

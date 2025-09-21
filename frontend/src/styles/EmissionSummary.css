@@ -75,32 +75,34 @@
 /* Total Emissions Box */
 .total-emissions-box {
   display: flex;
-  background-color: #b3d4f0;
-  border: 2px solid #5a8bb8;
+  border-radius: 12px;
   width: fit-content;
   margin-bottom: 30px;
+  animation: fadeIn 0.5s ease-in-out;
+  min-width: 300px;
+  transition: all 0.3s ease-in-out;
 }
 
 .total-emissions-label {
-  background-color: #b3d4f0;
-  padding: 15px;
-  font-size: 14px;
+  background-color: transparent;
+  padding: 20px;
+  font-size: 16px;
   font-weight: bold;
   text-align: center;
   line-height: 1.2;
-  border-right: 2px solid #5a8bb8;
-  color: #333;
+  color: white;
 }
 
 .total-emissions-value {
-  background-color: white;
-  padding: 15px 25px;
-  font-size: 18px;
+  background-color: transparent;
+  padding: 20px 30px;
+  font-size: 28px;
   font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #333;
+  color: white;
+  flex-direction: column;
 }
 
 /* Summary Sections */
@@ -121,18 +123,18 @@
   width: 100%;
   border-collapse: collapse;
   background-color: white;
-  border: 2px solid #5a8bb8;
+  border: 2px solid #2a5783;
   margin-bottom: 20px;
 }
 
 .summary-table th {
-  background-color: #5a8bb8;
+  background-color: #2a5783;
   color: white;
   padding: 12px 8px;
   text-align: center;
   font-size: 12px;
   font-weight: bold;
-  border: 1px solid #4a7ba8;
+  border: 1px solid #17405e;
 }
 
 .summary-table td {
@@ -153,23 +155,23 @@
 
 /* Special row styling */
 .total-row {
-  background-color: #5a8bb8 !important;
+  background-color: #2a5783 !important;
   color: white !important;
 }
 
 .total-row td {
-  background-color: #5a8bb8 !important;
+  background-color: #2a5783 !important;
   color: white !important;
   font-weight: bold;
 }
 
 .total-ghg-row {
-  background-color: #5a8bb8 !important;
+  background-color: #2a5783 !important;
   color: white !important;
 }
 
 .total-ghg-row td {
-  background-color: #5a8bb8 !important;
+  background-color: #2a5783 !important;
   color: white !important;
   font-weight: bold;
   text-align: center;
@@ -184,17 +186,17 @@
   width: 100%;
   border-collapse: collapse;
   background-color: white;
-  border: 2px solid #5a8bb8;
+  border: 2px solid #2a5783;
 }
 
 .equivalency-table th {
-  background-color: #5a8bb8;
+  background-color: #2a5783;
   color: white;
   padding: 12px 8px;
   text-align: center;
   font-size: 12px;
   font-weight: bold;
-  border: 1px solid #4a7ba8;
+  border: 1px solid #17405e;
 }
 
 .equivalency-table td {
@@ -262,7 +264,18 @@
   }
   
   .total-emissions-label {
-    border-right: none;
-    border-bottom: 2px solid #5a8bb8;
+    border-right: none !important;
+  }
+}
+
+/* Animation for total emissions display */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
