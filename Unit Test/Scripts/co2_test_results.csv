@@ -1,0 +1,11 @@
+Test Number,Source Description,Vehicle Type,Region,Expected CO2,Calculated CO2,Emission Factor,Status,Error Message
+1,Test1,Watercraft - Shipping - Large Bulk Carrier (14201 tonnes deadweight),US,100.954079,100.95407901504001,5.2910942879999995e-05,PASS,
+2,Test2,Road Vehicle - HGV - Rigid - Engine Size 3.5 - 7.5 tonnes,US,249.8613456,249.861345562224,0.00032738645907,PASS,
+3,Test3,Rail,US,10.6001783,10.6001782965792,2.7778245011999998e-05,PASS,
+4,Test4,Road Vehicle - HGV - Rigid - Engine Size Unknown,UK,462.7129864,462.7129863628801,0.00040418674560000004,PASS,
+5,Test5,Road Vehicle - HGV - Articulated - Engine Size Unknown,UK,817.0020856,817.0020856166402,0.00014273271936000002,PASS,
+6,Test6,Rail,UK,385.0567953,385.0567953408001,4.5866304e-05,PASS,
+7,Test7,Road Vehicle - HGV - Articulated - Engine Size Unknown,Other,424.7642875,424.76428745578085,0.00032738645907,PASS,
+8,Test8,Watercraft - Shipping - Small Bulk Carrier (1720 tonnes deadweight),Other,1110.494869,1110.49486916544,5.2910942879999995e-05,PASS,
+9,Test9,Rail,Other,143.102407,143.1024070038192,2.7778245011999998e-05,PASS,
+10,Test10,Road Vehicle - Light Goods Vehicle - Diesel - Engine Size ≤3.5 tonnes,US,499.7226911,499.722691124448,0.00032738645907,PASS,

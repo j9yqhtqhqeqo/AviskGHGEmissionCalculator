@@ -53,6 +53,28 @@ function SupplierData() {
     );
   };
 
+  // Helper function to determine if fuel-related fields should be enabled
+  const isFuelFieldEnabled = (typeOfActivityData) => {
+    const fuelRelatedActivityTypes = [
+      "Fuel Use",
+      "Custom Fuel",
+      "Fuel Use and Vehicle Distance",
+    ];
+    return fuelRelatedActivityTypes.includes(typeOfActivityData);
+  };
+
+  // Helper function to determine if distance and units fields should be enabled
+  const isDistanceFieldEnabled = (typeOfActivityData) => {
+    const distanceRelatedActivityTypes = [
+      "Weight Distance (e.g. Freight Transport)",
+      "Vehicle Distance (e.g. Road Transport)",
+      "Passenger Distance (e.g. Public Transport)",
+      "Fuel Use and Vehicle Distance",
+      "Custom Vehicle"
+    ];
+    return distanceRelatedActivityTypes.includes(typeOfActivityData);
+  };
+
   // Helper function to format number with commas
   const formatNumberWithCommas = (value) => {
     if (!value || value === "") return "";
@@ -564,6 +586,20 @@ function SupplierData() {
     setActivityRows((prevRows) => {
       const updated = [...prevRows];
       updated[rowIdx] = { ...updated[rowIdx], [key]: processedValue };
+
+      // If type of activity data is changed to non-fuel related, clear fuel fields
+      if (key === "typeOfActivityData" && !isFuelFieldEnabled(processedValue)) {
+        updated[rowIdx].fuelUsed = "";
+        updated[rowIdx].fuelAmount = "";
+        updated[rowIdx].unitOfFuelAmount = "";
+      }
+
+      // If type of activity data is changed to non-distance related, clear distance and units fields
+      if (key === "typeOfActivityData" && !isDistanceFieldEnabled(processedValue)) {
+        updated[rowIdx].distanceTravelled = "";
+        updated[rowIdx].units = "";
+      }
+
       return updated;
     });
   };
@@ -1502,6 +1538,20 @@ function SupplierData() {
                               e.target.value
                             )
                           }
+                          disabled={!isDistanceFieldEnabled(row.typeOfActivityData)}
+                          style={{
+                            backgroundColor: !isDistanceFieldEnabled(row.typeOfActivityData) 
+                              ? "#f5f5f5" 
+                              : "",
+                            cursor: !isDistanceFieldEnabled(row.typeOfActivityData) 
+                              ? "not-allowed" 
+                              : "pointer"
+                          }}
+                          title={
+                            !isDistanceFieldEnabled(row.typeOfActivityData)
+                              ? "Select a distance-related activity type to enable this field"
+                              : ""
+                          }
                         >
                           <option value="">Select Unit</option>
                           {unitsOptions.map((option, idx) => (
@@ -1526,6 +1576,22 @@ function SupplierData() {
                               col.key,
                               e.target.value
                             )
+                          }
+                          disabled={!isFuelFieldEnabled(row.typeOfActivityData)}
+                          style={{
+                            backgroundColor: !isFuelFieldEnabled(
+                              row.typeOfActivityData
+                            )
+                              ? "#f5f5f5"
+                              : "",
+                            cursor: !isFuelFieldEnabled(row.typeOfActivityData)
+                              ? "not-allowed"
+                              : "pointer",
+                          }}
+                          title={
+                            !isFuelFieldEnabled(row.typeOfActivityData)
+                              ? "Select a fuel-related activity type to enable this field"
+                              : ""
                           }
                         >
                           <option value="">Select Fuel Type</option>
@@ -1552,6 +1618,22 @@ function SupplierData() {
                               e.target.value
                             )
                           }
+                          disabled={!isFuelFieldEnabled(row.typeOfActivityData)}
+                          style={{
+                            backgroundColor: !isFuelFieldEnabled(
+                              row.typeOfActivityData
+                            )
+                              ? "#f5f5f5"
+                              : "",
+                            cursor: !isFuelFieldEnabled(row.typeOfActivityData)
+                              ? "not-allowed"
+                              : "pointer",
+                          }}
+                          title={
+                            !isFuelFieldEnabled(row.typeOfActivityData)
+                              ? "Select a fuel-related activity type to enable this field"
+                              : ""
+                          }
                         >
                           <option value="">Select Unit of Fuel Amount</option>
                           {unitOfFuelAmountOptions.map((option, idx) => (
@@ -1576,9 +1658,33 @@ function SupplierData() {
                         placeholder={
                           isNumericalField(col.key) ? "Enter number" : ""
                         }
-                        readOnly={col.key === "totalWeight"}
+                        readOnly={
+                          col.key === "totalWeight" ||
+                          (col.key === "fuelAmount" &&
+                            !isFuelFieldEnabled(row.typeOfActivityData)) ||
+                          (col.key === "distanceTravelled" &&
+                            !isDistanceFieldEnabled(row.typeOfActivityData))
+                        }
+                        disabled={
+                          (col.key === "fuelAmount" &&
+                            !isFuelFieldEnabled(row.typeOfActivityData)) ||
+                          (col.key === "distanceTravelled" &&
+                            !isDistanceFieldEnabled(row.typeOfActivityData))
+                        }
                         style={
                           col.key === "totalWeight"
+                            ? {
+                                backgroundColor: "#f5f5f5",
+                                cursor: "not-allowed",
+                              }
+                            : col.key === "fuelAmount" &&
+                              !isFuelFieldEnabled(row.typeOfActivityData)
+                            ? {
+                                backgroundColor: "#f5f5f5",
+                                cursor: "not-allowed",
+                              }
+                            : col.key === "distanceTravelled" &&
+                              !isDistanceFieldEnabled(row.typeOfActivityData)
                             ? {
                                 backgroundColor: "#f5f5f5",
                                 cursor: "not-allowed",
@@ -1588,6 +1694,12 @@ function SupplierData() {
                         title={
                           col.key === "totalWeight"
                             ? "Auto-calculated from (# of Containers × Container Weight) ÷ 1,000,000"
+                            : col.key === "fuelAmount" &&
+                              !isFuelFieldEnabled(row.typeOfActivityData)
+                            ? "Select a fuel-related activity type to enable this field"
+                            : col.key === "distanceTravelled" &&
+                              !isDistanceFieldEnabled(row.typeOfActivityData)
+                            ? "Select a distance-related activity type to enable this field"
                             : ""
                         }
                       />

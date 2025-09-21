@@ -1,7 +1,7 @@
 # CO2 Emissions Calculator Test Documentation
 
 ## Overview
-This document provides comprehensive test validation for the `calculate_co2_emissions` method in the `Co2FossilFuelCalculator` class using test data from `Co2TestData.csv`.
+This document provides comprehensive test validation for the `calculate_co2_emissions` method in the `Co2FossilFuelCalculator` class using test data from `Co2TestDataFreightDistance.csv`.
 
 ## Test Results Summary
 

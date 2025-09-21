@@ -1,0 +1,11 @@
+Test Number,Description,Fuel Used,Fuel Amount,Fuel Unit,Region,Expected CO2,Calculated CO2,Emission Factor,Status,Calculation Status,Error Message
+1,Test Fuel1,Jet Fuel,1000.0,US Gallon,US,9.57,9.57,0.00957,PASS,Success,
+2,Test Fuel2,Jet Fuel,1000.0,US Gallon,US,9.57,9.57,0.00957,PASS,Success,
+3,Test Fuel3,On-Road Diesel Fuel,5000.0,US Gallon,US,50.75,50.75000000000001,0.010150000000000001,PASS,Success,
+4,Test Fuel4,Gasoline/Petrol,3000.0,litre,UK,6.905399321,6.90539932142856,0.00230179977380952,PASS,Success,
+5,Test Fuel5,LNG,10000.0,UK Gallon,UK,55.78963945,55.789639447660335,0.005578963944766034,PASS,Success,
+6,Test Fuel6,Residual Fuel Oil (3s 5 and 6),3000.0,UK Gallon,UK,34.50347348,34.50347347868392,0.011501157826227975,PASS,Success,
+7,Test Fuel7,LNG,5000.0,UK Gallon,Other,26.78119437,26.781194366000005,0.005356238873200001,PASS,Success,
+8,Test Fuel8,LPG,3000.0,US Gallon,Other,18.3,18.299999999999997,0.0060999999999999995,PASS,Success,
+9,Test Fuel9,100% Biodiesel,5000.0,litre,Other,0.0,0.0,0.0,PASS,No emissions calculated,
+10,Test Fuel10,Residual Fuel Oil (3s 5 and 6),5000.0,litre,US,15.58615107,15.586151068000003,0.0031172302136000004,PASS,Success,

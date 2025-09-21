@@ -1,0 +1,12 @@
+﻿Description,Region,Mode of Transport,Scope,Type of Activity Data,Vehicle Type,Distance Travelled,Total Weight of Freight (tonne),Units of Measurement (Tonne Miles),Fuel Used,Fuel Amount,Unit of Fuel Amount,"Fossil Fuel CO2
+(metric tonnes)"
+Test Fuel1,US,Water,Scope 3,Fuel Use,Watercraft - Shipping - Large Bulk Carrier (14201 tonnes deadweight),0,381.6,Tonne Mile,Jet Fuel,1000,US Gallon,9.57
+Test Fuel2,US,Road,Scope 3,Fuel Use and Vehicle Distance,Road Vehicle - HGV - Rigid - Engine Size 3.5 - 7.5 tonnes,1000,381.6,Tonne Mile,Jet Fuel,1000,US Gallon,9.57
+Test Fuel3,US,Rail,Scope 3,Fuel Use,Rail,1000,381.6,Tonne Mile,On-Road Diesel Fuel,5000,US Gallon,50.75
+Test Fuel4,UK,Water,Scope 3,Fuel Use,Road Vehicle - HGV - Rigid - Engine Size Unknown,3000,381.6,Tonne Mile,Gasoline/Petrol,3000,litre,6.905399321
+Test Fuel5,UK,Road,Scope 3,Fuel Use and Vehicle Distance,Road Vehicle - HGV - Articulated - Engine Size Unknown,15000,381.6,Tonne Mile,LNG,10000,UK Gallon,55.78963945
+Test Fuel6,UK,Rail,Scope 3,Fuel Use,Rail,22000,381.6,Tonne Mile,Residual Fuel Oil (3s 5 and 6),3000,UK Gallon,34.50347348
+Test Fuel7,Other,Road,Scope 3,Fuel Use,Road Vehicle - HGV - Articulated - Engine Size Unknown,3400,381.6,Tonne Mile,LNG,5000,UK Gallon,26.78119437
+Test Fuel8,Other,Water,Scope 3,Fuel Use and Vehicle Distance,Watercraft - Shipping - Small Bulk Carrier (1720 tonnes deadweight),55000,381.6,Tonne Mile,LPG,3000,US Gallon,18.3
+Test Fuel9,Other,Rail,Scope 3,Fuel Use,Rail,13500,381.6,Tonne Mile,100% Biodiesel,5000,litre,0
+Test Fuel10,US,Road,Scope 3,Fuel Use and Vehicle Distance,Road Vehicle - Light Goods Vehicle - Diesel - Engine Size ≤3.5 tonnes,4000,381.6,Tonne Mile,Residual Fuel Oil (3s 5 and 6),5000,litre,15.58615107

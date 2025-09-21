@@ -18,7 +18,7 @@ def run_quick_test():
     print("🧪 Quick CO2 Emissions Test")
     print("=" * 40)
 
-    # Test data (first 3 cases from Co2TestData.csv)
+    # Test data (first 3 cases from Co2TestDataFreightDistance.csv)
     test_cases = [
         {
             'name': 'Test1 - Water Transport',

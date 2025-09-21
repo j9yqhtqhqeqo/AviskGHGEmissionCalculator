@@ -3,7 +3,7 @@
 CO2 Emissions Validation Script
 
 This script validates the calculate_co2_emissions method against the test data
-in Co2TestData.csv by running individual test cases and comparing results.
+in Co2TestDataFreightDistance.csv by running individual test cases and comparing results.
 """
 
 import sys
@@ -27,9 +27,9 @@ except ImportError as e:
 
 
 def load_test_data():
-    """Load test data from Co2TestData.csv."""
+    """Load test data from Co2TestDataFreightDistance.csv."""
     test_data_path = os.path.join(os.path.dirname(
-        __file__), '..', 'Data', 'Co2TestData.csv')
+        __file__), '..', 'Data', 'Co2TestDataFreightDistance.csv')
     test_cases = []
 
     try:
