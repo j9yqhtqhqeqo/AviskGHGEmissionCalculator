@@ -655,11 +655,26 @@ function SupplierData() {
   useEffect(() => {
     const restoreData = () => {
       try {
-        // Restore form data
+        // Restore form data - check both formats for backward compatibility
         const savedSupplierData = sessionStorage.getItem("supplierData");
         if (savedSupplierData) {
           const parsedData = JSON.parse(savedSupplierData);
-          setFormData(parsedData);
+
+          // Check if it's the API format (from previous submissions)
+          if (parsedData.Supplier_and_Container) {
+            setFormData({
+              supplier: parsedData.Supplier_and_Container || "",
+              containerWeight: parsedData.Container_Weight
+                ? parsedData.Container_Weight.toString()
+                : "",
+              numberOfContainers: parsedData.Number_Of_Containers
+                ? parsedData.Number_Of_Containers.toString()
+                : "",
+            });
+          } else {
+            // It's already in form format
+            setFormData(parsedData);
+          }
         }
 
         // Restore activity rows
@@ -675,6 +690,84 @@ function SupplierData() {
 
     restoreData();
   }, []);
+
+  // Auto-save form data to sessionStorage whenever it changes
+  useEffect(() => {
+    if (
+      formData.supplier ||
+      formData.containerWeight ||
+      formData.numberOfContainers
+    ) {
+      sessionStorage.setItem("supplierData", JSON.stringify(formData));
+    }
+  }, [formData]);
+
+  // Auto-save activity data to sessionStorage whenever it changes
+  useEffect(() => {
+    if (
+      activityRows.length > 0 &&
+      activityRows.some(
+        (row) =>
+          row.sourceDescription ||
+          row.region ||
+          row.modeOfTransport ||
+          row.typeOfActivityData ||
+          row.vehicleType ||
+          row.distanceTravelled ||
+          row.fuelUsed ||
+          row.fuelAmount ||
+          row.totalWeight
+      )
+    ) {
+      sessionStorage.setItem("activityData", JSON.stringify(activityRows));
+    }
+  }, [activityRows]);
+
+  // Function to clear all form data and sessionStorage
+  const clearAllData = () => {
+    if (
+      window.confirm(
+        "Are you sure you want to clear all data? This action cannot be undone."
+      )
+    ) {
+      // Clear component state
+      setFormData({
+        supplier: "",
+        containerWeight: "",
+        numberOfContainers: "",
+      });
+
+      setActivityRows([
+        {
+          sourceDescription: "",
+          region: "",
+          modeOfTransport: "",
+          scope: "Scope 3",
+          typeOfActivityData: "",
+          vehicleType: "",
+          distanceTravelled: "",
+          totalWeight: "",
+          units: "",
+          fuelUsed: "",
+          fuelAmount: "",
+          unitOfFuelAmount: "",
+        },
+      ]);
+
+      // Clear sessionStorage
+      sessionStorage.removeItem("supplierData");
+      sessionStorage.removeItem("activityData");
+      sessionStorage.removeItem("emissionResults");
+
+      // Clear validation errors
+      setValidationErrors({
+        containerWeight: false,
+        numberOfContainers: false,
+      });
+
+      console.log("All data cleared successfully");
+    }
+  };
 
   // Initialize total weight for existing rows on component mount
   useEffect(() => {
@@ -1127,7 +1220,7 @@ function SupplierData() {
               !formData.containerWeight ||
               !formData.containerWeight.toString().trim()
             ) {
-              supplierErrors.push("Please enter Container Weight");
+              supplierErrors.push("Please enter Container (bottle/can) Weight");
             }
 
             if (
@@ -1179,13 +1272,14 @@ function SupplierData() {
                   row.totalWeight
               );
 
-              // Prepare supplier data
+              // Prepare supplier data (emission factor will be looked up by backend)
               const supplierData = {
                 Supplier_and_Container: formData.supplier,
                 Container_Weight:
                   parseFloat(removeCommas(formData.containerWeight)) || 0,
                 Number_Of_Containers:
                   parseInt(removeCommas(formData.numberOfContainers)) || 0,
+                // Supplier_Emission_Factor removed - backend will lookup from Reference Matrix
               };
 
               // Prepare activity rows data
@@ -1238,6 +1332,9 @@ function SupplierData() {
               console.log(
                 "Successfully sent all data to compute_ghg_emissions API"
               );
+
+              // Store the emission results for the summary page
+              sessionStorage.setItem("emissionResults", JSON.stringify(result));
             } catch (error) {
               console.error("Error sending data to API:", error);
               alert(`Error processing emission calculations: ${error.message}`);
@@ -1259,8 +1356,20 @@ function SupplierData() {
               );
             }
 
-            // Store data for the summary page
-            sessionStorage.setItem("supplierData", JSON.stringify(formData));
+            // Store data for the summary page (update supplier data format to match API)
+            const supplierDataForStorage = {
+              Supplier_and_Container: formData.supplier,
+              Container_Weight:
+                parseFloat(removeCommas(formData.containerWeight)) || 0,
+              Number_Of_Containers:
+                parseInt(removeCommas(formData.numberOfContainers)) || 0,
+              // Removed Supplier_Emission_Factor - backend now handles lookup
+            };
+
+            sessionStorage.setItem(
+              "supplierData",
+              JSON.stringify(supplierDataForStorage)
+            );
             sessionStorage.setItem(
               "activityData",
               JSON.stringify(activityRows)
@@ -1317,7 +1426,9 @@ function SupplierData() {
           </div>
 
           <div className="table-row">
-            <div className="table-cell header-cell">Container Weight</div>
+            <div className="table-cell header-cell">
+              Container (bottle/can) Weight (g)
+            </div>
             <div className="table-cell">
               <input
                 type="text"
@@ -1702,7 +1813,7 @@ function SupplierData() {
                         }
                         title={
                           col.key === "totalWeight"
-                            ? "Auto-calculated from (# of Containers × Container Weight) ÷ 1,000,000"
+                            ? "Auto-calculated from (# of Containers × Container (bottle/can) Weight) ÷ 1,000,000"
                             : col.key === "fuelAmount" &&
                               !isFuelFieldEnabled(row.typeOfActivityData)
                             ? "Select a fuel-related activity type to enable this field"

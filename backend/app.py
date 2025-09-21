@@ -383,13 +383,126 @@ def compute_ghg_emissions():
         co2_results = co2_calculator.calculate_co2_emissions(
             supplier_input_objects)
 
-        # Return comprehensive results including CO2 emissions
+        # Create summarized data by Mode of Transport, Scope, Activity type, and GHG Type
+        summary_data = {}
+
+        # Initialize summary structure
+        for i, row_data in enumerate(activity_rows):
+            mode_of_transport = row_data.get('Mode_of_Transport', 'Unknown')
+            scope = row_data.get('Scope', 'Unknown')
+            activity_type = 'Fuel' if row_data.get(
+                'Fuel_Used') and row_data.get('Fuel_Amount') else 'Distance'
+
+            # Initialize nested structure if not exists
+            if mode_of_transport not in summary_data:
+                summary_data[mode_of_transport] = {}
+            if scope not in summary_data[mode_of_transport]:
+                summary_data[mode_of_transport][scope] = {}
+            if activity_type not in summary_data[mode_of_transport][scope]:
+                summary_data[mode_of_transport][scope][activity_type] = {}
+            if 'CO2' not in summary_data[mode_of_transport][scope][activity_type]:
+                summary_data[mode_of_transport][scope][activity_type]['CO2'] = {
+                    'total_emissions': 0.0,
+                    'details': []
+                }
+
+        # Aggregate the results into summary structure
+        for i, result in enumerate(co2_results):
+            if i < len(activity_rows):
+                row_data = activity_rows[i]
+                mode_of_transport = row_data.get(
+                    'Mode_of_Transport', 'Unknown')
+                scope = row_data.get('Scope', 'Unknown')
+                activity_type = 'Fuel' if row_data.get(
+                    'Fuel_Used') and row_data.get('Fuel_Amount') else 'Distance'
+
+                # Add CO2 emissions to the appropriate category
+                summary_data[mode_of_transport][scope][activity_type]['CO2']['total_emissions'] += result.get(
+                    'co2_emissions', 0.0)
+
+                # Add detailed information
+                detail = {
+                    'row_index': i,
+                    'source_description': row_data.get('Source_Description', ''),
+                    'vehicle_type': row_data.get('Vehicle_Type', ''),
+                    'region': row_data.get('Region', ''),
+                    'co2_emissions': result.get('co2_emissions', 0.0),
+                    'emission_factor': result.get('emission_factor', 0.0),
+                    'status': result.get('status', '')
+                }
+
+                if activity_type == 'Fuel':
+                    detail.update({
+                        'fuel_used': row_data.get('Fuel_Used', ''),
+                        'fuel_amount': row_data.get('Fuel_Amount', 0),
+                        'unit_of_fuel_amount': row_data.get('Unit_Of_Fuel_Amount', '')
+                    })
+                else:
+                    detail.update({
+                        'distance_travelled': row_data.get('Distance_Travelled', 0),
+                        'total_weight_of_freight': row_data.get('Total_Weight_Of_Freight_InTonne', 0),
+                        'units_of_measurement': row_data.get('Units_of_Measurement', '')
+                    })
+
+                summary_data[mode_of_transport][scope][activity_type]['CO2']['details'].append(
+                    detail)
+
+        # Calculate overall totals
+        total_co2_emissions = sum(result['co2_emissions']
+                                  for result in co2_results)
+
+        # Manufacturing emissions calculation (from supplier data)
+        container_weight = float(supplier_data.get('Container_Weight', 0))
+        number_of_containers = int(
+            supplier_data.get('Number_Of_Containers', 0))
+
+        # Get supplier emission factor from Reference_Source_Product_Matrix
+        supplier_and_container = supplier_data.get(
+            'Supplier_and_Container', '')
+        supplier_emission_factor = None
+
+        if supplier_and_container:
+            # Look up the emission factor using the Reference_Source_Product_Matrix
+            supplier_emission_factor = reference_source_product_matrix.get_manufacturing_emissions_factor(
+                supplier_and_container)
+
+        # If no emission factor found in matrix, try to get from supplied data or use default
+        if supplier_emission_factor is None:
+            supplier_emission_factor = float(
+                # Default fallback
+                supplier_data.get('Supplier_Emission_Factor', 0.5))
+            emission_factor_source = 'default/supplied'
+        else:
+            emission_factor_source = 'reference_matrix'
+
+        manufacturing_emissions = (container_weight * number_of_containers *
+                                   supplier_emission_factor) / 907184.74  # Convert to tonnes
+
+        manufacturing_emissions_metric_tonnes = manufacturing_emissions * \
+            (0.907185)  # Convert to Mertic tonnes
+
+        # Return comprehensive results including summarized data
         return jsonify({
             'status': 'success',
             'supplier_data': supplier_data,
             'processed_rows': len(supplier_input_objects),
-            'co2_emissions_results': co2_results,
-            'total_co2_emissions': sum(result['co2_emissions'] for result in co2_results)
+            'manufacturing_emissions': manufacturing_emissions,
+            'manufacturing_details': {
+                'supplier_emission_factor': supplier_emission_factor,
+                'emission_factor_source': emission_factor_source,
+                'container_weight': container_weight,
+                'number_of_containers': number_of_containers,
+                'total_material_weight_tonnes': (container_weight * number_of_containers) / 1000000,
+                'manufacturing_emissions_metric_tonnes': manufacturing_emissions_metric_tonnes
+            },
+            'transport_emissions': {
+                'co2': total_co2_emissions,
+                'summary_by_transport_scope_activity': summary_data,
+                'detailed_results': co2_results
+            },
+            'total_emissions': manufacturing_emissions_metric_tonnes + total_co2_emissions,
+            'co2_emissions_results': co2_results,  # Keep for backward compatibility
+            'total_co2_emissions': total_co2_emissions  # Keep for backward compatibility
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
