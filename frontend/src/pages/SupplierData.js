@@ -70,7 +70,7 @@ function SupplierData() {
       "Vehicle Distance (e.g. Road Transport)",
       "Passenger Distance (e.g. Public Transport)",
       "Fuel Use and Vehicle Distance",
-      "Custom Vehicle"
+      "Custom Vehicle",
     ];
     return distanceRelatedActivityTypes.includes(typeOfActivityData);
   };
@@ -595,7 +595,10 @@ function SupplierData() {
       }
 
       // If type of activity data is changed to non-distance related, clear distance and units fields
-      if (key === "typeOfActivityData" && !isDistanceFieldEnabled(processedValue)) {
+      if (
+        key === "typeOfActivityData" &&
+        !isDistanceFieldEnabled(processedValue)
+      ) {
         updated[rowIdx].distanceTravelled = "";
         updated[rowIdx].units = "";
       }
@@ -1538,14 +1541,20 @@ function SupplierData() {
                               e.target.value
                             )
                           }
-                          disabled={!isDistanceFieldEnabled(row.typeOfActivityData)}
+                          disabled={
+                            !isDistanceFieldEnabled(row.typeOfActivityData)
+                          }
                           style={{
-                            backgroundColor: !isDistanceFieldEnabled(row.typeOfActivityData) 
-                              ? "#f5f5f5" 
+                            backgroundColor: !isDistanceFieldEnabled(
+                              row.typeOfActivityData
+                            )
+                              ? "#f5f5f5"
                               : "",
-                            cursor: !isDistanceFieldEnabled(row.typeOfActivityData) 
-                              ? "not-allowed" 
-                              : "pointer"
+                            cursor: !isDistanceFieldEnabled(
+                              row.typeOfActivityData
+                            )
+                              ? "not-allowed"
+                              : "pointer",
                           }}
                           title={
                             !isDistanceFieldEnabled(row.typeOfActivityData)

@@ -6,6 +6,10 @@ This script tests the Co2FossilFuelCalculator.calculate_co2_emissions method
 using the test data from Co2TestDataFreightDistance.csv to ensure calculated values match expected results.
 """
 
+from Components.Supplier_Input import Supplier_Input
+from Components.reference_ef import Reference_EF_Freight_CO2, Reference_Unit_Conversion
+from Services.Co2FossilFuelCalculator import Co2FossilFuelCalculator
+from config import get_config
 import sys
 import os
 import csv
@@ -17,10 +21,6 @@ backend_path = os.path.join(os.path.dirname(__file__), '..', '..', 'backend')
 sys.path.insert(0, backend_path)
 
 # Import required classes
-from config import get_config
-from Services.Co2FossilFuelCalculator import Co2FossilFuelCalculator
-from Components.reference_ef import Reference_EF_Freight_CO2, Reference_Unit_Conversion
-from Components.Supplier_Input import Supplier_Input
 
 
 class Co2EmissionsTestRunner:
@@ -75,7 +75,8 @@ class Co2EmissionsTestRunner:
                             'Expected CO2 (metric tonnes)': float(row.get('Fossil Fuel CO2\n(metric tonnes)', 0))
                         })
 
-            print(f"✅ Loaded {len(test_data)} test cases from Co2TestDataFreightDistance.csv")
+            print(
+                f"✅ Loaded {len(test_data)} test cases from Co2TestDataFreightDistance.csv")
             return test_data
 
         except FileNotFoundError:

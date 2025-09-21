@@ -6,6 +6,10 @@ This script tests the Co2FossilFuelCalculator.calculate_co2_emissions method
 using the test data from Co2TestDataFuel.csv to validate fuel-based CO2 calculations.
 """
 
+from Components.Supplier_Input import Supplier_Input
+from Components.reference_ef import Reference_EF_Fuel_Use_CO2, Reference_Unit_Conversion
+from Services.Co2FossilFuelCalculator import Co2FossilFuelCalculator
+from config import get_config
 import sys
 import os
 import csv
@@ -17,10 +21,6 @@ backend_path = os.path.join(os.path.dirname(__file__), '..', '..', 'backend')
 sys.path.insert(0, backend_path)
 
 # Import required classes
-from config import get_config
-from Services.Co2FossilFuelCalculator import Co2FossilFuelCalculator
-from Components.reference_ef import Reference_EF_Fuel_Use_CO2, Reference_Unit_Conversion
-from Components.Supplier_Input import Supplier_Input
 
 
 class FuelCo2EmissionsTestRunner:
@@ -78,7 +78,8 @@ class FuelCo2EmissionsTestRunner:
                             'Expected CO2 (metric tonnes)': float(row.get('Fossil Fuel CO2\n(metric tonnes)', 0))
                         })
 
-            print(f"✅ Loaded {len(test_data)} fuel test cases from Co2TestDataFuel.csv")
+            print(
+                f"✅ Loaded {len(test_data)} fuel test cases from Co2TestDataFuel.csv")
             return test_data
 
         except FileNotFoundError:
@@ -101,7 +102,8 @@ class FuelCo2EmissionsTestRunner:
             Type_Of_Activity_Data=test_case['Type of Activity Data'],
             Vehicle_Type=test_case['Vehicle Type'],
             Distance_Travelled=test_case['Distance Travelled'],
-            Total_Weight_Of_Freight_InTonne=test_case['Total Weight of Freight (tonne)'],
+            Total_Weight_Of_Freight_InTonne=test_case[
+                'Total Weight of Freight (tonne)'],
             Num_Of_Passenger=None,
             Units_of_Measurement=test_case['Units of Measurement (Tonne Miles)'],
             Fuel_Used=test_case['Fuel Used'],
@@ -112,7 +114,7 @@ class FuelCo2EmissionsTestRunner:
     def validate_fuel_emission_factor(self, test_case: Dict[str, Any]) -> float:
         """
         Validate that we can get an emission factor for the fuel type and region.
-        
+
         Returns:
             float: The emission factor if found, 0.0 otherwise
         """
@@ -145,23 +147,28 @@ class FuelCo2EmissionsTestRunner:
 
     def run_single_test(self, test_case: Dict[str, Any], test_number: int) -> Dict[str, Any]:
         """Run a single fuel test case and return results."""
-        print(f"\n--- Fuel Test Case {test_number}: {test_case['Description']} ---")
+        print(
+            f"\n--- Fuel Test Case {test_number}: {test_case['Description']} ---")
         print(f"Fuel Used: {test_case['Fuel Used']}")
-        print(f"Fuel Amount: {test_case['Fuel Amount']} {test_case['Unit of Fuel Amount']}")
+        print(
+            f"Fuel Amount: {test_case['Fuel Amount']} {test_case['Unit of Fuel Amount']}")
         print(f"Region: {test_case['Region']}")
         print(f"Activity Type: {test_case['Type of Activity Data']}")
-        print(f"Expected CO2: {test_case['Expected CO2 (metric tonnes)']} metric tonnes")
+        print(
+            f"Expected CO2: {test_case['Expected CO2 (metric tonnes)']} metric tonnes")
 
         # Validate emission factor availability
         emission_factor = self.validate_fuel_emission_factor(test_case)
-        print(f"Fuel Emission Factor Available: {'Yes' if emission_factor > 0 else 'No'}")
+        print(
+            f"Fuel Emission Factor Available: {'Yes' if emission_factor > 0 else 'No'}")
 
         # Create supplier input
         supplier_input = self.create_supplier_input(test_case)
 
         # Calculate CO2 emissions
         try:
-            results = self.co2_calculator.calculate_co2_emissions([supplier_input])
+            results = self.co2_calculator.calculate_co2_emissions(
+                [supplier_input])
 
             if results and len(results) > 0:
                 result = results[0]
@@ -183,7 +190,8 @@ class FuelCo2EmissionsTestRunner:
                     self.passed_tests += 1
                     result_status = "PASS"
                 else:
-                    relative_error = abs((calculated_co2 - expected_co2) / expected_co2) * 100 if expected_co2 != 0 else float('inf')
+                    relative_error = abs((calculated_co2 - expected_co2) /
+                                         expected_co2) * 100 if expected_co2 != 0 else float('inf')
                     print(f"❌ FAIL - Relative error: {relative_error:.2f}%")
                     print(f"Expected: {expected_co2}, Got: {calculated_co2}")
                     self.failed_tests += 1
@@ -265,7 +273,8 @@ class FuelCo2EmissionsTestRunner:
     def generate_summary_report(self) -> None:
         """Generate and print a summary report."""
         total_tests = self.passed_tests + self.failed_tests
-        pass_rate = (self.passed_tests / total_tests * 100) if total_tests > 0 else 0
+        pass_rate = (self.passed_tests / total_tests *
+                     100) if total_tests > 0 else 0
 
         print("\n" + "=" * 70)
         print("📊 FUEL TEST SUMMARY REPORT")
@@ -287,31 +296,37 @@ class FuelCo2EmissionsTestRunner:
 
         print(f"\n📈 FUEL TYPE ANALYSIS:")
         for fuel_type, stats in fuel_types.items():
-            pass_rate = (stats['passed'] / stats['total'] * 100) if stats['total'] > 0 else 0
-            print(f"  • {fuel_type}: {stats['passed']}/{stats['total']} ({pass_rate:.1f}%)")
+            pass_rate = (stats['passed'] / stats['total']
+                         * 100) if stats['total'] > 0 else 0
+            print(
+                f"  • {fuel_type}: {stats['passed']}/{stats['total']} ({pass_rate:.1f}%)")
 
         if self.failed_tests > 0:
             print(f"\n❌ FAILED TESTS:")
             for result in self.test_results:
                 if result['status'] == 'FAIL':
-                    print(f"  • Test {result['test_number']}: {result['description']}")
+                    print(
+                        f"  • Test {result['test_number']}: {result['description']}")
                     if result['error_message']:
                         print(f"    Error: {result['error_message']}")
                     else:
-                        print(f"    Expected: {result['expected_co2']}, Got: {result['calculated_co2']}")
-                        print(f"    Fuel: {result['fuel_used']} - {result['fuel_amount']} {result['fuel_unit']}")
+                        print(
+                            f"    Expected: {result['expected_co2']}, Got: {result['calculated_co2']}")
+                        print(
+                            f"    Fuel: {result['fuel_used']} - {result['fuel_amount']} {result['fuel_unit']}")
 
         print("\n" + "=" * 70)
 
     def generate_detailed_report(self) -> None:
         """Generate a detailed CSV report."""
-        report_path = os.path.join(os.path.dirname(__file__), 'fuel_co2_test_results.csv')
+        report_path = os.path.join(os.path.dirname(
+            __file__), 'fuel_co2_test_results.csv')
 
         try:
             with open(report_path, 'w', newline='', encoding='utf-8') as csvfile:
                 fieldnames = [
                     'Test Number', 'Description', 'Fuel Used', 'Fuel Amount', 'Fuel Unit',
-                    'Region', 'Expected CO2', 'Calculated CO2', 'Emission Factor', 'Status', 
+                    'Region', 'Expected CO2', 'Calculated CO2', 'Emission Factor', 'Status',
                     'Calculation Status', 'Error Message'
                 ]
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
