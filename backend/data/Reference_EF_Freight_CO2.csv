@@ -1,80 +1,80 @@
-﻿Vehicle and Size,Region,CO2,CO2 - Biomass Fuel,CO2 Unit - Numerator,CO2 Unit - Denominator,Default Scope,Vehicle Type,Mode of Transport
-Air - Domestic,Other,1.96073,,Kilogram,Tonne Kilometer,,Aircraft,Aircraft
-Air - Short Haul,Other,1.47389,,Kilogram,Tonne Kilometer,,Aircraft,Aircraft
-Air - Long Haul,Other,0.61324,,Kilogram,Tonne Kilometer,,Aircraft,Aircraft
-Rail,Other,0.0252,,Kilogram,Short Ton Mile,,Rail,Rail
-Road Vehicle - HGV - Rigid - Engine Size 3.5 - 7.5 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Rigid - Engine Size 7.5 - 17 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Rigid - Engine Size >17 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Rigid - Engine Size Unknown,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Articulated - Engine Size 3.5 - 33 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Articulated - Engine Size >33 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Articulated - Engine Size Unknown,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Type Unknown,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - Petro - Engine Size ≤1.25 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - Diesel - Engine Size ≤3.5 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - LPG or CNG - Engine Size ≤3.5 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - Fuel Unknown,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Watercraft - Large RoPax Ferry,Other,0.048,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water
-Watercraft - Shipping - Small Tanker (844 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Large Tanker (18371 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Very Large Tanker (100000 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Small Bulk Carrier (1720 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Large Bulk Carrier (14201 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Very Large Bulk Carrier (70000 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Small Container Vessel (2500 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Large Container Vessel (20000 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Air - Domestic,UK,1.96073,,Kilogram,Tonne Kilometer,,Aircraft,Aircraft
-Air - Short Haul,UK,1.47389,,Kilogram,Tonne Kilometer,,Aircraft,Aircraft
-Air - Long Haul,UK,0.61324,,Kilogram,Tonne Kilometer,,Aircraft,Aircraft
-Rail,UK,0.0285,,Kilogram,Tonne Kilometer,,Rail,Rail
-Road Vehicle - HGV - Rigid - Engine Size 3.5 - 7.5 tonnes,UK,0.65946,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Rigid - Engine Size 7.5 - 17 tonnes,UK,0.41243,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Rigid - Engine Size >17 tonnes,UK,0.20027,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Rigid - Engine Size Unknown,UK,0.25115,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Articulated - Engine Size 3.5 - 33 tonnes,UK,0.15262,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Articulated - Engine Size >33 tonnes,UK,0.08678,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Articulated - Engine Size Unknown,UK,0.08869,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Type Unknown,UK,0.12427,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - Petrol - Engine Size < 1.305 tonnes,UK,1.173514123,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - Petrol - Engine Size 1.305 - 1.74 tonnes,UK,0.820633386,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - Petrol - Engine Size 1.74 - 3.5 tonnes,UK,0.496006632,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - Diesel - Engine Size < 1.305 tonnes,UK,0.94952,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - Diesel - Engine Size 1.305 - 1.74 tonnes,UK,0.87386,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - Diesel - Engine Size 1.74 - 3.5 tonnes,UK,0.52197,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - LPG or CNG - Engine Size ≤3.5 tonnes,UK,0.61742,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - Fuel and Engine Size Unknown,UK,0.58651,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road
-Watercraft - Large RoPax Ferry,UK,0.0495,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water
-Watercraft - Shipping - Small Tanker (844 tonnes deadweight),UK,0.0333,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water
-Watercraft - Shipping - Large Tanker (18371 tonnes deadweight),UK,0.0091,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water
-Watercraft - Shipping - Very Large Tanker (100000 tonnes deadweight),UK,0.0059,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water
-Watercraft - Shipping - Small Bulk Carrier (1720 tonnes deadweight),UK,0.0292,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water
-Watercraft - Shipping - Large Bulk Carrier (14201 tonnes deadweight),UK,0.0079,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water
-Watercraft - Shipping - Very Large Bulk Carrier (70000 tonnes deadweight),UK,0.0041,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water
-Watercraft - Shipping - Small Container Vessel (2500 tonnes deadweight),UK,0.02,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water
-Watercraft - Shipping - Large Container Vessel (20000 tonnes deadweight),UK,0.0125,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water
-Air - Domestic,US,1.527,,Kilogram,Short Ton Mile,,Aircraft,Aircraft
-Air - Short Haul,US,1.527,,Kilogram,Short Ton Mile,,Aircraft,Aircraft
-Air - Long Haul,US,1.527,,Kilogram,Short Ton Mile,,Aircraft,Aircraft
-Rail,US,0.0252,,Kilogram,Short Ton Mile,,Rail,Rail
-Road Vehicle - HGV - Rigid - Engine Size 3.5 - 7.5 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Rigid - Engine Size 7.5 - 17 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Rigid - Engine Size >17 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Rigid - Engine Size Unknown,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Articulated - Engine Size 3.5 - 33 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Articulated - Engine Size >33 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Articulated - Engine Size Unknown,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - HGV - Type Unknown,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - Petro - Engine Size ≤1.25 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - Diesel - Engine Size ≤3.5 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - LPG or CNG - Engine Size ≤3.5 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Road Vehicle - Light Goods Vehicle - Fuel Unknown,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road
-Watercraft - Large RoPax Ferry,US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Small Tanker (844 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Large Tanker (18371 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Very Large Tanker (100000 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Small Bulk Carrier (1720 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Large Bulk Carrier (14201 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Very Large Bulk Carrier (70000 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Small Container Vessel (2500 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
-Watercraft - Shipping - Large Container Vessel (20000 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water
+﻿Vehicle and Size,Region,CO2,CO2 - Biomass Fuel,CO2 Unit - Numerator,CO2 Unit - Denominator,Default Scope,Vehicle Type,Mode of Transport,CH4,CH4 Unit - Numerator,CH4 Unit - Denominator,N2O,N2O Unit - Numerator,N2O Unit - Denominator
+Air - Domestic,Other,1.96073,,Kilogram,Tonne Kilometer,,Aircraft,Aircraft,0.0417,Gram,Short Ton Mile,0.0479,Gram,Short Ton Mile
+Air - Short Haul,Other,1.47389,,Kilogram,Tonne Kilometer,,Aircraft,Aircraft,0.0417,Gram,Short Ton Mile,0.0479,Gram,Short Ton Mile
+Air - Long Haul,Other,0.61324,,Kilogram,Tonne Kilometer,,Aircraft,Aircraft,0.0417,Gram,Short Ton Mile,0.0479,Gram,Short Ton Mile
+Rail,Other,0.0252,,Kilogram,Short Ton Mile,,Rail,Rail,0.002,Gram,Short Ton Mile,0.0006,Gram,Short Ton Mile
+Road Vehicle - HGV - Rigid - Engine Size 3.5 - 7.5 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Rigid - Engine Size 7.5 - 17 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Rigid - Engine Size >17 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Rigid - Engine Size Unknown,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Articulated - Engine Size 3.5 - 33 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Articulated - Engine Size >33 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Articulated - Engine Size Unknown,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Type Unknown,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - Petro - Engine Size ≤1.25 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - Diesel - Engine Size ≤3.5 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - LPG or CNG - Engine Size ≤3.5 tonnes,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - Fuel Unknown,Other,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Watercraft - Large RoPax Ferry,Other,0.048,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Small Tanker (844 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Large Tanker (18371 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Very Large Tanker (100000 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Small Bulk Carrier (1720 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Large Bulk Carrier (14201 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Very Large Bulk Carrier (70000 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Small Container Vessel (2500 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Large Container Vessel (20000 tonnes deadweight),Other,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Air - Domestic,UK,1.96073,,Kilogram,Tonne Kilometer,,Aircraft,Aircraft,0.0417,Gram,Short Ton Mile,0.0479,Gram,Short Ton Mile
+Air - Short Haul,UK,1.47389,,Kilogram,Tonne Kilometer,,Aircraft,Aircraft,0.0417,Gram,Short Ton Mile,0.0479,Gram,Short Ton Mile
+Air - Long Haul,UK,0.61324,,Kilogram,Tonne Kilometer,,Aircraft,Aircraft,0.0417,Gram,Short Ton Mile,0.0479,Gram,Short Ton Mile
+Rail,UK,0.0285,,Kilogram,Tonne Kilometer,,Rail,Rail,0.002,Gram,Short Ton Mile,0.0006,Gram,Short Ton Mile
+Road Vehicle - HGV - Rigid - Engine Size 3.5 - 7.5 tonnes,UK,0.65946,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Rigid - Engine Size 7.5 - 17 tonnes,UK,0.41243,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Rigid - Engine Size >17 tonnes,UK,0.20027,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Rigid - Engine Size Unknown,UK,0.25115,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Articulated - Engine Size 3.5 - 33 tonnes,UK,0.15262,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Articulated - Engine Size >33 tonnes,UK,0.08678,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Articulated - Engine Size Unknown,UK,0.08869,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Type Unknown,UK,0.12427,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - Petrol - Engine Size < 1.305 tonnes,UK,1.173514123,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - Petrol - Engine Size 1.305 - 1.74 tonnes,UK,0.820633386,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - Petrol - Engine Size 1.74 - 3.5 tonnes,UK,0.496006632,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - Diesel - Engine Size < 1.305 tonnes,UK,0.94952,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - Diesel - Engine Size 1.305 - 1.74 tonnes,UK,0.87386,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - Diesel - Engine Size 1.74 - 3.5 tonnes,UK,0.52197,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - LPG or CNG - Engine Size ≤3.5 tonnes,UK,0.61742,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - Fuel and Engine Size Unknown,UK,0.58651,,Kilogram,Tonne Kilometer,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Watercraft - Large RoPax Ferry,UK,0.0495,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Small Tanker (844 tonnes deadweight),UK,0.0333,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Large Tanker (18371 tonnes deadweight),UK,0.0091,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Very Large Tanker (100000 tonnes deadweight),UK,0.0059,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Small Bulk Carrier (1720 tonnes deadweight),UK,0.0292,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Large Bulk Carrier (14201 tonnes deadweight),UK,0.0079,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Very Large Bulk Carrier (70000 tonnes deadweight),UK,0.0041,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Small Container Vessel (2500 tonnes deadweight),UK,0.02,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Large Container Vessel (20000 tonnes deadweight),UK,0.0125,,Kilogram,Tonne Kilometer,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Air - Domestic,US,1.527,,Kilogram,Short Ton Mile,,Aircraft,Aircraft,0.0417,Gram,Short Ton Mile,0.0479,Gram,Short Ton Mile
+Air - Short Haul,US,1.527,,Kilogram,Short Ton Mile,,Aircraft,Aircraft,0.0417,Gram,Short Ton Mile,0.0479,Gram,Short Ton Mile
+Air - Long Haul,US,1.527,,Kilogram,Short Ton Mile,,Aircraft,Aircraft,0.0417,Gram,Short Ton Mile,0.0479,Gram,Short Ton Mile
+Rail,US,0.0252,,Kilogram,Short Ton Mile,,Rail,Rail,0.002,Gram,Short Ton Mile,0.0006,Gram,Short Ton Mile
+Road Vehicle - HGV - Rigid - Engine Size 3.5 - 7.5 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Rigid - Engine Size 7.5 - 17 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Rigid - Engine Size >17 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Rigid - Engine Size Unknown,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Articulated - Engine Size 3.5 - 33 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Articulated - Engine Size >33 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Articulated - Engine Size Unknown,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - HGV - Type Unknown,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - Petro - Engine Size ≤1.25 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - Diesel - Engine Size ≤3.5 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - LPG or CNG - Engine Size ≤3.5 tonnes,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Road Vehicle - Light Goods Vehicle - Fuel Unknown,US,0.297,,Kilogram,Short Ton Mile,,HGV and Light Goods Vehicle,Road,0.0035,Gram,Short Ton Mile,0.0027,Gram,Short Ton Mile
+Watercraft - Large RoPax Ferry,US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Small Tanker (844 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Large Tanker (18371 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Very Large Tanker (100000 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Small Bulk Carrier (1720 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Large Bulk Carrier (14201 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Very Large Bulk Carrier (70000 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Small Container Vessel (2500 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile
+Watercraft - Shipping - Large Container Vessel (20000 tonnes deadweight),US,0.048,,Kilogram,Short Ton Mile,,Waterborne Craft,Water,0.0041,Gram,Short Ton Mile,0.0014,Gram,Short Ton Mile

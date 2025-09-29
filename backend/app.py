@@ -3,6 +3,8 @@
 # --- Place this after reference_ef_freight is initialized ---
 
 
+from config import get_config
+import importlib.util
 from flask import Flask, jsonify, request
 import csv
 import os
@@ -14,7 +16,17 @@ from Components.reference_ef import Reference_EF_Public, Reference_EF_Freight_CO
 from Components.reference_lookups import ReferenceLookup
 from Components.Reference_Source_Product_Matrix import Reference_Source_Product_Matrix
 from Services.Co2FossilFuelCalculator import Co2FossilFuelCalculator
-from config import get_config
+
+# Import CH4 Calculator - handling space in filename
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), 'Services'))
+spec = importlib.util.spec_from_file_location("ch4_calculator", os.path.join(
+    os.path.dirname(__file__), "Services/CH4 Calculator.py"))
+if spec and spec.loader:
+    ch4_calculator_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(ch4_calculator_module)
+    Ch4Calculator = ch4_calculator_module.Ch4Calculator
 
 
 # Get configuration
@@ -290,26 +302,65 @@ def get_source_product_matrix():
     return jsonify({'results': results})
 
 
-# API endpoint to get unique Vehicle and Size for a given region and mode of transport
+# API endpoint to get unique Vehicle and Size for a given region, mode of transport, and type of activity data
 
 
 @app.route('/api/vehicle_and_size', methods=['GET'])
 def get_vehicle_and_size_by_region_and_mode():
     region = request.args.get('region', '')
     mode_of_transport = request.args.get('mode_of_transport', '')
+    type_of_activity_data = request.args.get('type_of_activity_data', '')
+
     if not region or not mode_of_transport:
         return jsonify({'error': 'Both region and mode_of_transport query parameters are required'}), 400
-    # Filter rows from reference_ef_freight by region and mode of transport
-    matches = [
-        row['Vehicle and Size']
-        for row in reference_ef_freight.data
-        if row.get('Region', '').strip().lower() == region.strip().lower()
-        and row.get('Mode of Transport', '').strip().lower() == mode_of_transport.strip().lower()
-        and row.get('Vehicle and Size')
-    ]
+
+    # Determine which data source to use based on type_of_activity_data
+    matches = []
+    data_source = 'Reference_EF_Freight_CO2'  # Default data source
+
+    if type_of_activity_data == 'Weight Distance (e.g. Freight Transport)':
+        # Use Reference_EF_Freight_CO2.csv for freight transport - apply all filters
+        for row in reference_ef_freight.data:
+            if (row.get('Region', '').strip().lower() == region.strip().lower() and
+                row.get('Mode of Transport', '').strip().lower() == mode_of_transport.strip().lower() and
+                    row.get('Vehicle and Size')):
+                matches.append(row['Vehicle and Size'])
+        data_source = 'Reference_EF_Freight_CO2'
+    elif type_of_activity_data == 'Fuel Use':
+        # For fuel use activities, still use freight data but could be filtered differently
+        for row in reference_ef_freight.data:
+            if (row.get('Region', '').strip().lower() == region.strip().lower() and
+                row.get('Mode of Transport', '').strip().lower() == mode_of_transport.strip().lower() and
+                    row.get('Vehicle and Size')):
+                matches.append(row['Vehicle and Size'])
+        data_source = 'Reference_EF_Freight_CO2'
+    elif type_of_activity_data == 'Fuel Use and Vehicle Distance':
+        # For combined fuel use and vehicle distance
+        for row in reference_ef_freight.data:
+            if (row.get('Region', '').strip().lower() == region.strip().lower() and
+                row.get('Mode of Transport', '').strip().lower() == mode_of_transport.strip().lower() and
+                    row.get('Vehicle and Size')):
+                matches.append(row['Vehicle and Size'])
+        data_source = 'Reference_EF_Freight_CO2'
+    else:
+        # Default: use Reference_EF_Freight_CO2 with all filters applied
+        for row in reference_ef_freight.data:
+            if (row.get('Region', '').strip().lower() == region.strip().lower() and
+                row.get('Mode of Transport', '').strip().lower() == mode_of_transport.strip().lower() and
+                    row.get('Vehicle and Size')):
+                matches.append(row['Vehicle and Size'])
+        data_source = 'Reference_EF_Freight_CO2'
+
     # Return unique values, sorted
     unique_vehicle_and_size = sorted(list(set(matches)))
-    return jsonify({'region': region, 'mode_of_transport': mode_of_transport, 'vehicle_and_size': unique_vehicle_and_size})
+    return jsonify({
+        'region': region,
+        'mode_of_transport': mode_of_transport,
+        'type_of_activity_data': type_of_activity_data,
+        'vehicle_and_size': unique_vehicle_and_size,
+        'data_source': data_source,
+        'total_matches': len(unique_vehicle_and_size)
+    })
 
 # API endpoint to get unique fuel types
 
@@ -383,6 +434,16 @@ def compute_ghg_emissions():
         co2_results = co2_calculator.calculate_co2_emissions(
             supplier_input_objects)
 
+        # Calculate CH4 emissions using Ch4Calculator with cached reference data
+        ch4_calculator = Ch4Calculator(
+            reference_ef_fuel_use_ch4_n2o=reference_ef_fuel_use_ch4_n2o,
+            reference_ef_freight_co2=reference_ef_freight,
+            reference_unit_conversion=reference_unit_conversion
+        )
+
+        ch4_results = ch4_calculator.calculate_ch4_emissions(
+            supplier_input_objects)
+
         # Create summarized data by Mode of Transport, Scope, Activity type, and GHG Type
         summary_data = {}
 
@@ -402,6 +463,11 @@ def compute_ghg_emissions():
                 summary_data[mode_of_transport][scope][activity_type] = {}
             if 'CO2' not in summary_data[mode_of_transport][scope][activity_type]:
                 summary_data[mode_of_transport][scope][activity_type]['CO2'] = {
+                    'total_emissions': 0.0,
+                    'details': []
+                }
+            if 'CH4' not in summary_data[mode_of_transport][scope][activity_type]:
+                summary_data[mode_of_transport][scope][activity_type]['CH4'] = {
                     'total_emissions': 0.0,
                     'details': []
                 }
@@ -447,9 +513,52 @@ def compute_ghg_emissions():
                 summary_data[mode_of_transport][scope][activity_type]['CO2']['details'].append(
                     detail)
 
+        # Aggregate the CH4 results into summary structure
+        for i, result in enumerate(ch4_results):
+            if i < len(activity_rows):
+                row_data = activity_rows[i]
+                mode_of_transport = row_data.get(
+                    'Mode_of_Transport', 'Unknown')
+                scope = row_data.get('Scope', 'Unknown')
+                activity_type = 'Fuel' if row_data.get(
+                    'Fuel_Used') and row_data.get('Fuel_Amount') else 'Distance'
+
+                # Add CH4 emissions to the appropriate category
+                summary_data[mode_of_transport][scope][activity_type]['CH4']['total_emissions'] += result.get(
+                    'ch4_emissions', 0.0)
+
+                # Add detailed information
+                detail = {
+                    'row_index': i,
+                    'source_description': row_data.get('Source_Description', ''),
+                    'vehicle_type': row_data.get('Vehicle_Type', ''),
+                    'region': row_data.get('Region', ''),
+                    'ch4_emissions': result.get('ch4_emissions', 0.0),
+                    'emission_factor': result.get('emission_factor', 0.0),
+                    'status': result.get('status', '')
+                }
+
+                if activity_type == 'Fuel':
+                    detail.update({
+                        'fuel_used': row_data.get('Fuel_Used', ''),
+                        'fuel_amount': row_data.get('Fuel_Amount', 0),
+                        'unit_of_fuel_amount': row_data.get('Unit_Of_Fuel_Amount', '')
+                    })
+                else:
+                    detail.update({
+                        'distance_travelled': row_data.get('Distance_Travelled', 0),
+                        'total_weight_of_freight': row_data.get('Total_Weight_Of_Freight_InTonne', 0),
+                        'units_of_measurement': row_data.get('Units_of_Measurement', '')
+                    })
+
+                summary_data[mode_of_transport][scope][activity_type]['CH4']['details'].append(
+                    detail)
+
         # Calculate overall totals
         total_co2_emissions = sum(result['co2_emissions']
                                   for result in co2_results)
+        total_ch4_emissions = sum(result['ch4_emissions']
+                                  for result in ch4_results)
 
         # Manufacturing emissions calculation (from supplier data)
         container_weight = float(supplier_data.get('Container_Weight', 0))
@@ -497,12 +606,18 @@ def compute_ghg_emissions():
             },
             'transport_emissions': {
                 'co2': total_co2_emissions,
+                'ch4': total_ch4_emissions,
                 'summary_by_transport_scope_activity': summary_data,
-                'detailed_results': co2_results
+                'detailed_results': {
+                    'co2': co2_results,
+                    'ch4': ch4_results
+                }
             },
-            'total_emissions': manufacturing_emissions_metric_tonnes + total_co2_emissions,
+            'total_emissions': manufacturing_emissions_metric_tonnes + total_co2_emissions + total_ch4_emissions,
             'co2_emissions_results': co2_results,  # Keep for backward compatibility
-            'total_co2_emissions': total_co2_emissions  # Keep for backward compatibility
+            'ch4_emissions_results': ch4_results,  # Keep for backward compatibility
+            'total_co2_emissions': total_co2_emissions,  # Keep for backward compatibility
+            'total_ch4_emissions': total_ch4_emissions  # Keep for backward compatibility
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500

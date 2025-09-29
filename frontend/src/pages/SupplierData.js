@@ -568,7 +568,12 @@ function SupplierData() {
   const fileInputRef = useRef(null);
 
   // Fetch vehicle type options for a specific row
-  const fetchVehicleTypeOptions = async (rowIdx, region, modeOfTransport) => {
+  const fetchVehicleTypeOptions = async (
+    rowIdx,
+    region,
+    modeOfTransport,
+    typeOfActivityData
+  ) => {
     if (!region || !modeOfTransport) {
       setVehicleTypeOptions((prev) => ({ ...prev, [rowIdx]: [] }));
       return;
@@ -576,11 +581,18 @@ function SupplierData() {
     setVehicleTypeLoading((prev) => ({ ...prev, [rowIdx]: true }));
     setVehicleTypeError((prev) => ({ ...prev, [rowIdx]: null }));
     try {
-      const response = await fetch(
-        `${getApiUrl("vehicleAndSize")}?region=${encodeURIComponent(
-          region
-        )}&mode_of_transport=${encodeURIComponent(modeOfTransport)}`
-      );
+      let apiUrl = `${getApiUrl("vehicleAndSize")}?region=${encodeURIComponent(
+        region
+      )}&mode_of_transport=${encodeURIComponent(modeOfTransport)}`;
+
+      // Add type_of_activity_data parameter if provided
+      if (typeOfActivityData) {
+        apiUrl += `&type_of_activity_data=${encodeURIComponent(
+          typeOfActivityData
+        )}`;
+      }
+
+      const response = await fetch(apiUrl);
       if (!response.ok)
         throw new Error(`HTTP error! Status: ${response.status}`);
       const data = await response.json();
@@ -949,11 +961,16 @@ function SupplierData() {
     fetchUnitOfFuelAmount();
   }, []);
 
-  // Effect: fetch vehicle type options when region or modeOfTransport changes for any row
+  // Effect: fetch vehicle type options when region, modeOfTransport, or typeOfActivityData changes for any row
   useEffect(() => {
     activityRows.forEach((row, rowIdx) => {
       if (row.region && row.modeOfTransport) {
-        fetchVehicleTypeOptions(rowIdx, row.region, row.modeOfTransport);
+        fetchVehicleTypeOptions(
+          rowIdx,
+          row.region,
+          row.modeOfTransport,
+          row.typeOfActivityData
+        );
       } else {
         setVehicleTypeOptions((prev) => ({ ...prev, [rowIdx]: [] }));
       }
@@ -964,6 +981,7 @@ function SupplierData() {
       activityRows.map((row) => ({
         region: row.region,
         modeOfTransport: row.modeOfTransport,
+        typeOfActivityData: row.typeOfActivityData,
       }))
     ),
   ]);
