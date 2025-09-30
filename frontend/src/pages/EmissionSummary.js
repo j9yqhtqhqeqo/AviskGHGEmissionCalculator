@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/EmissionSummary.css";
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 function EmissionSummary() {
   const [informationalMessages, setInformationalMessages] = useState([]);
@@ -151,72 +151,292 @@ function EmissionSummary() {
   // Export PDF function
   const exportToPDF = async () => {
     try {
-      // Create a clone of the content to export (without buttons)
-      const originalElement = document.querySelector('.emission-summary-container');
-      const clonedElement = originalElement.cloneNode(true);
-      
-      // Remove any export buttons from the clone
-      const exportButtons = clonedElement.querySelectorAll('.export-button, .export-pdf-button');
-      exportButtons.forEach(button => button.remove());
-      
-      // Style the cloned element for PDF
-      clonedElement.style.width = '794px'; // A4 width in pixels at 96 DPI
-      clonedElement.style.padding = '20px';
-      clonedElement.style.backgroundColor = 'white';
-      clonedElement.style.position = 'absolute';
-      clonedElement.style.left = '-9999px';
-      clonedElement.style.top = '0';
-      
-      // Append to body temporarily
-      document.body.appendChild(clonedElement);
-      
-      // Convert to canvas
-      const canvas = await html2canvas(clonedElement, {
-        scale: 2, // Higher quality
+      console.log("Starting PDF export...");
+
+      // Hide the export button
+      const exportButton = document.querySelector(".export-pdf-button");
+      if (exportButton) {
+        exportButton.style.display = "none";
+      }
+
+      // Create a simplified version for PDF
+      const element = document.querySelector(".emission-summary-container");
+      if (!element) {
+        console.error("Could not find emission-summary-container");
+        alert("Could not find content to export");
+        return;
+      }
+
+      // Create a print-friendly container
+      const printContainer = document.createElement("div");
+      printContainer.style.cssText = `
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        width: 800px;
+        padding: 20px;
+        background-color: white;
+        font-family: Arial, sans-serif;
+        color: black;
+      `;
+
+      // Add header with logo
+      const header = document.createElement("div");
+      header.style.cssText = `
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 30px;
+      `;
+
+      const logo = document.createElement("img");
+      logo.src = "/saxcologo.jpeg";
+      logo.alt = "Saxco International";
+      logo.style.cssText = "max-width: 150px; height: auto;";
+      header.appendChild(logo);
+      printContainer.appendChild(header);
+
+      // Add Total GHG Emissions Box (simplified version)
+      const totalBox = document.createElement("div");
+      const bgColor = (() => {
+        if (totals.totalEmissions === 0) return "#4caf50";
+        if (totals.totalEmissions <= 1000) return "#fff9c4";
+        if (totals.totalEmissions <= 2000) return "#9e9e9e";
+        if (totals.totalEmissions <= 3000) return "#757575";
+        if (totals.totalEmissions <= 4000) return "#616161";
+        if (totals.totalEmissions <= 5000) return "#424242";
+        return "#303030";
+      })();
+
+      const textColor =
+        totals.totalEmissions <= 1000 && totals.totalEmissions > 0
+          ? "#333"
+          : "white";
+
+      totalBox.style.cssText = `
+        display: flex;
+        background-color: ${bgColor};
+        border: 2px solid ${
+          totals.totalEmissions === 0
+            ? "#66bb6a"
+            : totals.totalEmissions <= 1000
+            ? "#f9a825"
+            : "#757575"
+        };
+        border-radius: 12px;
+        margin-bottom: 30px;
+        min-height: 120px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      `;
+
+      const labelDiv = document.createElement("div");
+      labelDiv.style.cssText = `
+        background-color: transparent;
+        padding: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        color: ${textColor};
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-right: 2px solid ${
+          totals.totalEmissions === 0
+            ? "#66bb6a"
+            : totals.totalEmissions <= 1000
+            ? "#f9a825"
+            : "#757575"
+        };
+        min-width: 200px;
+      `;
+      labelDiv.innerHTML =
+        "🌍 Total GHG Emissions<br/>(metric tonnes<br/>CO₂e)";
+
+      const valueDiv = document.createElement("div");
+      valueDiv.style.cssText = `
+        background-color: transparent;
+        padding: 20px 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: ${textColor};
+        flex-direction: column;
+        flex: 1;
+      `;
+
+      const mainValue = document.createElement("div");
+      mainValue.style.cssText =
+        "font-size: 28px; font-weight: bold; margin-bottom: 5px;";
+      mainValue.textContent = totals.totalEmissions.toFixed(2);
+
+      const subValue = document.createElement("div");
+      subValue.style.cssText = "font-size: 14px; opacity: 0.9;";
+      subValue.textContent = "metric tonnes CO₂e";
+
+      const statusText = document.createElement("div");
+      statusText.style.cssText =
+        "font-size: 12px; margin-top: 5px; opacity: 0.8;";
+      statusText.textContent = (() => {
+        if (totals.totalEmissions === 0) return "No Emissions Calculated 🌱";
+        if (totals.totalEmissions <= 1000)
+          return "Good Industrial Performance 🌿";
+        if (totals.totalEmissions <= 2000)
+          return "Moderate Industrial Impact 🔲";
+        if (totals.totalEmissions <= 3000) return "High Industrial Impact ⬛";
+        if (totals.totalEmissions <= 4000)
+          return "Very High Industrial Impact 🖤";
+        return "Critical Industrial Impact 💀";
+      })();
+
+      valueDiv.appendChild(mainValue);
+      valueDiv.appendChild(subValue);
+      valueDiv.appendChild(statusText);
+
+      totalBox.appendChild(labelDiv);
+      totalBox.appendChild(valueDiv);
+      printContainer.appendChild(totalBox);
+
+      // Clone and add all other sections (excluding the original total box and export button)
+      const sections = element.querySelectorAll(
+        ".summary-section, .equivalency-section, .informational-messages-section"
+      );
+      sections.forEach((section) => {
+        const clonedSection = section.cloneNode(true);
+        // Remove any export buttons from cloned sections
+        const buttons = clonedSection.querySelectorAll(
+          ".export-pdf-button, .export-button"
+        );
+        buttons.forEach((btn) => btn.remove());
+        printContainer.appendChild(clonedSection);
+      });
+
+      // Add to DOM temporarily
+      document.body.appendChild(printContainer);
+
+      console.log("Print container created, capturing...");
+
+      // Capture the print container
+      const canvas = await html2canvas(printContainer, {
+        scale: 1.5,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#ffffff',
-        width: 794,
-        height: clonedElement.scrollHeight
+        backgroundColor: "#ffffff",
+        logging: false,
+        removeContainer: false,
       });
-      
-      // Remove the cloned element
-      document.body.removeChild(clonedElement);
-      
-      // Create PDF
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      
-      // Calculate dimensions to fit A4
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 295; // A4 height in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
-      
-      // Add first page
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-      
-      // Add additional pages if needed
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+
+      // Remove print container
+      document.body.removeChild(printContainer);
+
+      // Show export button again
+      if (exportButton) {
+        exportButton.style.display = "";
       }
-      
-      // Generate filename with timestamp
-      const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-      const supplierName = supplierData?.Supplier_and_Container?.split(' - ')[0] || 'Unknown';
+
+      console.log(
+        "Canvas created, dimensions:",
+        canvas.width,
+        "x",
+        canvas.height
+      );
+
+      // Check if canvas has content
+      if (canvas.width === 0 || canvas.height === 0) {
+        console.error("Canvas is empty");
+        alert("Failed to capture content. Please try again.");
+        return;
+      }
+
+      // Create PDF
+      const imgData = canvas.toDataURL("image/png");
+      console.log("Image data created, length:", imgData.length);
+
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+
+      // Calculate dimensions
+      const pdfWidth = 210;
+      const pdfHeight = 297;
+      const canvasAspectRatio = canvas.height / canvas.width;
+      const pdfContentWidth = pdfWidth - 20;
+      const pdfContentHeight = pdfContentWidth * canvasAspectRatio;
+
+      console.log(
+        "PDF dimensions calculated:",
+        pdfContentWidth,
+        "x",
+        pdfContentHeight
+      );
+
+      // Add image to PDF
+      if (pdfContentHeight <= pdfHeight - 20) {
+        pdf.addImage(imgData, "PNG", 10, 10, pdfContentWidth, pdfContentHeight);
+      } else {
+        // Split across multiple pages
+        const pageContentHeight = pdfHeight - 20;
+        const totalPages = Math.ceil(pdfContentHeight / pageContentHeight);
+
+        for (let i = 0; i < totalPages; i++) {
+          if (i > 0) pdf.addPage();
+
+          const sourceY =
+            (i * pageContentHeight * canvas.height) / pdfContentHeight;
+          const sourceHeight = Math.min(
+            (pageContentHeight * canvas.height) / pdfContentHeight,
+            canvas.height - sourceY
+          );
+
+          const pageCanvas = document.createElement("canvas");
+          pageCanvas.width = canvas.width;
+          pageCanvas.height = sourceHeight;
+          const pageCtx = pageCanvas.getContext("2d");
+
+          pageCtx.drawImage(
+            canvas,
+            0,
+            sourceY,
+            canvas.width,
+            sourceHeight,
+            0,
+            0,
+            canvas.width,
+            sourceHeight
+          );
+
+          const pageImgData = pageCanvas.toDataURL("image/png");
+          const pageHeight = (sourceHeight * pdfContentWidth) / canvas.width;
+
+          pdf.addImage(pageImgData, "PNG", 10, 10, pdfContentWidth, pageHeight);
+        }
+      }
+
+      // Generate filename
+      const timestamp = new Date()
+        .toISOString()
+        .slice(0, 19)
+        .replace(/:/g, "-");
+      const supplierName =
+        supplierData?.Supplier_and_Container?.split(" - ")[0] || "Unknown";
       const filename = `GHG_Emission_Report_${supplierName}_${timestamp}.pdf`;
-      
+
+      console.log("Saving PDF as:", filename);
+
       // Save the PDF
       pdf.save(filename);
-      
+
+      console.log("PDF export completed successfully");
     } catch (error) {
-      console.error('Error generating PDF:', error);
-      alert('Failed to generate PDF. Please try again.');
+      console.error("Error generating PDF:", error);
+
+      // Restore export button if hidden
+      const exportButton = document.querySelector(".export-pdf-button");
+      if (exportButton) {
+        exportButton.style.display = "";
+      }
+
+      alert(`Failed to generate PDF: ${error.message}. Please try again.`);
     }
   };
 
@@ -229,7 +449,7 @@ function EmissionSummary() {
           alt="Saxco International"
           className="summary-logo"
         />
-        <button 
+        <button
           className="export-pdf-button"
           onClick={exportToPDF}
           title="Export report to PDF"
