@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "../styles/EmissionSummary.css";
-import saxcoLogo from "../assets/saxcologo.jpeg";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 function EmissionSummary() {
   const [informationalMessages, setInformationalMessages] = useState([]);
   const [supplierData, setSupplierData] = useState(null);
-  const [activityData, setActivityData] = useState([]);
   const [emissionResults, setEmissionResults] = useState(null);
 
   useEffect(() => {
     // Retrieve all data from sessionStorage
     const storedMessages = sessionStorage.getItem("informationalMessages");
     const storedSupplierData = sessionStorage.getItem("supplierData");
-    const storedActivityData = sessionStorage.getItem("activityData");
     const storedEmissionResults = sessionStorage.getItem("emissionResults");
 
     if (storedMessages) {
@@ -30,15 +29,6 @@ function EmissionSummary() {
         setSupplierData(supplier);
       } catch (error) {
         console.error("Error parsing supplier data:", error);
-      }
-    }
-
-    if (storedActivityData) {
-      try {
-        const activity = JSON.parse(storedActivityData);
-        setActivityData(activity);
-      } catch (error) {
-        console.error("Error parsing activity data:", error);
       }
     }
 
@@ -158,6 +148,78 @@ function EmissionSummary() {
 
   const transportEmissions = getTransportEmissions();
 
+  // Export PDF function
+  const exportToPDF = async () => {
+    try {
+      // Create a clone of the content to export (without buttons)
+      const originalElement = document.querySelector('.emission-summary-container');
+      const clonedElement = originalElement.cloneNode(true);
+      
+      // Remove any export buttons from the clone
+      const exportButtons = clonedElement.querySelectorAll('.export-button, .export-pdf-button');
+      exportButtons.forEach(button => button.remove());
+      
+      // Style the cloned element for PDF
+      clonedElement.style.width = '794px'; // A4 width in pixels at 96 DPI
+      clonedElement.style.padding = '20px';
+      clonedElement.style.backgroundColor = 'white';
+      clonedElement.style.position = 'absolute';
+      clonedElement.style.left = '-9999px';
+      clonedElement.style.top = '0';
+      
+      // Append to body temporarily
+      document.body.appendChild(clonedElement);
+      
+      // Convert to canvas
+      const canvas = await html2canvas(clonedElement, {
+        scale: 2, // Higher quality
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        width: 794,
+        height: clonedElement.scrollHeight
+      });
+      
+      // Remove the cloned element
+      document.body.removeChild(clonedElement);
+      
+      // Create PDF
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      
+      // Calculate dimensions to fit A4
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 295; // A4 height in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+      
+      // Add first page
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+      
+      // Add additional pages if needed
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+      
+      // Generate filename with timestamp
+      const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+      const supplierName = supplierData?.Supplier_and_Container?.split(' - ')[0] || 'Unknown';
+      const filename = `GHG_Emission_Report_${supplierName}_${timestamp}.pdf`;
+      
+      // Save the PDF
+      pdf.save(filename);
+      
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
+    }
+  };
+
   return (
     <div className="emission-summary-container">
       {/* Header with Logo */}
@@ -167,6 +229,13 @@ function EmissionSummary() {
           alt="Saxco International"
           className="summary-logo"
         />
+        <button 
+          className="export-pdf-button"
+          onClick={exportToPDF}
+          title="Export report to PDF"
+        >
+          📄 Export Report
+        </button>
       </div>
 
       {/* Total Emissions Box */}
