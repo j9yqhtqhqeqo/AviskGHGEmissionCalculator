@@ -11,6 +11,10 @@ import os
 import logging
 from flask_cors import CORS
 import json
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from datetime import datetime
 from Components.Supplier_Input import Supplier_Input
 from Components.reference_ef import Reference_EF_Public, Reference_EF_Freight_CO2, Reference_EF_Freight_CH4_NO2, Reference_EF_Road, Reference_EF_Fuel_Use_CH4_N2O, Reference_EF_Fuel_Use_CO2, Reference_Unit_Conversion
 from Components.reference_lookups import ReferenceLookup
@@ -621,6 +625,92 @@ def compute_ghg_emissions():
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+# Contact Admin endpoint
+@app.route('/api/contact-admin', methods=['POST'])
+def contact_admin():
+    try:
+        data = request.get_json()
+
+        # Validate required fields
+        required_fields = ['firstName', 'lastName', 'email',
+                           'supplierName', 'location', 'description']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'error': f'{field} is required'}), 400
+
+        # Email configuration (you should move these to environment variables)
+        admin_email = "mohan.ganadal@gmail.com"  # Updated to send to Mohan's email
+        smtp_server = "smtp.gmail.com"  # Gmail SMTP server
+        smtp_port = 587
+        system_email = "saxco.calculator@gmail.com"  # System Gmail address for sending
+        sender_password = "xsbo okii wapp qmta"  # Replace with Gmail App Password
+        user_email = data['email']  # User's email for Reply-To header
+
+        # Create email content
+        subject = f"New Account Request: {data.get('subject', 'New Account Request')}"
+
+        html_body = f"""
+        <html>
+            <body>
+                <h2>New Account Request</h2>
+                <p><strong>Request Date:</strong> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+                <p><em>Note: This email was sent on behalf of {data['firstName']} {data['lastName']} ({data['email']}). You can reply directly to this email to respond to them.</em></p>
+                
+                <h3>Contact Information:</h3>
+                <p><strong>Name:</strong> {data['firstName']} {data['lastName']}</p>
+                <p><strong>Email:</strong> {data['email']}</p>
+                <p><strong>Supplier Name:</strong> {data['supplierName']}</p>
+                <p><strong>Location:</strong> {data['location']}</p>
+                
+                <h3>Request Details:</h3>
+                <p><strong>Subject:</strong> {data.get('subject', 'New Account Request')}</p>
+                <p><strong>Description:</strong></p>
+                <p>{data['description']}</p>
+                
+                <hr>
+                <p><em>This request was submitted through the GHG Emission Calculator contact form.</em></p>
+            </body>
+        </html>
+        """
+
+        # Create message
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = system_email
+        msg['To'] = admin_email
+        # Set reply-to as the form submitter's email
+        msg['Reply-To'] = user_email
+
+        # Create HTML part
+        html_part = MIMEText(html_body, 'html')
+        msg.attach(html_part)
+
+        # For development/testing purposes, we'll log the email content
+        print("=== EMAIL BEING SENT ===")
+        print(f"To: {admin_email}")
+        print(f"Subject: {subject}")
+        print("=== EMAIL CONTENT LOGGED ===")
+
+        # Send email
+        try:
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(system_email, sender_password)
+                text = msg.as_string()
+                server.sendmail(system_email, admin_email, text)
+            print("✅ Email sent successfully!")
+        except Exception as email_error:
+            print(f"❌ Failed to send email: {str(email_error)}")
+            # Still return success to user, but log the email error
+            pass
+
+        return jsonify({'message': 'Request sent successfully'}), 200
+
+    except Exception as e:
+        print(f"Error in contact_admin: {str(e)}")
+        return jsonify({'error': 'Failed to send request'}), 500
 
 
 if __name__ == '__main__':

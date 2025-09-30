@@ -57,8 +57,8 @@ function Login() {
     alert("Forgot password functionality would be implemented here");
   };
 
-  const handleSignUp = () => {
-    alert("Sign up functionality would be implemented here");
+  const handleContactAdmin = () => {
+    navigate("/contact-admin");
   };
 
   return (
@@ -137,9 +137,9 @@ function Login() {
               <button
                 type="button"
                 className="link-button signup-link"
-                onClick={handleSignUp}
+                onClick={handleContactAdmin}
               >
-                Sign up
+                Contact Admin
               </button>
             </p>
           </div>

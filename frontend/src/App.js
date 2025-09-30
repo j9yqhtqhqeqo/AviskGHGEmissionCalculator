@@ -13,11 +13,12 @@ import Login from "./pages/Login";
 import Home from "./components/Home";
 import SupplierData from "./pages/SupplierData";
 import EmissionSummary from "./pages/EmissionSummary";
+import ContactAdmin from "./pages/ContactAdmin";
 
 // Navigation component that conditionally renders
 function AppNavigation() {
   const location = useLocation();
-  const hideNavPaths = ["/", "/login"];
+  const hideNavPaths = ["/", "/login", "/contact-admin"];
 
   if (hideNavPaths.includes(location.pathname)) {
     return null;
@@ -52,6 +53,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/contact-admin" element={<ContactAdmin />} />
           <Route path="/home" element={<Home />} />
           <Route path="/supplier-data" element={<SupplierData />} />
           <Route path="/emission-summary" element={<EmissionSummary />} />
